@@ -10,7 +10,7 @@ FreeSim is a free simultor for electrochemical reaction. It now has implemented 
 * A + e = B, B = C, EC reaction 
 * X = A, A + e = B, CE reaction 
 * X = A + C, A + e = B, dissociative CE reaction
-* A + e = B， A<sub>abs</sub> + e = B<abs>abs</abs>, one eletctron reduction with adsorbed species, adsorption described with Langmuir Isotherm theory
+* A + e = B， A<sub>abs</sub> + e = B<sub>abs</sub>, one eletctron reduction with adsorbed species, adsorption described with Langmuir Isotherm theory
 
 # Installs
 A few common packages including PyQt5, Numpy, Pandas are required to be installed. Python version 3.6 and above is recommended
