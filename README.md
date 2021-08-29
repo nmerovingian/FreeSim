@@ -1,7 +1,8 @@
 # FreeSim
  An Open-Source Electrochemical Reaction Simulator
 
-FreeSim is a free simultor for electrochemical reaction written in pure Python. It now has implemented 7 mechanisms, including:
+FreeSim is a free simultor for electrochemical reaction by Haotian Chen and Professor Richard Compton at University of Oxford. 
+It now has implemented ***7*** mechanisms, including:
 
 * A + e = B, simple one electron reuduction 
 * Stochastic A + e = B, stochastic one electron reduction using random walk algorithm
@@ -34,7 +35,7 @@ The authors will try to implement chronoamperometry of these experiments, then m
 
 
 # Discailmers
-Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would also try their best to correct any bugs as soon as possible. Thank you for your understanding.
+Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would also try their best to correct any bugs as soon as possible. Thanks for your understanding.
 
 
 
