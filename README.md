@@ -2,7 +2,7 @@
  An Open-Source Electrochemical Reaction Simulator
 
 FreeSim is a free simultor for electrochemical reaction by Haotian Chen and Professor Richard Compton at University of Oxford. 
-It now has implemented ***7*** mechanisms, including:
+We have now implemented ***7*** mechanisms, including:
 
 * A + e = B, simple one electron reuduction 
 * Stochastic A + e = B, stochastic one electron reduction using random walk algorithm
@@ -12,6 +12,8 @@ It now has implemented ***7*** mechanisms, including:
 * X = A, A + e = B, CE reaction 
 * X = A + C, A + e = B, dissociative CE reaction
 * A + e = B， A<sub>abs</sub> + e = B<sub>abs</sub>, one eletctron reduction with adsorbed species, adsorption described with Langmuir Isotherm theory
+
+Most of the mechanism support Butler-Volmer and Nernst kinetics. Radial and linear diffusions are also supported in most mechanisms. Prequilibrium of species are supported in CE and dissociative CE reactions.
 
 # Installs
 A few common packages including PyQt5, pyqtgraph, Sympy, Numpy and Pandas are required to be installed. Python version 3.6 and above is recommended
