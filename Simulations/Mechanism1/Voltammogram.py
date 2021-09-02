@@ -1,7 +1,7 @@
 from Parameters import Parameters
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
+
 import csv 
 
 class Voltammogram(object):
@@ -44,14 +44,3 @@ class Voltammogram(object):
 
 
 
-
-if __name__ == "__main__":
-
-    from Constants import Constants
-    Parameters.evalImplicitParameters(Constants)
-    v = Voltammogram(Parameters)
-
-    plt.plot(v.E)
-    plt.show()
-    plt.plot(v.t)
-    plt.show()

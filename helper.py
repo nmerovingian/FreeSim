@@ -8,6 +8,8 @@ def getValue(widget):
         return bool(widget.isChecked())
     elif isinstance(widget,QComboBox):
         return int(widget.currentIndex())
+    elif isinstance(widget,QCheckBox):
+        return widget.isChecked()
 
 
 def setDisabled(widget):

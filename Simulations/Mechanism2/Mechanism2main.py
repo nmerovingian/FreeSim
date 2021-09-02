@@ -1,7 +1,7 @@
 import numpy as np
 import time
-from coeff import Coeff
-from grid import Grid
+from Simulations.Mechanism2.coeff import Coeff
+from Simulations.Mechanism2.grid import Grid
 import csv
 import scipy
 from scipy import sparse

@@ -52,8 +52,8 @@ class SimulationWorker(QRunnable):
             from Simulations.Mechanism1.Mechanism1main import Mechanism_1_simulation_single_thread_GUI
             Mechanism_1_simulation_single_thread_GUI(self.signals,self.input_parameters)
         elif self.input_parameters.mechanism_parameters_0[0] in [0,3,4,5,6]:
-            from Simulations.Mechanism4.Mechanism1456main import Mechanism_1456_simulation_single_thread_Gui
-            Mechanism_1456_simulation_single_thread_Gui(self.signals,self.input_parameters)
+            from Simulations.Mechanism4.Mechanism1456main import Mechanism_03456_simulation_single_thread_Gui
+            Mechanism_03456_simulation_single_thread_Gui(self.signals,self.input_parameters)
         elif self.input_parameters.mechanism_parameters_0[0] in [2]:
             from Simulations.Mechanism2.Mechanism2main import Mechanism_2_simulation_single_thread_Gui
             Mechanism_2_simulation_single_thread_Gui(self.signals,self.input_parameters)
@@ -97,7 +97,8 @@ class MainWindow(QMainWindow):
         self.threadpool = QThreadPool()
     
 
-        self.graphWindow = None
+        self.graphWindow = None 
+        self.graphWindowOverlay = None
         self.liveConcProfileWindow = None
         self.liveConcProfileWindowLineRef = OrderedDict() 
         self.liveSimulationWindow = None
@@ -129,6 +130,9 @@ class MainWindow(QMainWindow):
         button_action8.triggered.connect(self.onSaveSetting)
         button_action9 = QAction(QIcon('./Icons/LoadSettingIcon.png'),'&Load Setting',self)
         button_action9.triggered.connect(self.onLoadSetting)
+        button_action10 = QAction(QIcon('./Icons/OverlayIcon.png'),'&Overlay',self)
+        button_action10.triggered.connect(self.onOverlay)
+        button_action10.setCheckable(True)
 
 
         self.menu = self.menuBar()
@@ -143,6 +147,7 @@ class MainWindow(QMainWindow):
         view_menu = self.menu.addMenu('&View')
         view_menu.addAction(button_action6)
         view_menu.addAction(button_action7)
+        view_menu.addAction(button_action10)
         about_menu = self.menu.addMenu('&About')
         about_menu.addAction(button_action2)
     def onScreenShot(self):
@@ -182,6 +187,8 @@ class MainWindow(QMainWindow):
         self.tableWidget.userParameter.ViewOption[0] = checked
     def onLiveConcProfile(self,checked):
         self.tableWidget.userParameter.ViewOption[1] = checked
+    def onOverlay(self,checked):
+        self.tableWidget.userParameter.ViewOption[2] = checked
 
 
     @pyqtSlot(str)
@@ -202,36 +209,97 @@ class MainWindow(QMainWindow):
         print('double clicked')
         selectedFile = item.text()
 
-        if self.graphWindow is None or isinstance(self.graphWindow,GraphWindow):
-            self.graphWindow = GraphWindow()
-            self.graphWindow.graphWidget.setBackground('w')
-            
-            if os.path.splitext(selectedFile)[1] == '.csv' or os.path.splitext(selectedFile)[1] =='.txt':
-                df = pd.read_csv(selectedFile)
-
-
-                pen = pg.mkPen(width=5,color=(0,0,0))
-                self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen)
-                self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.showGrid(x=True,y=True)
-            elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
-                df_dict = pd.read_excel(selectedFile,sheet_name=None)
-                # add legend
-                self.graphWindow.graphWidget.addLegend()
-                for key,df in df_dict.items():
-                    pen = pg.mkPen(width=5,color=next(self.graphWindow.colorCycle))
-                    self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=key)
+        # No overlay
+        if self.tableWidget.userParameter.ViewOption[2] == False: 
+            if self.graphWindow is None or isinstance(self.graphWindow,GraphWindow):
+                self.graphWindow = GraphWindow()
+                self.graphWindow.graphWidget.setBackground('w')
                 
-                self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                self.graphWindow.graphWidget.showGrid(x=True,y=True)
-            else:
-                raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
+                if os.path.splitext(selectedFile)[1] == '.csv' or os.path.splitext(selectedFile)[1] =='.txt':
+                    df = pd.read_csv(selectedFile)
+
+
+                    pen = pg.mkPen(width=5,color=(0,0,0))
+                    self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen)
+                    self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.showGrid(x=True,y=True)
+                elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
+                    df_dict = pd.read_excel(selectedFile,sheet_name=None)
+                    # add legend
+                    self.graphWindow.graphWidget.addLegend()
+                    for key,df in df_dict.items():
+                        pen = pg.mkPen(width=5,color=next(self.graphWindow.colorCycle))
+                        self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=key)
+                    
+                    self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.showGrid(x=True,y=True)
+                else:
+                    raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
+            
+                self.graphWindow.show()
         
-            self.graphWindow.show()
+        else:
+            # Now requires overlay
+            if self.graphWindowOverlay is None or not self.graphWindowOverlay.isVisible():
+                # If it does not exist or is not visible, instantiate it.
+                self.graphWindowOverlay = GraphWindow()
+                self.graphWindowOverlay.graphWidget.setBackground('w')
+                
+                if os.path.splitext(selectedFile)[1] == '.csv' or os.path.splitext(selectedFile)[1] =='.txt':
+                    df = pd.read_csv(selectedFile)
+
+                    self.graphWindowOverlay.graphWidget.addLegend()
+                    pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
+                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}')
+                    self.graphWindowOverlay.graphWidget.setLabel('left','Current, A',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.showGrid(x=True,y=True)
+                elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
+                    df_dict = pd.read_excel(selectedFile,sheet_name=None)
+                    # add legend
+                    self.graphWindowOverlay.graphWidget.addLegend()
+                    for key,df in df_dict.items():
+                        pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
+                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}/{key}')
+                    
+                    self.graphWindowOverlay.graphWidget.setLabel('left','Current, A',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.showGrid(x=True,y=True)
+                else:
+                    raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
+                    
+                self.graphWindowOverlay.show()
+            elif isinstance(self.graphWindowOverlay,GraphWindow):
+
+                if os.path.splitext(selectedFile)[1] == '.csv' or os.path.splitext(selectedFile)[1] =='.txt':
+                    df = pd.read_csv(selectedFile)
+
+
+                    pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
+                    self.graphWindowOverlay.graphWidget.addLegend()
+                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}')
+                elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
+                    df_dict = pd.read_excel(selectedFile,sheet_name=None)
+                    # add legend
+                    self.graphWindowOverlay.graphWidget.addLegend()
+                    for key,df in df_dict.items():
+                        pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
+                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}/{key}')
+                    
+                else:
+                    raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
+
+            else:
+
+                raise TypeError('Unknwon type')
+
+
             
     @pyqtSlot(np.ndarray)
     def plotLiveSimulation(self,fluxesProfile):
@@ -239,7 +307,7 @@ class MainWindow(QMainWindow):
             self.liveSimulationWindow = GraphWindow(title='Live Voltammogram')
             self.liveSimulationWindow.graphWidget.setBackground('w')
             self.liveSimulationWindow.graphWidget.addLegend()
-            pen = pg.mkPen(width=5,color=(0,0,0))
+            pen = pg.mkPen(width=3,color=(0,0,0))
             self.liveSimulationWindowLineRef[0] = self.liveSimulationWindow.graphWidget.plot(fluxesProfile[:,0],fluxesProfile[:,1],pen=pen,name=f'Voltammogram')
             self.liveSimulationWindow.graphWidget.setLabel('left','Current, A',**self.liveSimulationWindow.styles)
             self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)
@@ -259,7 +327,7 @@ class MainWindow(QMainWindow):
             self.liveConcProfileWindow.graphWidget.setBackground('w')
             self.liveConcProfileWindow.graphWidget.addLegend()
             for index,species in enumerate(['A','B','C','X','Y']):
-                pen = pg.mkPen(width=5,color=next(self.liveConcProfileWindow.colorCycle))
+                pen = pg.mkPen(width=3,color=next(self.liveConcProfileWindow.colorCycle))
                 self.liveConcProfileWindowLineRef[index]=self.liveConcProfileWindow.graphWidget.plot(concProfile[:,0],concProfile[:,index+1],pen=pen,name=f'{species}')
 
             self.liveConcProfileWindow.graphWidget.setLabel('left','Concentration, M',**self.liveConcProfileWindow.styles)
@@ -272,6 +340,9 @@ class MainWindow(QMainWindow):
                 self.liveConcProfileWindowLineRef[index].setData(concProfile[:,0],concProfile[:,index+1])
 
         self.liveConcProfileWindow.show()
+
+
+
 
 
             
@@ -940,10 +1011,29 @@ class MyTableWidget(QWidget):
 
         self.input_widgets_dict40[0] = QLineEdit()
         self.input_widgets_dict40[0].setReadOnly(True)
+        self.input_widgets_dict40[1] = QPushButton('Calculate')
+        self.input_widgets_dict40[1].clicked.connect(self.calcNMolecules)
+        
 
         layout.addRow(QLabel('Number of molecules'),self.input_widgets_dict40[0])
+        layout.addRow(self.input_widgets_dict40[1])
         self.formGroupBox40.setLayout(layout)
 
+
+    def calcNMolecules(self):
+        EMax = getValue(self.input_widgets_dict1[0])
+        EMin = getValue(self.input_widgets_dict1[1])
+        v  = getValue(self.input_widgets_dict1[3])
+        cycles = int(getValue(self.input_widgets_dict1[4]))
+        c0 = getValue(self.input_widgets_dict10[0]) * 1000
+        dElectrode = getValue(self.input_widgets_dict11[1])
+        D = getValue(self.input_widgets_dict22[1])
+        NA = 6.0221409e23
+        tMax = 2.0*(EMax-EMin)/v * cycles
+        xMax = 6.0*math.sqrt(D*tMax)
+        A = math.pi * dElectrode * dElectrode
+        nMolecules = int(NA*c0*xMax*A)
+        self.input_widgets_dict40[0].setText(f'{nMolecules}')
 
 
     def createFormGroupBox5(self):
@@ -1021,6 +1111,7 @@ class MyTableWidget(QWidget):
         self.file_widgetes_dict[2] = QLineEdit()
         self.file_widgetes_dict[3] = QComboBox()
         self.file_widgetes_dict[4] = QCheckBox('Automatic File Names')
+        self.file_widgetes_dict[5] = QCheckBox('Dimensional form of voltammogram')
 
         self.file_widgetes_dict[0].clicked.connect(self.saveDirectoryDialog)
         self.file_widgetes_dict[3].addItems(['.txt','.csv'])
@@ -1031,6 +1122,7 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('File name') ,self.file_widgetes_dict[2])
         layout.addRow(QLabel('File type') ,self.file_widgetes_dict[3])
         layout.addRow(self.file_widgetes_dict[4])
+        layout.addRow(self.file_widgetes_dict[5])
         self.fileFormGroupBox.setLayout(layout)
 
 
@@ -1111,7 +1203,10 @@ class MyTableWidget(QWidget):
             setEnabled(self.input_widgets_dict4[key])
 
         for key,value in inputParameter.stochastic_process_parameters_40.items():
-            self.input_widgets_dict40[key].setText(f'{value}')
+            if key in [1]:
+                pass
+            else:
+                self.input_widgets_dict40[key].setText(f'{value}')
             setEnabled(self.input_widgets_dict40[key])
 
         for key,value in inputParameter.adsorption_parameters_5.items():
@@ -1131,6 +1226,9 @@ class MyTableWidget(QWidget):
                 setEnabled(self.file_widgetes_dict[key])
             elif key in [3]:
                 self.file_widgetes_dict[key].setCurrentIndex(value)
+                setEnabled(self.file_widgetes_dict[key])
+            elif key in [4,5]:
+                self.file_widgetes_dict[key].setChecked(value)
                 setEnabled(self.file_widgetes_dict[key])
         for key,value in inputParameter.chemical_parameters_hided_21.items():
             if value:

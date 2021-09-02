@@ -1,7 +1,9 @@
 import numpy as np
 import time
-from coeff import Coeff
-from grid import Grid
+#from coeff import Coeff
+from Simulations.Mechanism4.coeff import Coeff
+#from grid import Grid
+from Simulations.Mechanism4.grid import Grid
 import csv
 import scipy
 from scipy import sparse
@@ -18,7 +20,7 @@ P0 = 1.0 # reference pressure, 1 bar
 
 
 
-def Mechanism_1456_simulation_single_thread_Gui(signals,input_parameters)->None:
+def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None:
 
     DA = input_parameters.chemical_parameters_22[1]
     DB = input_parameters.chemical_parameters_22[5]
@@ -30,12 +32,14 @@ def Mechanism_1456_simulation_single_thread_Gui(signals,input_parameters)->None:
     E0f = input_parameters.chemical_parameters_2[1] # The formal potential of the couple couple
     directory = input_parameters.file_options_parameters[1]
     file_name = input_parameters.file_options_parameters[2]
+
     if input_parameters.file_options_parameters[3] == 0:
         file_type ='.txt'
     elif input_parameters.file_options_parameters[3] == 1:
         file_type ='.csv'
     else:
         raise ValueError('Unknwon file type')
+    dimensional = input_parameters.file_options_parameters[5]
     output_file_name = f'{directory}/{file_name}{file_type}'
     Temperature = input_parameters.cv_parameters_1[7]
     theta_i = (input_parameters.cv_parameters_1[0]-E0f)*96485/(8.314*Temperature)
@@ -243,7 +247,7 @@ def Mechanism_1456_simulation_single_thread_Gui(signals,input_parameters)->None:
 
 
 
-    grid.saveVoltammogram(E,output_file_name)
+    grid.saveVoltammogram(E,output_file_name,dimensional,Temperature,E0f,dElectrode,Dref,cRef)
 
     signals.output_file_name.emit(output_file_name)
     signals.progress.emit(100)

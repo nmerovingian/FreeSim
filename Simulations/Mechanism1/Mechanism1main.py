@@ -2,11 +2,11 @@ import queue
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-from Constants import Constants
-from Parameters import Parameters
+from Simulations.Mechanism1.Constants import Constants
+from Simulations.Mechanism1.Parameters import Parameters
 Parameters.evalImplicitParameters(Constants)
-from Voltammogram import Voltammogram
-from Molecule import Molecule
+from Simulations.Mechanism1.Voltammogram import Voltammogram
+from Simulations.Mechanism1.Molecule import Molecule
 from random import random,seed
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Queue,Lock,Pool,Process,Manager

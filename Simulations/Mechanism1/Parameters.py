@@ -10,11 +10,12 @@ class Parameters(object):
     # cycles
     cycles = 2
 
-    # target concentrtaion before discretisation , mM 
+    # target concentrtaion before discretisation , mol/m^3
     c0 = 1e-2
 
+    dElectrode = 100e-9
     #Electrode surface area , radius is 100 nm
-    A = math.pi * 100e-9 * 100e-9
+    A = math.pi * dElectrode * dElectrode
 
     # formal potential, V 
 
@@ -73,8 +74,10 @@ class Parameters(object):
         cls.EMin = input_parameters.cv_parameters_1[1] # Ereverse 
         cls.V = input_parameters.cv_parameters_1[3]
         cls.cycles = int(float(input_parameters.cv_parameters_1[4]))
-        cls.c0 = input_parameters.cv_parameters_10[0]
+        cls.c0 = input_parameters.cv_parameters_10[0] * 1000
         cls.D = input_parameters.chemical_parameters_22[1]
+        cls.dElectrode = input_parameters.cv_parameters_11[1]
+        cls.A =cls.dElectrode * cls.dElectrode * math.pi
 
         
 
