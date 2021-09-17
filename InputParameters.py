@@ -33,14 +33,14 @@ class DefaultInput(object):
         self.model_parameters_31 = OrderedDict([(0,0.05)])
 
         self.stochastic_process_parameters_4 = OrderedDict([(0,100),(1,500),])
-        self.stochastic_process_parameters_40 = OrderedDict([(0,0)])
+        self.stochastic_process_parameters_40 = OrderedDict([(0,0),(1,True)])
 
         self.adsorption_parameters_5 = OrderedDict([(0,0.0),(1,0.0),(2,0.0),(3,0.0),(4,0.0),(5,0.0),(6,0.0),(7,0.0),(8,0.0)])
-        self.adsorption_parameters_50 = OrderedDict([(0,0.5),(1,1.0)])
+        self.adsorption_parameters_50 = OrderedDict([(0,1.0),(1,0.5)])
 
 
 
-        self.cv_parameters_enabled_1 = OrderedDict()
+        self.cv_parameters_enabled_1 = OrderedDict([(5,False),(6,False),(8,False),(9,False)])
         self.cv_parameters_enabled_10 = OrderedDict()
         self.cv_parameters_enabled_11 = OrderedDict()
         self.cv_parameters_enabled_12 = OrderedDict()
@@ -61,7 +61,7 @@ class DefaultInput(object):
 
         self.chemical_parameters_hided_21 = OrderedDict([(1,True)])
         
-        self.file_options_parameters = OrderedDict([(0,True),(1,os.getcwd() + '\Data'),(2,datetime.datetime.now().strftime(r'%Y-%m-%d')),(3,0)])
+        self.file_options_parameters = OrderedDict([(0,True),(1,os.getcwd() + '\Data'),(2,datetime.datetime.now().strftime(r'%Y-%m-%d')),(3,False),(4,False),(5,True)])
 
 class Mechanism0Input(DefaultInput):
     def __init__(self) -> None:
@@ -89,11 +89,13 @@ class Mechanism0Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 class Mechanism1Input(DefaultInput):
     def __init__(self) -> None:
         super().__init__()
 
+
+        self.cv_parameters_11[1] = 1e-7
         self.cv_parameters_enabled_10[2] = False
         self.cv_parameters_enabled_10[3] = False
         self.cv_parameters_enabled_10[4] = False
@@ -143,7 +145,7 @@ class Mechanism2Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 
 class Mechanism3Input(DefaultInput):
     def __init__(self) -> None:
@@ -164,7 +166,7 @@ class Mechanism3Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 
 class Mechanism4Input(DefaultInput):
     def __init__(self) -> None:
@@ -185,7 +187,7 @@ class Mechanism4Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 
 
 class Mechanism5Input(DefaultInput):
@@ -207,7 +209,7 @@ class Mechanism5Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 
 
 class Mechanism6Input(DefaultInput):
@@ -225,7 +227,7 @@ class Mechanism6Input(DefaultInput):
         self.stochastic_parameters_enabled_4[0]= False
         self.stochastic_parameters_enabled_4[1] = False
         self.stochastic_parameters_enabled_40[0] = False
-
+        self.stochastic_parameters_enabled_40[1] = False
 
 class Mechanism7Input(DefaultInput):
     def __init__(self) -> None:
@@ -264,6 +266,8 @@ class Mechanism7Input(DefaultInput):
         self.adsorption_parameters_5[4] = 1.0
         self.adsorption_parameters_5[5] = 0.0
         self.adsorption_parameters_5[6] = 0.0
+        self.stochastic_parameters_enabled_40[1] = False
+
 
 class Mechanism8Input(DefaultInput):
     def __init__(self) -> None:
@@ -274,4 +278,4 @@ class userInputParameters(DefaultInput):
     def __init__(self) -> None:
         super().__init__()
 
-        self.ViewOption = OrderedDict([(0,False),(1,False)])
+        self.ViewOption = OrderedDict([(0,False),(1,False),(2,False)])
