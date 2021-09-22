@@ -5,6 +5,8 @@
 
 # C extensions
 *.so
+# Data
+Data/*
 
 # Distribution / packaging
 .Python

@@ -213,7 +213,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
         coeff.update(grid.conc,concA,concB,concC,concY,concZ)
-        coeff.Allcalc_abc(deltaT,Theta,deltaX)
+        coeff.Allcalc_abc(deltaT,Theta,deltaX,mode=diffusion_mode)
         for ii in range(number_of_iteration):
             coeff.calc_jacob(grid.conc,Theta)
             coeff.calc_fx(grid.conc,Theta)
