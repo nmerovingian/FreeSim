@@ -5,7 +5,7 @@ from PyQt5 import QtCore
 import pyqtgraph as pg
 from pyqtgraph import PlotWidget, plot 
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget
+from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget,QActionGroup,QStackedWidget
 from PyQt5.QtCore import QFile, QLine, QRect, QRunnable, QTimer, Qt,QSize,QThread,QThreadPool,QObject, pyqtBoundSignal, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon,QPixmap
 import sys
@@ -133,6 +133,16 @@ class MainWindow(QMainWindow):
         button_action10 = QAction(QIcon('./Icons/OverlayIcon.png'),'&Overlay',self)
         button_action10.triggered.connect(self.onOverlay)
         button_action10.setCheckable(True)
+        button_action11 = QAction(QIcon('./Icons/CV-Icon.png'),'&Cyclic Voltammetry',self)
+        button_action11.setCheckable(True)
+        button_action11.toggled.connect(self.tableWidget.onCVModeToggled)
+        button_action12 = QAction(QIcon('./Icons/CA-Icon.png'),'&Chronoamperometry',self)
+        button_action12.setCheckable(True)
+        button_action12.toggled.connect(self.tableWidget.onCAModeToggled)
+
+        button_group0 = QActionGroup(self)
+        button_group0.addAction(button_action11)
+        button_group0.addAction(button_action12)
 
 
         self.menu = self.menuBar()
@@ -143,7 +153,10 @@ class MainWindow(QMainWindow):
         file_menu.addAction(button_action4)
         file_menu.addAction(button_action8)
         file_menu.addAction(button_action9)
-        edit_menu = self.menu.addMenu('&Edit')
+        mode_menu = self.menu.addMenu('&Mode')
+        mode_menu.addAction(button_action11)
+        mode_menu.addAction(button_action12)
+
         view_menu = self.menu.addMenu('&View')
         view_menu.addAction(button_action6)
         view_menu.addAction(button_action7)
@@ -503,7 +516,11 @@ class MyTableWidget(QWidget):
         self.tab1.layout = QGridLayout()
         self.pushButton1 = QPushButton("reserved button")
         self.createFormGroupBox1()
-        self.tab1.layout.addWidget(self.formGroupBox1,0,0)
+        self.createFormGroupBox13()
+        self.tab1Stack0 = QStackedWidget()
+        self.tab1Stack0.addWidget(self.formGroupBox1)
+        self.tab1Stack0.addWidget(self.formGroupBox13) 
+        self.tab1.layout.addWidget(self.tab1Stack0,0,0)
         self.createFormGroupBox10()
         self.tab1.layout.addWidget(self.formGroupBox10,1,0)
         self.createFormGroupBox11()
@@ -511,6 +528,8 @@ class MyTableWidget(QWidget):
         self.createFormGroupBox12()
         self.tab1.layout.addWidget(self.formGroupBox12,1,1)
         self.tab1.layout.addWidget(self.pushButton1,2,0,1,2)
+
+
         self.tab1.setLayout(self.tab1.layout)
 
         # create second tab 
@@ -609,6 +628,12 @@ class MyTableWidget(QWidget):
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
         self.calAds()
 
+    def onCVModeToggled(self):
+        self.tab1Stack0.setCurrentIndex(0)
+
+    def onCAModeToggled(self):
+        self.tab1Stack0.setCurrentIndex(1)
+
 
     def createFormGroupBox1(self):
         self.formGroupBox1 = QGroupBox('Simulation Parameters')
@@ -677,6 +702,24 @@ class MyTableWidget(QWidget):
 
         self.formGroupBox12.setLayout(layout)
 
+
+    def createFormGroupBox13(self):
+        self.formGroupBox13 = QGroupBox('Simulation Parameters')
+        layout = QFormLayout()
+        self.input_widgets_dict13 = OrderedDict()
+
+        for i in range(10):
+            self.input_widgets_dict13[i] = QLineEdit()
+
+        layout.addRow(QLabel('E<sub>applied</sub>, V'),self.input_widgets_dict13[0])
+        layout.addRow(QLabel('Time'),self.input_widgets_dict13[1])
+        layout.addRow(QLabel('Ru, ohm'),self.input_widgets_dict13[2])
+        layout.addRow(QLabel('Cdl, F'),self.input_widgets_dict13[3])
+        self.input_widgets_dict13[3].setToolTip('Double Layer Capacitance')
+        layout.addRow(QLabel('Temp, K'),self.input_widgets_dict13[4])
+        layout.addRow(QLabel('Reserved'),self.input_widgets_dict13[5])
+        layout.addRow(QLabel('Reserved'),self.input_widgets_dict13[6])
+        self.formGroupBox13.setLayout(layout)
 
 
 
@@ -1158,6 +1201,10 @@ class MyTableWidget(QWidget):
             else:
                 self.input_widgets_dict11[key].setText(f'{value:.2E}')
             setEnabled(self.input_widgets_dict11[key])
+
+        for key,value in inputParameter.cv_parameters_13.items():
+            self.input_widgets_dict13[key].setText(f'{value:.2f}')
+            setEnabled(self.input_widgets_dict13[key])
             
         for key,value in inputParameter.chemical_parameters_2.items():
             if key in [0,5]:
@@ -1274,6 +1321,9 @@ class MyTableWidget(QWidget):
 
         for key,value in self.userParameter.cv_parameters_11.items():
             self.userParameter.cv_parameters_11[key] = getValue(self.input_widgets_dict11[key])
+
+        for key,value in self.userParameter.cv_parameters_13.items():
+            self.userParameter.cv_parameters_13[key] = getValue(self.input_widgets_dict13[key])
 
         for key,value in self.userParameter.chemical_parameters_2.items():
             self.userParameter.chemical_parameters_2[key] = getValue(self.input_widgets_dict2[key])
