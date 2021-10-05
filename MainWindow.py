@@ -52,7 +52,7 @@ class SimulationWorker(QRunnable):
             from Simulations.Mechanism1.Mechanism1main import Mechanism_1_simulation_single_thread_GUI
             Mechanism_1_simulation_single_thread_GUI(self.signals,self.input_parameters)
         elif self.input_parameters.mechanism_parameters_0[0] in [0,3,4,5,6]:
-            from Simulations.Mechanism4.Mechanism1456main import Mechanism_03456_simulation_single_thread_Gui
+            from Simulations.Mechanism4.Mechanism03456main import Mechanism_03456_simulation_single_thread_Gui
             Mechanism_03456_simulation_single_thread_Gui(self.signals,self.input_parameters)
         elif self.input_parameters.mechanism_parameters_0[0] in [2]:
             from Simulations.Mechanism2.Mechanism2main import Mechanism_2_simulation_single_thread_Gui
@@ -1289,6 +1289,8 @@ class MyTableWidget(QWidget):
             setDisabled(self.input_widgets_dict10[key])
         for key,value in inputParameter.cv_parameters_enabled_11.items():
             setDisabled(self.input_widgets_dict11[key])
+        for key,value in inputParameter.cv_parameters_enabled_13.items():
+            setDisabled(self.input_widgets_dict13[key])
         for key,value in inputParameter.chemical_parameters_enabled_2.items():
             setDisabled(self.input_widgets_dict2[key])
         for key,value in inputParameter.chemical_parameters_enabled_21.items():
