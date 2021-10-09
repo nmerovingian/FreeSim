@@ -24,6 +24,7 @@ $ pip install pyqtgraph
 $ pip install sympy
 $ pip install numpy
 $ pip install pandas
+$ pip install scipy
 ```
 
 To run,

@@ -11,7 +11,7 @@ from scipy.sparse import linalg
 import time
 import os
 import math
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
 cRef=1.0 # reference concentration, 1M
 P0 = 1.0 # reference pressure, 1 bar
