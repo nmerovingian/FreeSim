@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('FreeSim, an open-source electrochemical reaction simulator V 0.0')
+        self.setWindowTitle('FreeSim, Open-Source Electrochemical Reaction Simulator V 0.0')
 
         self.layout = QVBoxLayout()
 
@@ -103,6 +103,8 @@ class MainWindow(QMainWindow):
         self.liveConcProfileWindowLineRef = OrderedDict() 
         self.liveSimulationWindow = None
         self.liveSimulationWindowLineRef = OrderedDict()
+
+
         
         
 
@@ -136,6 +138,7 @@ class MainWindow(QMainWindow):
         button_action11 = QAction(QIcon('./Icons/CV-Icon.png'),'&Cyclic Voltammetry',self)
         button_action11.setCheckable(True)
         button_action11.toggled.connect(self.tableWidget.onCVModeToggled)
+        button_action11.setChecked(True)
         button_action12 = QAction(QIcon('./Icons/CA-Icon.png'),'&Chronoamperometry',self)
         button_action12.setCheckable(True)
         button_action12.toggled.connect(self.tableWidget.onCAModeToggled)
@@ -497,7 +500,7 @@ class MyTableWidget(QWidget):
         self.button_group.addButton(self.pushButton15,5)
         self.button_group.addButton(self.pushButton16,6)
         self.button_group.addButton(self.pushButton17,7)
-        self.button_group.buttonClicked[int].connect(self.onMmodelButtonClicked)
+        self.button_group.buttonClicked[int].connect(self.onModelButtonClicked)
 
 
         self.tab0.layout.addWidget(self.pushButton10)
@@ -547,11 +550,16 @@ class MyTableWidget(QWidget):
         self.createFormGroupBox3()
         self.tab3.layout.addWidget(self.formGroupBox3,0,0)
         self.createFormGroupBox30()
-        self.tab3.layout.addWidget(self.formGroupBox30,1,0)
+        self.createFormGroupBox32()
+        self.tab3Stack0 = QStackedWidget()
+        self.tab3Stack0.addWidget(self.formGroupBox30)
+        self.tab3Stack0.addWidget(self.formGroupBox32)
+        self.tab3.layout.addWidget(self.tab3Stack0,1,0)
         self.createFormGroupBox31()
         self.tab3.layout.addWidget(self.formGroupBox31,0,1)
         self.pushButton30 = QPushButton('Default Parameters')
-        self.tab3.layout.addWidget(self.pushButton30,1,1)
+        self.pushButton30.clicked.connect(self.onModelParametersDefaultParameters)
+        self.tab3.layout.addWidget(self.pushButton30,2,0,1,2)
         self.tab3.setLayout(self.tab3.layout)
 
         # create fourth tab 
@@ -585,7 +593,7 @@ class MyTableWidget(QWidget):
         self.userParameter = userInputParameters()
         
 
-    def onMmodelButtonClicked(self,id):
+    def onModelButtonClicked(self,id):
         for button in self.button_group.buttons():
             if button is self.button_group.button(id):
                 print(id,button.text() + " Was Clicked ")
@@ -630,11 +638,19 @@ class MyTableWidget(QWidget):
 
     def onCVModeToggled(self):
         self.tab1Stack0.setCurrentIndex(0)
+        self.tab3Stack0.setCurrentIndex(0)
+        self.userParameter.mechanism_parameters_0[1] = 'CV'
+        self.tabs.setTabText(1,'CV-Parameters')
 
     def onCAModeToggled(self):
         self.tab1Stack0.setCurrentIndex(1)
+        self.tab3Stack0.setCurrentIndex(1)
+        self.userParameter.mechanism_parameters_0[1] = 'CA'
+        self.tabs.setTabText(1,'CA-Parameters')
 
-
+    def onModelParametersDefaultParameters(self):
+        print('Not implemented')
+    
     def createFormGroupBox1(self):
         self.formGroupBox1 = QGroupBox('Simulation Parameters')
         layout = QFormLayout()
@@ -1006,7 +1022,7 @@ class MyTableWidget(QWidget):
 
 
     def createFormGroupBox30(self):
-        self.formGroupBox30 = QGroupBox('Time grid in x direction')
+        self.formGroupBox30 = QGroupBox('Time grid in cyclic voltammetry')
         layout = QFormLayout()
         self.input_widgets_dict30 = OrderedDict()
 
@@ -1034,6 +1050,19 @@ class MyTableWidget(QWidget):
 
         self.formGroupBox31.setLayout(layout)
 
+
+    def createFormGroupBox32(self):
+        self.formGroupBox32 = QGroupBox('Time grid in cyclic voltammetry')
+        layout = QFormLayout()
+        self.input_widgets_dict32 = OrderedDict()
+        for i in range(10):
+            self.input_widgets_dict32[i] = QLineEdit()
+
+        layout.addRow(QLabel('Initial Time Step'),self.input_widgets_dict32[0])
+        layout.addRow(QLabel('Expanding Time Factor'),self.input_widgets_dict32[1])
+        layout.addRow(QLabel('Gaussian Noise Level (A)'),self.input_widgets_dict32[2])
+
+        self.formGroupBox32.setLayout(layout)
 
     def createFormGroupBox4(self):
         self.formGroupBox4 = QGroupBox('Stochastic Parameters')
@@ -1244,6 +1273,12 @@ class MyTableWidget(QWidget):
             self.input_widgets_dict31[key].setText(f'{value:.2f}')
             setEnabled(self.input_widgets_dict31[key])
 
+        for key,value in inputParameter.model_parameters_32.items():
+            if key in [0]:
+                self.input_widgets_dict32[key].setText(f'{value:.2E}')
+            else:
+                self.input_widgets_dict32[key].setText(f'{value:.2f}')
+            setEnabled(self.input_widgets_dict32[key])
 
         for key,value in inputParameter.stochastic_process_parameters_4.items():
             self.input_widgets_dict4[key].setText(f'{value}')
@@ -1345,6 +1380,9 @@ class MyTableWidget(QWidget):
 
         for key,value in self.userParameter.model_parameters_31.items():
             self.userParameter.model_parameters_31[key] = getValue(self.input_widgets_dict31[key])
+
+        for key,value in self.userParameter.model_parameters_32.items():
+            self.userParameter.model_parameters_32[key] = getValue(self.input_widgets_dict32[key])  
 
         for key,value in self.userParameter.stochastic_process_parameters_4.items():
             self.userParameter.stochastic_process_parameters_4[key] = getValue(self.input_widgets_dict4[key])

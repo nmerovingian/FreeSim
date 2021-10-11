@@ -15,7 +15,7 @@ class DefaultInput(object):
         self.model_parameters_disabled = {}
         self.cv_parameters_disabled = {}
 
-        self.mechanism_parameters_0 = OrderedDict([(0,3)])
+        self.mechanism_parameters_0 = OrderedDict([(0,3),(1,'CV')])
 
         self.cv_parameters_1 = OrderedDict([(0,0.4),(1,-0.4),(2,0.4),(3,1.0),(4,1),(5,0.0),(6,0.0),(7,298),(8,0.0),(9,0.0)])
         self.cv_parameters_10 = OrderedDict([(0,1e-5),(1,0.0),(2,0.0),(3,0.0),(4,0.0)])
@@ -32,6 +32,7 @@ class DefaultInput(object):
         self.model_parameters_3 = OrderedDict([(0,0.05),(1,0),(2,6.0),(3,1e-8)])
         self.model_parameters_30 = OrderedDict([(0,5e-3),(1,6),(2,0.0)])
         self.model_parameters_31 = OrderedDict([(0,0.05)])
+        self.model_parameters_32 = OrderedDict([(0,1e-8),(1,0.02),(2,0.0)])
 
         self.stochastic_process_parameters_4 = OrderedDict([(0,100),(1,500),])
         self.stochastic_process_parameters_40 = OrderedDict([(0,0),(1,True)])

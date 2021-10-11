@@ -41,11 +41,9 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
         raise ValueError('Unknwon file type')
     dimensional = input_parameters.file_options_parameters[5]
     output_file_name = f'{directory}/{file_name}{file_type}'
-    Temperature = input_parameters.cv_parameters_1[7]
-    theta_i = (input_parameters.cv_parameters_1[0]-E0f)*96485/(8.314*Temperature)
-    theta_v = (input_parameters.cv_parameters_1[1]- E0f)*96485/(8.314*Temperature)
-    dimScanRate = input_parameters.cv_parameters_1[3]
-    cycles = int(input_parameters.cv_parameters_1[4])
+    Temperature = input_parameters.cv_parameters_13[4]
+    theta_i = (input_parameters.cv_parameters_13[0]-E0f)*96485/(8.314*Temperature)
+    time_dim = input_parameters.cv_parameters_13[1]
     #space step
     deltaX = 1e-5
     #potential step
