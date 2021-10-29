@@ -3,7 +3,6 @@ import numpy as np
 class Coeff(object):
     def __init__(self,deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism):
         self.n = 0
-        self.xi = 0.0
         self.maxX = maxX
         self.kinetics = kinetics
         self.K0 = K0
@@ -18,7 +17,12 @@ class Coeff(object):
         self.dZ = dZ
         self.mechanism = mechanism
 
-
+        if self.mode =='linear':
+            self.xi = 0.0
+        elif self.mode=='radial':
+            self.xi == 1.0
+        else:
+            raise ValueError
 
 
     def calc_n(self,dX):
@@ -302,7 +306,7 @@ class Coeff(object):
         elif self.kinetics =='BV':
             Kred = self.K0*np.exp(-self.alpha*Theta)
             Kox = self.K0*np.exp((1.0-self.alpha)*Theta)
-            self.J[0,0] = Kred*h/self.dB + 1
+            self.J[0,0] = Kred*h/self.dA + 1
             self.J[0,1] = -Kox*h/self.dA
             self.J[0,5] = -1.0
             self.J[1,0] = -Kred*h/self.dB
