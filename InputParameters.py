@@ -6,15 +6,6 @@ class DefaultInput(object):
     def __init__(self) -> None:
         super().__init__()
 
-        self.cv_parameters = {'Estart':0.3,'Erev':-0.3,'Eend':0.3,'Scan Rate':1.0,'Cycles':1,'Ru':0.0,'Cdl':0.0,'Temp':298.15,'cA':1e-4,'cB':0.0,'cC':0.0,'cX':0.0,'Geometry of electrode':0,'Area':1e-6,'Mode of simulation':0}
-        self.chemical_parameters = {'Type of mechanism':0,'Formal Potential':0.0,'Reorgnization energy':0.0,'k0':1e7,'ACheck':True,'DA':1e-9,'canalA':0.0,'cinitA':0.0,'BCheck':True,'DB':1e-9,'canalB':0.0,'cinitB':0.0,'CCheck':False,'DC':1e-9,'canalC':0.0,'cinitC':0.0,'DCheck':True,'DD':1e-9,'canalD':0.0,'cinit':0.0}
-        self.model_prameters = {'Expanding Grid Factor':0.05,'D*/k*':0.0,'Xmax/SQRT(Dt)':6.0,'R0*':1e-6,'Potential Step':1e-5,'Gaussian-Newton iteration':5,'Gaussian Noise level':0.0,'Expanding grid factor in y direction':0.05}
-        self.stochastic_process_parameters = {'Sampling rate':100,'Number of oversampling':500,'Number of molecules':0.0}
-        self.cv_parameters_disabled = {}
-        self.chemical_parameters_disabled = {}
-        self.model_parameters_disabled = {}
-        self.cv_parameters_disabled = {}
-
         self.mechanism_parameters_0 = OrderedDict([(0,3),(1,'CV')])
 
         self.cv_parameters_1 = OrderedDict([(0,0.4),(1,-0.4),(2,0.4),(3,1.0),(4,1),(5,0.0),(6,0.0),(7,298),(8,0.0),(9,0.0)])
@@ -40,6 +31,9 @@ class DefaultInput(object):
         self.adsorption_parameters_5 = OrderedDict([(0,0.0),(1,0.0),(2,0.0),(3,0.0),(4,0.0),(5,0.0),(6,0.0),(7,0.0),(8,0.0)])
         self.adsorption_parameters_50 = OrderedDict([(0,1.0),(1,0.5)])
 
+        self.AI_parameters_6 = OrderedDict([(0,1.0),(1,-1.0),(2,1.0),(3,1.0),(4,1),(5,1e-3),(6,0.0),(7,1e-9),(8,1e-9),(9,1.0),(10,0.5),(11,0),(12,298),(13,1e-3),(14,0)])
+        self.AI_parameters_60 = OrderedDict([(0,0.0),(1,0.0),(2,0.0),(3,0.0),(4,1),(5,1.0),(6,0.0),(7,1.0),(8,1.0),(9,1.0),(10,0.5),(11,0),(12,0)])
+
 
 
         self.cv_parameters_enabled_1 = OrderedDict([(5,False),(6,False),(8,False),(9,False)])
@@ -61,6 +55,8 @@ class DefaultInput(object):
         self.stochastic_parameters_enabled_40 = OrderedDict()
         self.adsorption_parameters_enabled_5 = OrderedDict([(0,False),(1,False),(2,False),(3,False),(4,False),(5,False),(6,False),(7,False),(8,False)])
         self.adsorption_parameters_enabled_50 = OrderedDict([(0,False),(1,False)])
+        self.AI_parameters_enabled_6 = OrderedDict([(0,False),(1,False),(2,False),(4,False),(6,False),(12,False)])
+        self.AI_parameters_enabled_60 = OrderedDict([(0,False),(1,False),(2,False),(3,False),(4,False),(5,False),(6,False),(7,False),(8,False),(9,False),(10,False),(11,False)])
 
         self.chemical_parameters_hided_21 = OrderedDict([(1,True)])
         

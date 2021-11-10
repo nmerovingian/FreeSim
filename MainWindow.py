@@ -1,5 +1,6 @@
 __author__ = 'Haotian Chen'
 from pyqtgraph.graphicsItems.PlotDataItem import dataType
+from pyqtgraph.widgets.LayoutWidget import LayoutWidget
 from Simulations.Mechanism1.Voltammogram import Voltammogram
 from PyQt5 import QtCore
 import pyqtgraph as pg
@@ -142,10 +143,14 @@ class MainWindow(QMainWindow):
         button_action12 = QAction(QIcon('./Icons/CA-Icon.png'),'&Chronoamperometry',self)
         button_action12.setCheckable(True)
         button_action12.toggled.connect(self.tableWidget.onCAModeToggled)
+        button_action13 = QAction(QIcon('./Icons/AI-icon.png'),'&CV (AI prediction) ')
+        button_action13.toggled.connect(self.tableWidget.onAIModeToggled)
+        button_action13.setCheckable(True)
 
         button_group0 = QActionGroup(self)
         button_group0.addAction(button_action11)
         button_group0.addAction(button_action12)
+        button_group0.addAction(button_action13)
 
 
         self.menu = self.menuBar()
@@ -159,6 +164,8 @@ class MainWindow(QMainWindow):
         mode_menu = self.menu.addMenu('&Mode')
         mode_menu.addAction(button_action11)
         mode_menu.addAction(button_action12)
+        mode_menu.addSeparator()
+        mode_menu.addAction(button_action13)
 
         view_menu = self.menu.addMenu('&View')
         view_menu.addAction(button_action6)
@@ -166,6 +173,7 @@ class MainWindow(QMainWindow):
         view_menu.addAction(button_action10)
         about_menu = self.menu.addMenu('&About')
         about_menu.addAction(button_action2)
+
     def onScreenShot(self):
         screen = QApplication.primaryScreen()
         screen = screen.grabWindow(self.winId())
@@ -431,6 +439,7 @@ class MyTableWidget(QWidget):
         self.tab3 = QWidget()
         self.tab4 = QWidget()
         self.tab5 = QWidget()
+        self.tab6 = QWidget()
         self.FileTab = QWidget()
         self.tabs.resize(300,200)
         
@@ -578,6 +587,15 @@ class MyTableWidget(QWidget):
         self.tab5.layout.addWidget(self.formGroupBox50,0,1)
         self.tab5.setLayout(self.tab5.layout)
 
+        # create the sixth tab 
+        self.tab6.layout = QGridLayout()
+        self.createFormGroupBox6()
+        self.tab6.layout.addWidget(self.formGroupBox6,0,0)
+        self.createFormGroupBox60()
+        self.tab6.layout.addWidget(self.formGroupBox60,0,1)
+        self.tab6.setLayout(self.tab6.layout)
+        
+
         # create file tab
         self.FileTab.layout = QGridLayout()
         self.createFileFormGroupBox()
@@ -637,16 +655,42 @@ class MyTableWidget(QWidget):
         self.calAds()
 
     def onCVModeToggled(self):
+        self.defaultTabVisibility()
         self.tab1Stack0.setCurrentIndex(0)
         self.tab3Stack0.setCurrentIndex(0)
         self.userParameter.mechanism_parameters_0[1] = 'CV'
         self.tabs.setTabText(1,'CV-Parameters')
 
+
     def onCAModeToggled(self):
+        self.defaultTabVisibility()
         self.tab1Stack0.setCurrentIndex(1)
         self.tab3Stack0.setCurrentIndex(1)
         self.userParameter.mechanism_parameters_0[1] = 'CA'
         self.tabs.setTabText(1,'CA-Parameters')
+
+
+    def onAIModeToggled(self):
+        self.AIModeTabVisibility()
+        self.userParameter.mechanism_parameters_0[1] = 'AI'
+
+    def AIModeTabVisibility(self):
+        self.tab1.setEnabled(False)
+        self.tab2.setEnabled(False)
+        self.tab3.setEnabled(False)
+        self.tab4.setEnabled(False)
+        self.tab5.setEnabled(False)
+        self.tab6.setEnabled(True)
+        self.tabs.insertTab(1,self.tab6,'CV-AI prediction')
+
+    def defaultTabVisibility(self):
+        self.tab1.setEnabled(True)
+        self.tab2.setEnabled(True)
+        self.tab3.setEnabled(True)
+        self.tab4.setEnabled(True)
+        self.tab5.setEnabled(True)
+        self.tab6.setEnabled(False)
+
 
     def onModelParametersDefaultParameters(self):
         print('Not implemented')
@@ -1169,7 +1213,99 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('\u03B1<sub>ads</sub>'),self.input_widgets_dict50[1])
         self.formGroupBox50.setLayout(layout)
         
+    def createFormGroupBox6(self):
+        self.formGroupBox6 = QGroupBox('AI prediction, dimensional parameters')
+        layout = QFormLayout()
+        self.input_widgets_dict6 = OrderedDict()
 
+
+        self.input_widgets_dict6[0] = QLineEdit()
+        self.input_widgets_dict6[1] = QLineEdit()
+        self.input_widgets_dict6[2] = QLineEdit()
+        self.input_widgets_dict6[3] = QLineEdit()
+        self.input_widgets_dict6[4] = QLineEdit()
+        self.input_widgets_dict6[5] = QLineEdit()
+        self.input_widgets_dict6[6] = QLineEdit()
+        self.input_widgets_dict6[7] = QLineEdit()
+        self.input_widgets_dict6[8] = QLineEdit()
+        self.input_widgets_dict6[9] = QLineEdit()
+        self.input_widgets_dict6[10] = QLineEdit()
+
+        
+        self.input_widgets_dict6[11] = QComboBox()
+        self.input_widgets_dict6[11].addItems(['Bulter-Volmer'])
+        self.input_widgets_dict6[12] = QLineEdit()
+        self.input_widgets_dict6[13] = QLineEdit()
+        self.input_widgets_dict6[14] = QComboBox()
+        self.input_widgets_dict6[14].addItems(['Linear','Radial'])
+        self.input_widgets_dict6[15] = QPushButton('Convert to dimensionless')
+        self.input_widgets_dict6[15].toggled.connect(self.toDimlessAImode)
+
+        
+        layout.addRow(QLabel('E<sub>start</sub>, V'),self.input_widgets_dict6[0])
+        layout.addRow(QLabel('E<sub>rev</sub>, V'),self.input_widgets_dict6[1])
+        layout.addRow(QLabel('E<sub>end</sub>, V'),self.input_widgets_dict6[2])
+        layout.addRow(QLabel('Scan Rate, V/s'),self.input_widgets_dict6[3])
+        layout.addRow(QLabel('Cycles'),self.input_widgets_dict6[4])
+        layout.addRow(QLabel('c<sub>A<\sub>, M'),self.input_widgets_dict6[5])
+        layout.addRow(QLabel('c<sub>B<\sub>, M'),self.input_widgets_dict6[6])
+        layout.addRow(QLabel('D<sub>A<\sub>, m<sup>2</sup> s<sup>-1</sup>'),self.input_widgets_dict6[7])
+        layout.addRow(QLabel('D<sub>B<\sub>, m<sup>2</sup> s<sup>-1</sup>'),self.input_widgets_dict6[8])
+        layout.addRow(QLabel('k<sub>0<\sub>'),self.input_widgets_dict6[9])
+        layout.addRow(QLabel('\u03B1, transfer coefficient'),self.input_widgets_dict6[10])
+        layout.addRow(QLabel('Electrode Kinetics'),self.input_widgets_dict6[11])
+        layout.addRow(QLabel('Temp, K'),self.input_widgets_dict6[12])
+        layout.addRow(QLabel('r<sub>e</sub>, m'),self.input_widgets_dict6[13])
+        layout.addRow(QLabel('Diffusion Mode'),self.input_widgets_dict6[14])
+        layout.addRow(self.input_widgets_dict6[15])
+        
+        self.formGroupBox6.setLayout(layout)
+
+    def toDimlessAImode(self):
+        pass
+
+    def createFormGroupBox60(self):
+        self.formGroupBox60 = QGroupBox('AI prediction, dimensionless parameters')
+        layout = QFormLayout()
+        self.input_widgets_dict60 = OrderedDict()
+
+
+        self.input_widgets_dict60[0] = QLineEdit()
+        self.input_widgets_dict60[1] = QLineEdit()
+        self.input_widgets_dict60[2] = QLineEdit()
+        self.input_widgets_dict60[3] = QLineEdit()
+        self.input_widgets_dict60[4] = QLineEdit()
+
+
+        self.input_widgets_dict60[5] = QLineEdit()
+        self.input_widgets_dict60[6] = QLineEdit()
+        self.input_widgets_dict60[7] = QLineEdit()
+        self.input_widgets_dict60[8] = QLineEdit()
+        self.input_widgets_dict60[9] = QLineEdit()
+        self.input_widgets_dict60[10] = QLineEdit()
+        self.input_widgets_dict60[11] = QComboBox()
+        self.input_widgets_dict60[11].addItems(['Butler-Volmer'])
+        self.input_widgets_dict60[12] = QComboBox()
+        self.input_widgets_dict60[12].addItems(['Linear','Radial'])
+
+        layout.addRow(QLabel('\u03B8<sub>start</sub>'),self.input_widgets_dict60[0])
+        layout.addRow(QLabel('\u03B8<sub>rev</sub>'),self.input_widgets_dict60[1])
+        layout.addRow(QLabel('\u03B8<sub>end</sub>'),self.input_widgets_dict60[2])
+        layout.addRow(QLabel('\u03C3, scan rate '),self.input_widgets_dict60[3])
+        layout.addRow(QLabel('Cycles'),self.input_widgets_dict60[4])
+        #layout.addRow(QLabel('Electrode Kinetics'),self.input_widgets_dict60[5])
+        layout.addRow(QLabel('c<sub>A<\sub>'),self.input_widgets_dict60[5])
+        layout.addRow(QLabel('c<sub>B<\sub>'),self.input_widgets_dict60[6])
+        layout.addRow(QLabel('D<sub>A<\sub>'),self.input_widgets_dict60[7])
+        layout.addRow(QLabel('D<sub>B<\sub>'),self.input_widgets_dict60[8])
+        layout.addRow(QLabel('K<sub>0<\sub>'),self.input_widgets_dict60[9])
+        layout.addRow(QLabel('\u03B1'),self.input_widgets_dict60[10])
+        layout.addRow(QLabel('Electrode Kinetics'),self.input_widgets_dict60[11])
+        layout.addRow(QLabel('Diffusion Mode'),self.input_widgets_dict60[12])
+
+
+        
+        self.formGroupBox60.setLayout(layout)
 
 
 
@@ -1302,6 +1438,20 @@ class MyTableWidget(QWidget):
             self.input_widgets_dict50[key].setText(f'{value}')
             setEnabled(self.input_widgets_dict50[key])
 
+        for key,value in inputParameter.AI_parameters_6.items():
+            if key in [11,14]:
+                self.input_widgets_dict6[key].setCurrentIndex(value)
+            else:
+                self.input_widgets_dict6[key].setText(f'{value}')
+            setEnabled(self.input_widgets_dict6[key])
+
+        for key,value in inputParameter.AI_parameters_60.items():
+            if key in [11,12]:
+                self.input_widgets_dict60[key].setCurrentIndex(value)
+            else:
+                self.input_widgets_dict60[key].setText(f'{value}')
+            setEnabled(self.input_widgets_dict60[key])
+
         for key,value in inputParameter.file_options_parameters.items():
             if key  in [1,2]: 
                 self.file_widgetes_dict[key].setText(f'{value}')
@@ -1346,6 +1496,12 @@ class MyTableWidget(QWidget):
             setDisabled(self.input_widgets_dict5[key])
         for key,value in inputParameter.adsorption_parameters_enabled_50.items():
             setDisabled(self.input_widgets_dict50[key])
+
+        for key,value in inputParameter.AI_parameters_enabled_6.items():
+            setDisabled(self.input_widgets_dict6[key])    
+        
+        for key,value in inputParameter.AI_parameters_enabled_60.items():
+            setDisabled(self.input_widgets_dict60[key])
     
     def getUserInput(self):
 
