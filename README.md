@@ -37,7 +37,7 @@ $ python MainWindow.py
 The authors will try to implement chronoamperometry of these experiments, then may include 2-D simulation of a microdisc elelctrode. You may also leave your preferred mechanism in the discussion forum and we will try our best to consider that! 
 
 
-# Discailmers
+# Disclaimers
 Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would also try their best to correct any bugs as soon as possible. Thanks for your understanding.
 
 
