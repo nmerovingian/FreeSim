@@ -49,21 +49,22 @@ class SimulationWorker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        if self.input_parameters.mechanism_parameters_0[0] in [1]:
-            from Simulations.Mechanism1.Mechanism1main import Mechanism_1_simulation_single_thread_GUI
-            Mechanism_1_simulation_single_thread_GUI(self.signals,self.input_parameters)
-        elif self.input_parameters.mechanism_parameters_0[0] in [0,3,4,5,6]:
-            from Simulations.Mechanism4.Mechanism03456main import Mechanism_03456_simulation_single_thread_Gui
-            Mechanism_03456_simulation_single_thread_Gui(self.signals,self.input_parameters)
-        elif self.input_parameters.mechanism_parameters_0[0] in [2]:
-            from Simulations.Mechanism2.Mechanism2main import Mechanism_2_simulation_single_thread_Gui
-            Mechanism_2_simulation_single_thread_Gui(self.signals,self.input_parameters)
-        elif self.input_parameters.mechanism_parameters_0[0] in [7]:
-            from Simulations.Mechanism7.Mechanism7main import Mechanism_7_simulation_single_thread_Gui
-            Mechanism_7_simulation_single_thread_Gui(self.signals,self.input_parameters)
-        else:
-            raise ValueError('Unsuppoted type')
-        
+        if self.input_parameters.mechanism_parameters_0[1] == 'CV':
+            if self.input_parameters.mechanism_parameters_0[0] in [1]:
+                from Simulations.Mechanism1.Mechanism1main import Mechanism_1_simulation_single_thread_GUI
+                Mechanism_1_simulation_single_thread_GUI(self.signals,self.input_parameters)
+            elif self.input_parameters.mechanism_parameters_0[0] in [0,3,4,5,6]:
+                from Simulations.Mechanism4.Mechanism03456main import Mechanism_03456_simulation_single_thread_Gui
+                Mechanism_03456_simulation_single_thread_Gui(self.signals,self.input_parameters)
+            elif self.input_parameters.mechanism_parameters_0[0] in [2]:
+                from Simulations.Mechanism2.Mechanism2main import Mechanism_2_simulation_single_thread_Gui
+                Mechanism_2_simulation_single_thread_Gui(self.signals,self.input_parameters)
+            elif self.input_parameters.mechanism_parameters_0[0] in [7]:
+                from Simulations.Mechanism7.Mechanism7main import Mechanism_7_simulation_single_thread_Gui
+                Mechanism_7_simulation_single_thread_Gui(self.signals,self.input_parameters)
+            else:
+                raise ValueError('Unsuppoted type')
+            
 
 
 
@@ -394,7 +395,7 @@ class MainWindow(QMainWindow):
             self.unfinishedWorker()
         
         
-        print('Not fully implemented yet!')
+        print('Please note development is ongoing. Report bugs in the issue section of the GitHub repository\n')
 
 
 
@@ -681,7 +682,7 @@ class MyTableWidget(QWidget):
         self.tab4.setEnabled(False)
         self.tab5.setEnabled(False)
         self.tab6.setEnabled(True)
-        self.tabs.insertTab(1,self.tab6,'CV-AI prediction')
+        self.tabs.insertTab(1,self.tab6,'CV AI-prediction')
 
     def defaultTabVisibility(self):
         self.tab1.setEnabled(True)
@@ -1239,12 +1240,12 @@ class MyTableWidget(QWidget):
         self.input_widgets_dict6[14] = QComboBox()
         self.input_widgets_dict6[14].addItems(['Linear','Radial'])
         self.input_widgets_dict6[15] = QPushButton('Convert to dimensionless')
-        self.input_widgets_dict6[15].toggled.connect(self.toDimlessAImode)
+        self.input_widgets_dict6[15].clicked.connect(lambda: (self.toDimlessAImode(),self.checkAImodeInputRange()))
 
         
         layout.addRow(QLabel('E<sub>start</sub>, V'),self.input_widgets_dict6[0])
         layout.addRow(QLabel('E<sub>rev</sub>, V'),self.input_widgets_dict6[1])
-        layout.addRow(QLabel('E<sub>end</sub>, V'),self.input_widgets_dict6[2])
+        layout.addRow(QLabel('E<sub>0,f</sub>, V'),self.input_widgets_dict6[2])
         layout.addRow(QLabel('Scan Rate, V/s'),self.input_widgets_dict6[3])
         layout.addRow(QLabel('Cycles'),self.input_widgets_dict6[4])
         layout.addRow(QLabel('c<sub>A<\sub>, M'),self.input_widgets_dict6[5])
@@ -1262,7 +1263,40 @@ class MyTableWidget(QWidget):
         self.formGroupBox6.setLayout(layout)
 
     def toDimlessAImode(self):
-        pass
+        E_start = getValue(self.input_widgets_dict6[0])
+        E_rev = getValue(self.input_widgets_dict6[1])
+        E_0f = getValue(self.input_widgets_dict6[2])
+        scan_rate = getValue(self.input_widgets_dict6[3])
+        cycles = getValue(self.input_widgets_dict6[4])
+        c_A = getValue(self.input_widgets_dict6[5])
+        c_B = getValue(self.input_widgets_dict6[6])
+        D_A = getValue(self.input_widgets_dict6[7])
+        D_B = getValue(self.input_widgets_dict6[8])
+        k0 = getValue(self.input_widgets_dict6[9])
+        alpha = getValue(self.input_widgets_dict6[10])
+        kinetics = getValue(self.input_widgets_dict6[11])
+        T = getValue(self.input_widgets_dict6[12])
+        r_e = getValue(self.input_widgets_dict6[13])
+        diffusion_mode = getValue(self.input_widgets_dict6[14])
+        R = 8.314
+        F = 96485
+
+        self.input_widgets_dict60[0].setText(f'{(E_start-E_0f)*F/(R*T):.2f}')
+        self.input_widgets_dict60[1].setText(f'{(E_rev-E_0f)*F/(R*T):.2f}')
+        self.input_widgets_dict60[2].setText(f'{(E_0f-E_0f)*F/(R*T):.2f}')
+        self.input_widgets_dict60[3].setText(f'{(r_e*r_e/D_A*F/(R*T)*scan_rate):.2E}')
+        self.input_widgets_dict60[4].setText(f'{int(cycles)}')
+        self.input_widgets_dict60[5].setText(f'{c_A/c_A:.2f}')
+        self.input_widgets_dict60[6].setText(f'{c_B/c_A:2f}')
+        self.input_widgets_dict60[7].setText(f'{D_A/D_A:.2f}')
+        self.input_widgets_dict60[8].setText(f'{D_B/D_A:.2f}')
+        self.input_widgets_dict60[9].setText(f'{k0*r_e/D_A:.2E}')
+        self.input_widgets_dict60[10].setText(f'{alpha:.2f}')
+        self.input_widgets_dict60[11].setCurrentIndex(kinetics)
+        self.input_widgets_dict60[12].setCurrentIndex(diffusion_mode)
+
+        
+
 
     def createFormGroupBox60(self):
         self.formGroupBox60 = QGroupBox('AI prediction, dimensionless parameters')
@@ -1290,22 +1324,55 @@ class MyTableWidget(QWidget):
 
         layout.addRow(QLabel('\u03B8<sub>start</sub>'),self.input_widgets_dict60[0])
         layout.addRow(QLabel('\u03B8<sub>rev</sub>'),self.input_widgets_dict60[1])
-        layout.addRow(QLabel('\u03B8<sub>end</sub>'),self.input_widgets_dict60[2])
-        layout.addRow(QLabel('\u03C3, scan rate '),self.input_widgets_dict60[3])
+        layout.addRow(QLabel('\u03B8<sub>0,f</sub>'),self.input_widgets_dict60[2])
+        layout.addRow(QLabel('\u03C3, scan rate, [10<sup>-12</sup>,10<sup>15</sup>]'),self.input_widgets_dict60[3])
         layout.addRow(QLabel('Cycles'),self.input_widgets_dict60[4])
-        #layout.addRow(QLabel('Electrode Kinetics'),self.input_widgets_dict60[5])
-        layout.addRow(QLabel('c<sub>A<\sub>'),self.input_widgets_dict60[5])
-        layout.addRow(QLabel('c<sub>B<\sub>'),self.input_widgets_dict60[6])
-        layout.addRow(QLabel('D<sub>A<\sub>'),self.input_widgets_dict60[7])
-        layout.addRow(QLabel('D<sub>B<\sub>'),self.input_widgets_dict60[8])
-        layout.addRow(QLabel('K<sub>0<\sub>'),self.input_widgets_dict60[9])
-        layout.addRow(QLabel('\u03B1'),self.input_widgets_dict60[10])
+        layout.addRow(QLabel('C<sub>A</sub>'),self.input_widgets_dict60[5])
+        layout.addRow(QLabel('C<sub>B</sub>'),self.input_widgets_dict60[6])
+        layout.addRow(QLabel('d<sub>A</sub>'),self.input_widgets_dict60[7])
+        layout.addRow(QLabel('d<sub>B</sub>, [0.01,100]'),self.input_widgets_dict60[8])
+        layout.addRow(QLabel('K<sub>0</sub>, [10<sup>-12</sup>,10<sup>8</sup>]'),self.input_widgets_dict60[9])
+        layout.addRow(QLabel('\u03B1,[0.05,0.95]'),self.input_widgets_dict60[10])
         layout.addRow(QLabel('Electrode Kinetics'),self.input_widgets_dict60[11])
         layout.addRow(QLabel('Diffusion Mode'),self.input_widgets_dict60[12])
 
 
         
         self.formGroupBox60.setLayout(layout)
+
+
+    def checkAImodeInputRange(self):
+        default_qss = "background: white"
+        warning_qss = "background: yellow"
+        error_string = ""
+        if  1e-12 <= getValue(self.input_widgets_dict60[3]) <= 1e15:
+            self.input_widgets_dict60[3].setStyleSheet(default_qss)
+        else:
+            error_string += "The dimensionless scan rate is suggested to be within 10^-12 to 10^15\n"
+            self.input_widgets_dict60[3].setStyleSheet(warning_qss)
+        if 1e-2 <= getValue(self.input_widgets_dict60[8]) <=100:
+            self.input_widgets_dict60[8].setStyleSheet(default_qss)
+        else:
+            error_string +=  "The dimensionless diffusion coefficient of B is suggested to be within 0.01 and 100\n"
+            self.input_widgets_dict60[8].setStyleSheet(warning_qss)
+        if 1e-12 <= getValue(self.input_widgets_dict60[9]) <= 1e8:
+            self.input_widgets_dict60[9].setStyleSheet(default_qss)
+        else:
+            error_string += "The dimensionless electrochemical rate constant is suggested to be within 10^-12 to 10^8\n"
+            self.input_widgets_dict60[9].setStyleSheet(warning_qss)
+        if 0.05 <= getValue(self.input_widgets_dict60[10]) <= 0.95:
+            self.input_widgets_dict60[10].setStyleSheet(default_qss)
+        else:
+            error_string += "The transfer coefficient is suggested to be within 0.05 and 0.95"
+            self.input_widgets_dict60[10].setStyleSheet(warning_qss)
+        if error_string:
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle('Check Input Range')
+            dlg.setText(error_string)
+            dlg.setIcon(QMessageBox.Warning)
+            print('\a')
+            button = dlg.exec_()
+
 
 
 
@@ -1558,6 +1625,9 @@ class MyTableWidget(QWidget):
                 self.userParameter.file_options_parameters[key] = self.file_widgetes_dict[key].text()
             else:
                 self.userParameter.file_options_parameters[key] =  getValue(self.file_widgetes_dict[key])
+
+        for key,value in self.userParameter.AI_parameters_60.items():
+            self.userParameter.AI_parameters_60[key] = getValue(self.input_widgets_dict60[key])
 
         return self.userParameter
 
