@@ -64,7 +64,12 @@ class SimulationWorker(QRunnable):
                 Mechanism_7_simulation_single_thread_Gui(self.signals,self.input_parameters)
             else:
                 raise ValueError('Unsuppoted type')
+        elif self.input_parameters.mechanism_parameters_0[1] =='AI':
+            if self.input_parameters.mechanism_parameters_0[0] in [0]:
+                from Simulations.Mechanism0AI.Mechanism0AImain import Mechanism_0_AI_single_thread_GUI
+                Mechanism_0_AI_single_thread_GUI(self.signals,self.input_parameters)
             
+
 
 
 
@@ -145,7 +150,7 @@ class MainWindow(QMainWindow):
         button_action12.setCheckable(True)
         button_action12.toggled.connect(self.tableWidget.onCAModeToggled)
         button_action13 = QAction(QIcon('./Icons/AI-icon.png'),'&CV (AI prediction) ')
-        button_action13.toggled.connect(self.tableWidget.onAIModeToggled)
+        button_action13.toggled.connect(lambda:(self.tableWidget.onAIModeToggled(),self.tfInstalled()))
         button_action13.setCheckable(True)
 
         button_group0 = QActionGroup(self)
@@ -417,6 +422,19 @@ class MainWindow(QMainWindow):
         dlg.setIcon(QMessageBox.Warning)
         print('\a')
         button = dlg.exec_()
+
+
+    def tfInstalled(self):
+        try:
+            import tensorflow
+        except ImportError as e:
+            error_string = repr(e)
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle('Tensorflow 2 may not be installed')
+            dlg.setText(f'Import error:\n{error_string}\nPlease install Tensorflow 2 at https://www.tensorflow.org/\n')
+            dlg.setIcon(QMessageBox.Warning)
+            print('\a')
+            button = dlg.exec_()
 
 
 
