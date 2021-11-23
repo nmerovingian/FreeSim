@@ -49,7 +49,8 @@ def saveVoltammogram(voltammogram,output_file_name,dimensional = True,Temperatur
     df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
     if dimensional:
         df.iloc[:,0] = df.iloc[:,0] / (96485/(8.314*Temperature)) + E0f
-        df.iloc[:,1] = df.iloc[:,1] *math.pi*dElectrode*96485*Dref*cref
+
+        df.iloc[:,1] = df.iloc[:,1] * math.pi*dElectrode*96485*Dref*cref
 
     df.to_csv(output_file_name,index=False)
 
@@ -79,8 +80,8 @@ def Mechanism_0_AI_single_thread_GUI(signals,input_parameters) -> None:
     model.load_weights('./Simulations/Mechanism0AI/weights.h5')
     pred = model.predict(vars)
     pred *= np.sqrt(sigma) # now denormalize the voltammogram
-
     Voltammogram = np.stack([scan,pred[0]],axis=1)
+
     saveVoltammogram(Voltammogram,output_file_name,dimensional,Temperature,E0f,dElectrode,Dref,cref)
 
 

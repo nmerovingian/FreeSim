@@ -388,6 +388,10 @@ class MainWindow(QMainWindow):
         if self.threadpool.activeThreadCount() < 1:
             self.tableWidget.getUserInput()
             user_inputs = self.tableWidget.getUserInput()
+            if user_inputs.mechanism_parameters_0[1] =='AI' and user_inputs.mechanism_parameters_0[0] in [0]:
+                self.tableWidget.toDimlessAImode()
+                user_inputs = self.tableWidget.getUserInput()
+
             worker = SimulationWorker(user_inputs)
             worker.signals.progress.connect(self.showProgress)
             worker.signals.finished.connect(self.workerFinished)
@@ -675,22 +679,30 @@ class MyTableWidget(QWidget):
 
     def onCVModeToggled(self):
         self.defaultTabVisibility()
+        self.defaultMechanismEnabled()
         self.tab1Stack0.setCurrentIndex(0)
         self.tab3Stack0.setCurrentIndex(0)
         self.userParameter.mechanism_parameters_0[1] = 'CV'
-        self.tabs.setTabText(1,'CV-Parameters')
-
+        if self.tabs.count() == 7:
+            self.tabs.setTabText(1,'CV-Parameters')
+        elif self.tabs.count() == 8:
+            self.tabs.setTabText(2,'CV-Parameters')
 
     def onCAModeToggled(self):
         self.defaultTabVisibility()
+        self.CAMechanismEnabled()
         self.tab1Stack0.setCurrentIndex(1)
         self.tab3Stack0.setCurrentIndex(1)
         self.userParameter.mechanism_parameters_0[1] = 'CA'
-        self.tabs.setTabText(1,'CA-Parameters')
+        if self.tabs.count() == 7:
+            self.tabs.setTabText(1,'CA-Parameters')
+        elif self.tabs.count() == 8:
+            self.tabs.setTabText(2,'CA-Parameters')
 
 
     def onAIModeToggled(self):
         self.AIModeTabVisibility()
+        self.AIModeMechanismEnabled()
         self.userParameter.mechanism_parameters_0[1] = 'AI'
 
     def AIModeTabVisibility(self):
@@ -702,6 +714,16 @@ class MyTableWidget(QWidget):
         self.tab6.setEnabled(True)
         self.tabs.insertTab(1,self.tab6,'CV AI-prediction')
 
+    def AIModeMechanismEnabled(self):
+        setEnabled(self.pushButton10)
+        setDisabled(self.pushButton11)
+        setDisabled(self.pushButton12)
+        setDisabled(self.pushButton13)
+        setDisabled(self.pushButton14)
+        setDisabled(self.pushButton15)
+        setDisabled(self.pushButton16)
+        setDisabled(self.pushButton17)
+
     def defaultTabVisibility(self):
         self.tab1.setEnabled(True)
         self.tab2.setEnabled(True)
@@ -710,6 +732,25 @@ class MyTableWidget(QWidget):
         self.tab5.setEnabled(True)
         self.tab6.setEnabled(False)
 
+    def defaultMechanismEnabled(self):
+        setEnabled(self.pushButton10)
+        setEnabled(self.pushButton11)
+        setEnabled(self.pushButton12)
+        setEnabled(self.pushButton13)
+        setEnabled(self.pushButton14)
+        setEnabled(self.pushButton15)
+        setEnabled(self.pushButton16)
+        setEnabled(self.pushButton17)
+
+    def CAMechanismEnabled(self):
+        setDisabled(self.pushButton10)
+        setDisabled(self.pushButton11)
+        setDisabled(self.pushButton12)
+        setDisabled(self.pushButton13)
+        setDisabled(self.pushButton14)
+        setDisabled(self.pushButton15)
+        setDisabled(self.pushButton16)
+        setDisabled(self.pushButton17)
 
     def onModelParametersDefaultParameters(self):
         print('Not implemented')
