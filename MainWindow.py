@@ -388,18 +388,17 @@ class MainWindow(QMainWindow):
             self.liveSimulationWindowLineRef[0] = self.liveSimulationWindow.graphWidget.plot(fluxesProfile[:,0],fluxesProfile[:,1],pen=pen,name=f'Voltammogram')
             self.liveSimulationWindow.graphWidget.setLabel('left','Current, A',**self.liveSimulationWindow.styles)
             if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
-                self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)
+                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
             elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
-                self.graphWindowOverlay.graphWidget.setLabel('bottom','Time, s',**self.graphWindowOverlay.styles)
-                self.graphWindowOverlay.graphWidget.setTitle('Preview of Chronamperogram',**self.graphWindowOverlay.styles)
+                self.liveSimulationWindow.graphWidget.setLabel('bottom','Time, s',**self.liveSimulationWindow.styles)
+                self.liveSimulationWindow.graphWidget.setTitle('Preview of Chronamperogram',**self.liveSimulationWindow.styles)
             elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
-                self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)
+                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
             else:
-                self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)          
-                self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
-            self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
+                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)          
+                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
             self.liveSimulationWindow.graphWidget.showGrid(x=True,y=True)
 
         elif isinstance(self.liveSimulationWindow,GraphWindow):
