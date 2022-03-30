@@ -4,9 +4,11 @@ import pandas as pd
 import math
 
 class Grid(object):
-    def __init__(self,n,diffusion_mode):
+    def __init__(self,n,diffusion_mode,nT):
         self.n = n
+        self.nT = nT
         self.x = np.zeros(self.n,dtype=np.float64)
+        self.t = np.zeros(self.nT,dtype=np.float64)
         self.conc = np.zeros(self.n*5,dtype=np.float64)
         self.concA = np.zeros(self.n,dtype=np.float64)
         self.concB = np.zeros(self.n,dtype=np.float64)
@@ -18,7 +20,7 @@ class Grid(object):
         self.g = 0.0
 
 
-    def grid(self,dX,gamma):
+    def grid(self,dX,deltaT,gamma,gammaT):
         if self.diffusion_mode =='linear':
             self.x[0] = 0.0
         elif self.diffusion_mode =='radial':
@@ -29,6 +31,9 @@ class Grid(object):
             self.x[i] = self.x[i-1] + dX
             dX = dX* (1.0 +gamma )
 
+        for i in range(1,self.nT):
+            self.t[i] = self.t[i-1] + deltaT
+            deltaT =deltaT *(1+gammaT)
     
     # initialize the concentration matrix
     def init_c(self,A:float,B:float,C:float,Y:float,Z:float,Theta:float):
@@ -100,12 +105,12 @@ class Grid(object):
         package = np.stack((self.x,self.concA,self.concB,self.concC,self.concY,self.concZ),axis=1)
         return package
 
-    def saveVoltammogram(self,E,output_file_name,dimensional = True,Temperature = None, E0f=None,dElectrode = None,Dref=None,Cref=None):
+    def saveVoltammogram(self,t,output_file_name,dimensional = True,Temperature = None, E0f=None,dElectrode = None,Dref=None,Cref=None):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
-        df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
+        df = pd.DataFrame(voltammogram,columns=['Time,s','Current,A'])
         if dimensional:
-            df.iloc[:,0] = df.iloc[:,0] / (96485/(8.314*Temperature)) + E0f
+            df.iloc[:,0] = df.iloc[:,0] * (dElectrode * dElectrode) / Dref
             df.iloc[:,1] = df.iloc[:,1] *math.pi*dElectrode*96485*Dref*Cref
 
         df.to_csv(output_file_name,index=False)

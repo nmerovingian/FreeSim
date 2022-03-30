@@ -1,8 +1,10 @@
 import numpy as np
 
 class Coeff(object):
-    def __init__(self,deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism):
+    def __init__(self,deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,mode):
         self.n = 0
+        self.nT = 0
+        self.xi = 0.0
         self.maxX = maxX
         self.kinetics = kinetics
         self.K0 = K0
@@ -16,6 +18,7 @@ class Coeff(object):
         self.dY = dY
         self.dZ = dZ
         self.mechanism = mechanism
+        self.mode = mode
 
         if self.mode =='linear':
             self.xi = 0.0
@@ -24,6 +27,15 @@ class Coeff(object):
         else:
             raise ValueError
 
+
+    def calc_time_steps(self,maxT,deltaT,GammaT):
+        T = 0
+        while T < maxT:
+            T += deltaT
+            deltaT  = deltaT*(1+GammaT)
+            self.nT += 1
+
+        self.nT += 1
 
     def calc_n(self,dX):
         while self.xi < self.maxX:
@@ -283,7 +295,9 @@ class Coeff(object):
             self.Ycal_abc_linear(deltaT,Theta,deltaX)
             self.Zcal_abc_linear(deltaT,Theta,deltaX)
     
-    def calc_jacob(self,x,Theta):
+    def calc_jacob(self,x,Theta,Kf,Kb,deltaT):
+        self.Kf = Kf*deltaT
+        self.Kb = Kb*deltaT
         h = self.XX[1] - self.XX[0]
         self.J = np.zeros((5*self.n,5*self.n),dtype=np.float64)
         self.J[2,2] = -1.0
@@ -406,7 +420,9 @@ class Coeff(object):
 
 
 
-    def calc_fx(self,x,Theta):
+    def calc_fx(self,x,Theta,Kf,Kb,deltaT):
+        self.Kf = Kf*deltaT
+        self.Kb = Kb*deltaT
         h = self.XX[1] - self.XX[0]
 
         if self.kinetics == 'Nernst':

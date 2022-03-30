@@ -27,6 +27,12 @@ $ pip install pandas
 $ pip install scipy
 ```
 
+The packages can also be installed using the *requirement.txt*
+
+```
+$ pip install requirement.txt
+```
+
 To run,
 
 ```
