@@ -1,7 +1,7 @@
 import numpy as np
 
 class Coeff(object):
-    def __init__(self,deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism):
+    def __init__(self,deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode):
         self.n = 0
         self.xi = 0.0
         self.maxX = maxX
@@ -17,6 +17,7 @@ class Coeff(object):
         self.dY = dY
         self.dZ = dZ
         self.mechanism = mechanism
+        self.outerBoundaryMode = outerBoundaryMode
 
 
 
@@ -394,11 +395,26 @@ class Coeff(object):
             else:
                 raise ValueError
 
-        self.J[5*self.n-5,5*self.n-5] = 1.0
-        self.J[5*self.n-4,5*self.n-4] = 1.0
-        self.J[5*self.n-3,5*self.n-3] = 1.0
-        self.J[5*self.n-2,5*self.n-2] = 1.0
-        self.J[5*self.n-1,5*self.n-1] = 1.0
+        if self.outerBoundaryMode == 'Semi-Infinite':
+            self.J[5*self.n-5,5*self.n-5] = 1.0
+            self.J[5*self.n-4,5*self.n-4] = 1.0
+            self.J[5*self.n-3,5*self.n-3] = 1.0
+            self.J[5*self.n-2,5*self.n-2] = 1.0
+            self.J[5*self.n-1,5*self.n-1] = 1.0
+        elif self.outerBoundaryMode == 'Finite-Space':
+            self.J[5*self.n-5,5*self.n-10] = -1.0
+            self.J[5*self.n-4,5*self.n-9] = -1.0
+            self.J[5*self.n-3,5*self.n-8] = -1.0
+            self.J[5*self.n-2,5*self.n-7] = -1.0
+            self.J[5*self.n-1,5*self.n-6] = -1.0
+
+            self.J[5*self.n-5,5*self.n-5] = 1.0
+            self.J[5*self.n-4,5*self.n-4] = 1.0
+            self.J[5*self.n-3,5*self.n-3] = 1.0
+            self.J[5*self.n-2,5*self.n-2] = 1.0
+            self.J[5*self.n-1,5*self.n-1] = 1.0
+        else:
+            raise ValueError
 
 
 
@@ -463,10 +479,19 @@ class Coeff(object):
             else:
                 raise ValueError
 
-        self.fx[5*self.n-5] = x[self.n*5-5] - self.d[5*self.n-5]
-        self.fx[5*self.n-4] = x[self.n*5-4] - self.d[5*self.n-4]
-        self.fx[5*self.n-3] = x[self.n*5-3] - self.d[5*self.n-3]
-        self.fx[5*self.n-2] = x[self.n*5-2] - self.d[5*self.n-2]
-        self.fx[5*self.n-1] = x[self.n*5-1] - self.d[5*self.n-1]
+        if self.outerBoundaryMode == 'Semi-Infinite':
+            self.fx[5*self.n-5] = x[self.n*5-5] - self.d[5*self.n-5]
+            self.fx[5*self.n-4] = x[self.n*5-4] - self.d[5*self.n-4]
+            self.fx[5*self.n-3] = x[self.n*5-3] - self.d[5*self.n-3]
+            self.fx[5*self.n-2] = x[self.n*5-2] - self.d[5*self.n-2]
+            self.fx[5*self.n-1] = x[self.n*5-1] - self.d[5*self.n-1]
+        elif self.outerBoundaryMode == 'Finite-Space':
+            self.fx[5*self.n-5] = x[self.n*5-5] - x[5*self.n-10]
+            self.fx[5*self.n-4] = x[self.n*5-4] - x[5*self.n-9]
+            self.fx[5*self.n-3] = x[self.n*5-3] - x[5*self.n-8]
+            self.fx[5*self.n-2] = x[self.n*5-2] - x[5*self.n-7]
+            self.fx[5*self.n-1] = x[self.n*5-1] - x[5*self.n-6]
+        else:
+            raise ValueError
 
         self.fx = -self.fx

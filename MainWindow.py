@@ -1216,7 +1216,7 @@ class MyTableWidget(QWidget):
 
 
     def createFormGroupBox32(self):
-        self.formGroupBox32 = QGroupBox('Time grid in cyclic voltammetry')
+        self.formGroupBox32 = QGroupBox('Time grid in chronoamperometry')
         layout = QFormLayout()
         self.input_widgets_dict32 = OrderedDict()
         for i in range(10):
@@ -1553,6 +1553,11 @@ class MyTableWidget(QWidget):
                 self.input_widgets_dict11[key].setText(f'{value:.2E}')
             setEnabled(self.input_widgets_dict11[key])
 
+        for key,value in inputParameter.cv_parameters_12.items():
+            if key == 0:
+                self.input_widgets_dict11[key].setCurrentIndex(value)
+            setEnabled(self.input_widgets_dict11[key])
+
         for key,value in inputParameter.cv_parameters_13.items():
             self.input_widgets_dict13[key].setText(f'{value:.2f}')
             setEnabled(self.input_widgets_dict13[key])
@@ -1660,6 +1665,8 @@ class MyTableWidget(QWidget):
             setDisabled(self.input_widgets_dict10[key])
         for key,value in inputParameter.cv_parameters_enabled_11.items():
             setDisabled(self.input_widgets_dict11[key])
+        for key,value in inputParameter.cv_parameters_enabled_12.items():
+            setDisabled(self.input_widgets_dict12[key])
         for key,value in inputParameter.cv_parameters_enabled_13.items():
             setDisabled(self.input_widgets_dict13[key])
         for key,value in inputParameter.chemical_parameters_enabled_2.items():
@@ -1700,6 +1707,9 @@ class MyTableWidget(QWidget):
 
         for key,value in self.userParameter.cv_parameters_11.items():
             self.userParameter.cv_parameters_11[key] = getValue(self.input_widgets_dict11[key])
+        
+        for key, value in self.userParameter.cv_parameters_12.items():
+            self.userParameter.cv_parameters_12[key] = getValue(self.input_widgets_dict12[key])
 
         for key,value in self.userParameter.cv_parameters_13.items():
             self.userParameter.cv_parameters_13[key] = getValue(self.input_widgets_dict13[key])

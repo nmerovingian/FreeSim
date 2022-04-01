@@ -15,7 +15,7 @@ import math
 # the total concentration of X added before any chemical equilibrium happen 
 cRef=1.0 # reference concentration, 1M
 P0 = 1.0 # reference pressure, 1 bar
-
+Dref = 1e-9 # reference diffusion coefficient
 
 
 
@@ -27,7 +27,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     DC = input_parameters.chemical_parameters_22[9]
     DY = input_parameters.chemical_parameters_22[13]
     DZ = input_parameters.chemical_parameters_22[17]
-    Dref = 1e-9
+
     dElectrode = input_parameters.cv_parameters_11[1] # unit is m
     E0f = input_parameters.chemical_parameters_2[1] # The formal potential of the couple couple
     directory = input_parameters.file_options_parameters[1]
@@ -47,7 +47,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     dimScanRate = input_parameters.cv_parameters_1[3]
     cycles = int(input_parameters.cv_parameters_1[4])
     #space step
-    deltaX = 1e-5
+    deltaX = 1e-6
     #potential step
     deltaTheta = input_parameters.model_parameters_30[0]*96485/(8.314*Temperature)
     #expanding grid factor
@@ -76,6 +76,13 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
      
     else:
         raise ValueError('Unknown/Unimplemented Electrode kinetics ')
+
+    if input_parameters.cv_parameters_12[0] == 0:
+        outerBoundaryMode = 'Semi-Infinite'
+    elif input_parameters.cv_parameters_12[0] == 1:
+        outerBoundaryMode = 'Finite-Space'
+    else:
+        raise ValueError('Unknwon outer boundary of simulation. Either semi-infinite or finite space')
      
     mechanism = input_parameters.mechanism_parameters_0[0]
     k0 = input_parameters.chemical_parameters_2[3]
@@ -155,10 +162,13 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     # The maximum distance of simulation
     maxT = 2.0*abs(theta_v-theta_i)/sigma
     maxT = 2.0*abs(theta_v-theta_i)/sigma
+    SimulationSpaceMultiple  = input_parameters.model_parameters_3[2]
     if diffusion_mode == 'linear':
-        maxX = 6.0 * np.sqrt(maxT)
+        maxX = SimulationSpaceMultiple * np.sqrt(maxT)
     elif diffusion_mode =='radial':
-        maxX = 1.0 +  6.0 * np.sqrt(maxT)
+        maxX = 1.0 +  SimulationSpaceMultiple * np.sqrt(maxT)
+
+    
 
 
 
@@ -168,7 +178,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     if os.path.exists(CVLocation):
         print(F'{CVLocation} File exists, skipping!')
         #return
-    coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism)
+    coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
     coeff.calc_n(deltaX)
 
     #simulation steps

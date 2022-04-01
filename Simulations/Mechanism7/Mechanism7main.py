@@ -151,10 +151,11 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
     # The maximum distance of simulation
     maxT = 2.0*abs(theta_v-theta_i)/sigma
     maxT = 2.0*abs(theta_v-theta_i)/sigma
+    SimulationSpaceMultiple  = input_parameters.model_parameters_3[2]
     if diffusion_mode == 'linear':
-        maxX = 6.0 * np.sqrt(maxT)
+        maxX = SimulationSpaceMultiple * np.sqrt(maxT)
     elif diffusion_mode =='radial':
-        maxX = 1.0 +  6.0 * np.sqrt(maxT)
+        maxX = 1.0 +  SimulationSpaceMultiple * np.sqrt(maxT)
 
 
 
