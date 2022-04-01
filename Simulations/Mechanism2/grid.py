@@ -99,10 +99,13 @@ class Grid(object):
         package = np.stack((self.x,self.concA,self.concB,self.concC,self.concY,self.concZ),axis=1)
         return package
 
-    def saveVoltammogram(self,E,output_file_name):
+    def saveVoltammogram(self,E,output_file_name,dimensional):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
-        df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
+        if dimensional:
+            df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
+        else: 
+            df = pd.DataFrame(voltammogram,columns=['Dimensionless Potential,theta','Flux,J'])
         df.to_csv(output_file_name,index=False)
 
         

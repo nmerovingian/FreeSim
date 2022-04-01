@@ -228,7 +228,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
                 break
             
         if not np.isnan(grid.grad(coeff.d,deltaTheta)):
-            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)])
+            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f

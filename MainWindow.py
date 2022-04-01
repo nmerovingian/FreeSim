@@ -1,4 +1,5 @@
 __author__ = 'Haotian Chen'
+from tkinter.tix import Tree
 from pyqtgraph.graphicsItems.PlotDataItem import dataType
 from pyqtgraph.widgets.LayoutWidget import LayoutWidget
 from Simulations.Mechanism1.Voltammogram import Voltammogram
@@ -156,6 +157,9 @@ class MainWindow(QMainWindow):
         button_action13 = QAction(QIcon('./Icons/AI-icon.png'),'&CV (AI prediction) ')
         button_action13.toggled.connect(lambda:(self.tableWidget.onAIModeToggled(),self.tfInstalled()))
         button_action13.setCheckable(True)
+        button_action14 = QAction(QIcon('./Icons/Dimension.png'),'&Dimensionless',self)
+        button_action14.toggled.connect(self.onDimension)
+        button_action14.setCheckable(True)
 
         button_group0 = QActionGroup(self)
         button_group0.addAction(button_action11)
@@ -171,6 +175,7 @@ class MainWindow(QMainWindow):
         file_menu.addAction(button_action4)
         file_menu.addAction(button_action8)
         file_menu.addAction(button_action9)
+
         mode_menu = self.menu.addMenu('&Mode')
         mode_menu.addAction(button_action11)
         mode_menu.addAction(button_action12)
@@ -181,6 +186,8 @@ class MainWindow(QMainWindow):
         view_menu.addAction(button_action6)
         view_menu.addAction(button_action7)
         view_menu.addAction(button_action10)
+        view_menu.addAction(button_action14)
+
         about_menu = self.menu.addMenu('&About')
         about_menu.addAction(button_action2)
 
@@ -223,6 +230,8 @@ class MainWindow(QMainWindow):
         self.tableWidget.userParameter.ViewOption[1] = checked
     def onOverlay(self,checked):
         self.tableWidget.userParameter.ViewOption[2] = checked
+    def onDimension(self,checked):
+        self.tableWidget.userParameter.ViewOption[3] = checked
 
 
     @pyqtSlot(str)
@@ -238,10 +247,48 @@ class MainWindow(QMainWindow):
 
     def updateFileList(self,files):
         self.file_list.addItems(files)
-    
+
+    def determineLabelTitle(self):
+        if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Potential,\u03B8'
+                ylabel = 'Flux, J'
+                title ='Preview of Voltammogram, dimensionless'
+            else:
+                xlabel = 'Potential, V'
+                ylabel = 'Current, A'
+                title = 'Preview of Voltammogram'
+        elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Time, T'
+                ylabel = 'Flux, J'
+                title ='Preview of Chronoamperogram, dimensionless'
+            else:
+                xlabel = 'Time, s'
+                ylabel = 'Current, A'
+                title = 'Preview of Chronoamperogram'
+        elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Potential,\u03B1'
+                ylabel = 'Flux, J'
+                title ='Preview of Voltammogram, dimensionless'
+            else:
+                xlabel = 'Potential, V'
+                ylabel = 'Current, A'
+                title = 'Preview of Voltammogram'
+        else:
+            xlabel = 'Potential, V'
+            ylabel = 'Current, A'
+            title = 'Preview of Voltammogram'
+
+        return xlabel,ylabel,title
+
     def onFileListDoubleClicked(self,item):
         print('double clicked')
         selectedFile = item.text()
+
+        xlabel,ylabel,title = self.determineLabelTitle()
+
 
         # No overlay
         if self.tableWidget.userParameter.ViewOption[2] == False: 
@@ -255,20 +302,11 @@ class MainWindow(QMainWindow):
 
                     pen = pg.mkPen(width=5,color=(0,0,0))
                     self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen)
-                    self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
-                    if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
-                        self.graphWindow.graphWidget.setLabel('bottom','Time, s',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Chronamperogram',**self.graphWindow.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    else:
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)          
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
+                    
+                    self.graphWindow.graphWidget.setLabel('bottom',xlabel,**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setLabel('left',ylabel,**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setTitle(title,**self.graphWindow.styles)
+
                     self.graphWindow.graphWidget.showGrid(x=True,y=True)
                 elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
                     df_dict = pd.read_excel(selectedFile,sheet_name=None)
@@ -278,20 +316,10 @@ class MainWindow(QMainWindow):
                         pen = pg.mkPen(width=5,color=next(self.graphWindow.colorCycle))
                         self.graphWindow.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=key)
                     
-                    self.graphWindow.graphWidget.setLabel('left','Current, A',**self.graphWindow.styles)
-                    if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
-                        self.graphWindow.graphWidget.setLabel('bottom','Time, s',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Chronamperogram',**self.graphWindow.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    else:
-                        self.graphWindow.graphWidget.setLabel('bottom','Potential, V',**self.graphWindow.styles)          
-                        self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
-                    self.graphWindow.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setLabel('bottom',xlabel,**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setLabel('left',ylabel,**self.graphWindow.styles)
+                    self.graphWindow.graphWidget.setTitle(title,**self.graphWindow.styles)
+
                     self.graphWindow.graphWidget.showGrid(x=True,y=True)
                 else:
                     raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
@@ -311,20 +339,11 @@ class MainWindow(QMainWindow):
                     self.graphWindowOverlay.graphWidget.addLegend()
                     pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
                     self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}')
-                    self.graphWindowOverlay.graphWidget.setLabel('left','Current, A',**self.graphWindowOverlay.styles)
-     
-                    if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Time, s',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Chronamperogram',**self.graphWindowOverlay.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
-                    else:
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)          
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                    
+                    self.graphWindowOverlay.graphWidget.setLabel('bottom',xlabel,**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setLabel('left',ylabel,**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setTitle(title,**self.graphWindowOverlay.styles)
+
                     self.graphWindowOverlay.graphWidget.showGrid(x=True,y=True)
                 elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
                     df_dict = pd.read_excel(selectedFile,sheet_name=None)
@@ -334,19 +353,10 @@ class MainWindow(QMainWindow):
                         pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
                         self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}/{key}')
                     
-                    self.graphWindowOverlay.graphWidget.setLabel('left','Current, A',**self.graphWindowOverlay.styles)
-                    if self.tableWidget.userParameter.mechanism_parameters_0[1][1] == 'CV':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1][1] == 'CA':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Time, s',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Chronamperogram',**self.graphWindowOverlay.styles)
-                    elif self.tableWidget.userParameter.mechanism_parameters_0[1][1] == 'AI':
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
-                    else:
-                        self.graphWindowOverlay.graphWidget.setLabel('bottom','Potential, V',**self.graphWindowOverlay.styles)          
-                        self.graphWindowOverlay.graphWidget.setTitle('Preview of Voltammogram',**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setLabel('bottom',xlabel,**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setLabel('left',ylabel,**self.graphWindowOverlay.styles)
+                    self.graphWindowOverlay.graphWidget.setTitle(title,**self.graphWindowOverlay.styles)
+
                     self.graphWindowOverlay.graphWidget.showGrid(x=True,y=True)
                 else:
                     raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
@@ -377,31 +387,62 @@ class MainWindow(QMainWindow):
                 raise TypeError('Unknwon type')
 
 
-            
+    def determineLabelTitleLiveSim(self):
+        if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Potential,\u03B8'
+                ylabel = 'Flux, J'
+                title ='Live Voltammogram, dimensionless'
+            else:
+                xlabel = 'Potential, V'
+                ylabel = 'Current, A'
+                title = 'Live Voltammogram'
+        elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Time, T'
+                ylabel = 'Flux, J'
+                title ='Live Chronoamperogram, dimensionless'
+            else:
+                xlabel = 'Time, s'
+                ylabel = 'Current, A'
+                title = 'Live Chronoamperogram'
+        elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
+            if self.tableWidget.userParameter.ViewOption[3]:
+                xlabel = 'Potential,\u03B1'
+                ylabel = 'Flux, J'
+                title ='Live Voltammogram, dimensionless'
+            else:
+                xlabel = 'Potential, V'
+                ylabel = 'Current, A'
+                title = 'Live Voltammogram'
+        else:
+            xlabel = 'Potential, V'
+            ylabel = 'Current, A'
+            title = 'Live Voltammogram'
+
+        return xlabel,ylabel,title            
     @pyqtSlot(np.ndarray)
     def plotLiveSimulation(self,fluxesProfile):
+
+        xlabel,ylabel,title = self.determineLabelTitleLiveSim()
+
         if self.liveSimulationWindow is None:
             self.liveSimulationWindow = GraphWindow(title='Live Voltammogram')
             self.liveSimulationWindow.graphWidget.setBackground('w')
             self.liveSimulationWindow.graphWidget.addLegend()
             pen = pg.mkPen(width=3,color=(0,0,0))
             self.liveSimulationWindowLineRef[0] = self.liveSimulationWindow.graphWidget.plot(fluxesProfile[:,0],fluxesProfile[:,1],pen=pen,name=f'Voltammogram')
-            self.liveSimulationWindow.graphWidget.setLabel('left','Current, A',**self.liveSimulationWindow.styles)
-            if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
-                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)
-                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
-            elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CA':
-                self.liveSimulationWindow.graphWidget.setLabel('bottom','Time, s',**self.liveSimulationWindow.styles)
-                self.liveSimulationWindow.graphWidget.setTitle('Preview of Chronamperogram',**self.liveSimulationWindow.styles)
-            elif self.tableWidget.userParameter.mechanism_parameters_0[1] == 'AI':
-                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)
-                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
-            else:
-                self.liveSimulationWindow.graphWidget.setLabel('bottom','Potential, V',**self.liveSimulationWindow.styles)          
-                self.liveSimulationWindow.graphWidget.setTitle('Preview of Voltammogram',**self.liveSimulationWindow.styles)
+
+            self.liveSimulationWindow.graphWidget.setLabel('bottom',xlabel,**self.liveSimulationWindow.styles)
+            self.liveSimulationWindow.graphWidget.setLabel('left',ylabel,**self.liveSimulationWindow.styles)
+            self.liveSimulationWindow.graphWidget.setTitle(title,**self.liveSimulationWindow.styles)
+
             self.liveSimulationWindow.graphWidget.showGrid(x=True,y=True)
 
         elif isinstance(self.liveSimulationWindow,GraphWindow):
+            self.liveSimulationWindow.graphWidget.setLabel('bottom',xlabel,**self.liveSimulationWindow.styles)
+            self.liveSimulationWindow.graphWidget.setLabel('left',ylabel,**self.liveSimulationWindow.styles)
+            self.liveSimulationWindow.graphWidget.setTitle(title,**self.liveSimulationWindow.styles)
             self.liveSimulationWindowLineRef[0].setData(fluxesProfile[:,0],fluxesProfile[:,1])
 
         self.liveSimulationWindow.show()
@@ -1518,6 +1559,8 @@ class MyTableWidget(QWidget):
         layout.addRow(self.file_widgetes_dict[4])
         layout.addRow(self.file_widgetes_dict[5])
         self.fileFormGroupBox.setLayout(layout)
+
+
 
 
     def saveDirectoryDialog(self):

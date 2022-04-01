@@ -108,7 +108,10 @@ class Grid(object):
     def saveVoltammogram(self,t,output_file_name,dimensional = True,Temperature = None, E0f=None,dElectrode = None,Dref=None,Cref=None):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
-        df = pd.DataFrame(voltammogram,columns=['Time,s','Current,A'])
+        if dimensional:
+            df = pd.DataFrame(voltammogram,columns=['Time,s','Current,A'])
+        else:
+            df = pd.DataFrame(voltammogram,columns=['Dimensionless Time,T','Flux,J'])
         if dimensional:
             df.iloc[:,0] = df.iloc[:,0] * (dElectrode * dElectrode) / Dref
             df.iloc[:,1] = df.iloc[:,1] *math.pi*dElectrode*96485*Dref*Cref

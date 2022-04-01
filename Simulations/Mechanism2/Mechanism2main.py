@@ -38,6 +38,7 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
         file_type ='.csv'
     else:
         raise ValueError('Unknwon file type')
+    dimensional = input_parameters.file_options_parameters[5]
     output_file_name = f'{directory}/{file_name}{file_type}'
     Temperature = input_parameters.cv_parameters_1[7]
     theta_i = (input_parameters.cv_parameters_1[0]-E0fAB)*96485/(8.314*Temperature)
@@ -138,10 +139,12 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
     # The maximum distance of simulation
     maxT = 2.0*abs(theta_v-theta_i)/sigma
     maxT = 2.0*abs(theta_v-theta_i)/sigma
+
+    SimulationSpaceMultiple  = input_parameters.model_parameters_3[2]
     if diffusion_mode == 'linear':
-        maxX = 6.0 * np.sqrt(maxT)
+        maxX = SimulationSpaceMultiple * np.sqrt(maxT)
     elif diffusion_mode =='radial':
-        maxX = 1.0 +  6.0 * np.sqrt(maxT)
+        maxX = 1.0 +  SimulationSpaceMultiple * np.sqrt(maxT)
 
 
 
@@ -214,11 +217,12 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([Theta,grid.grad()])
+            grid.fluxes.append([Theta,grid.grad()/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
-                fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0fAB
-                fluxes[:,1] = fluxes[:,1] * math.pi * dElectrode * 96485 * Dref * cRef
+                if dimensional:
+                    fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0fAB
+                    fluxes[:,1] = fluxes[:,1] * math.pi * dElectrode * 96485 * Dref * cRef
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')
@@ -230,7 +234,7 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
 
 
 
-    grid.saveVoltammogram(E,output_file_name)
+    grid.saveVoltammogram(E,output_file_name,dimensional)
 
     signals.output_file_name.emit(output_file_name)
     signals.finished.emit()

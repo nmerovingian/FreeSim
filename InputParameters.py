@@ -277,4 +277,4 @@ class userInputParameters(DefaultInput):
     def __init__(self) -> None:
         super().__init__()
 
-        self.ViewOption = OrderedDict([(0,False),(1,False),(2,False)])
+        self.ViewOption = OrderedDict([(0,False),(1,False),(2,False),(3,False)])

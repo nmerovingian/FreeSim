@@ -88,7 +88,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     k0 = input_parameters.chemical_parameters_2[3]
 
 
-    alpha = 0.5
+    alpha = input_parameters.chemical_parameters_2[4]
 
     if not os.path.exists(directory):
         os.mkdir(directory)
@@ -96,7 +96,9 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    sigma = dElectrode*dElectrode/Dref*(96485/(8.314*298)) *dimScanRate
+    sigma = dElectrode*dElectrode/Dref*(96485/(8.314*Temperature)) *dimScanRate
+
+
     
 
     #start and end potential of voltammetric scan
@@ -241,11 +243,12 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([Theta,grid.grad()])
+            grid.fluxes.append([Theta,grid.grad()/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
-                fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f
-                fluxes[:,1] = fluxes[:,1] *math.pi*dElectrode*96485*Dref*cRef
+                if dimensional:
+                    fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f
+                    fluxes[:,1] = fluxes[:,1] *math.pi*dElectrode*96485*Dref*cRef
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')

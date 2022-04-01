@@ -226,11 +226,13 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([grid.t[index],grid.grad()])
-            if input_parameters.ViewOption[0]: 
+            grid.fluxes.append([grid.t[index],grid.grad()/concA])
+            if input_parameters.ViewOption[0]:
+
                 fluxes = np.array(grid.fluxes)
-                fluxes[:,0]  = fluxes[:,0] * dElectrode * dElectrode / Dref
-                fluxes[:,1] = fluxes[:,1] *math.pi*dElectrode*96485*Dref*cRef
+                if dimensional: 
+                    fluxes[:,0]  = fluxes[:,0] * dElectrode * dElectrode / Dref
+                    fluxes[:,1] = fluxes[:,1] *math.pi*dElectrode*96485*Dref*cRef
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')
