@@ -156,7 +156,7 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
     if os.path.exists(CVLocation):
         print(F'{CVLocation} File exists, skipping!')
         #return
-    coeff = Coeff(Thetadiff,deltaT,maxX,kinetics,K0AB,K0BC,Kf,Kb,alphaAB,alphaBC,gamma,dA,dB,dC,dY,dZ,mechanism)
+    coeff = Coeff(Thetadiff,deltaT,maxX,kinetics,diffusion_mode,K0AB,K0BC,Kf,Kb,alphaAB,alphaBC,gamma,dA,dB,dC,dY,dZ,mechanism)
     coeff.calc_n(deltaX)
 
     #simulation steps

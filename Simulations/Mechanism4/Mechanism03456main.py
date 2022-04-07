@@ -49,7 +49,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     dimScanRate = input_parameters.cv_parameters_1[3]
     cycles = int(input_parameters.cv_parameters_1[4])
     #space step
-    deltaX = 1e-7
+    deltaX = 1e-6
     #potential step
     deltaTheta = input_parameters.model_parameters_30[0]*96485/(8.314*Temperature)
     #expanding grid factor
@@ -75,7 +75,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     elif input_parameters.chemical_parameters_2[0] == 2:
         kinetics = 'MH'
         raise ValueError('Marcus Harsh is an unimplemented Electrode kinetics ')
-     
     else:
         raise ValueError('Unknown/Unimplemented Electrode kinetics ')
 
@@ -165,7 +164,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     print('sigma',sigma,'DeltaT',deltaT)
     # The maximum distance of simulation
     maxT = 2.0*abs(theta_v-theta_i)/sigma
-    maxT = 2.0*abs(theta_v-theta_i)/sigma
+
     SimulationSpaceMultiple  = input_parameters.model_parameters_3[2]
     if diffusion_mode == 'linear':
         maxX = SimulationSpaceMultiple * np.sqrt(maxT)
@@ -176,7 +175,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
+    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
     coeff.calc_n(deltaX)
 
     #simulation steps
@@ -214,7 +213,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
         Theta = E[index]
         
 
-        #Theta  = Theta + deltaTheta
         
         if index == 2:
             print(f'Total run time is {(time.time()-start_time)*len(E)/60:.2f} mins')

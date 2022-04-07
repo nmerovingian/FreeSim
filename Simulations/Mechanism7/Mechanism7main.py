@@ -160,7 +160,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
 
 
 
-    coeff = Coeff(deltaT,maxX,kinetics,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism)
+    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism)
     coeff.calc_n(deltaX)
 
     #simulation steps
@@ -209,9 +209,6 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
             coeff.calc_jacob(grid.conc,Theta)
             coeff.calc_fx(grid.conc,Theta)
             try:
-                #coeff.dx = np.linalg.solve(coeff.J,coeff.fx)
-                #coeff.dx = scipy.linalg.solve_banded((4,4),coeff.J,coeff.fx)
-
                 coeff.dx=linalg.spsolve(sparse.csr_matrix(coeff.J),sparse.csr_matrix(coeff.fx[:,np.newaxis]))
             except:
                 print("Using lstsq solver! ")

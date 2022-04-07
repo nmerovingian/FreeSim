@@ -7,7 +7,7 @@ from PyQt5 import QtCore
 import pyqtgraph as pg
 from pyqtgraph import PlotWidget, plot 
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget,QActionGroup,QStackedWidget
+from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget,QActionGroup,QStackedWidget,QScrollBar
 from PyQt5.QtCore import QFile, QLine, QRect, QRunnable, QTimer, Qt,QSize,QThread,QThreadPool,QObject, pyqtBoundSignal, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QIcon,QPixmap
 import sys

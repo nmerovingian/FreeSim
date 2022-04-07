@@ -49,7 +49,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     time_dim = input_parameters.cv_parameters_13[1]
     maxT = time_dim * Dref / (dElectrode**2)
     #space step
-    deltaX = 1e-5
+    deltaX = 1e-6
     #initial step
     deltaT= input_parameters.model_parameters_32[0] * Dref / (dElectrode**2)
     gammaT = input_parameters.model_parameters_32[1]
@@ -161,7 +161,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     
 
-    coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,diffusion_mode)
+    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism)
     coeff.calc_n(deltaX)
     coeff.calc_time_steps(maxT,deltaT,gammaT)
 

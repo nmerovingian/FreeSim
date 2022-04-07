@@ -1,12 +1,13 @@
 import numpy as np
 
 class Coeff(object):
-    def __init__(self,Thetadiff,deltaT,maxX,kinetics,K0AB,K0BC,Kcomp,Kdisp,alphaAB,alphaBC,gamma,dA,dB,dC,dY,dZ,mechanism):
+    def __init__(self,Thetadiff,deltaT,maxX,kinetics,mode,K0AB,K0BC,Kcomp,Kdisp,alphaAB,alphaBC,gamma,dA,dB,dC,dY,dZ,mechanism):
         self.n = 0
         self.xi = 0.0
         self.Thetadiff = Thetadiff
         self.maxX = maxX
         self.kinetics = kinetics
+        self.mode = mode
         self.K0AB = K0AB
         self.K0BC =K0BC
         self.Kcomp = Kcomp*deltaT
@@ -20,6 +21,13 @@ class Coeff(object):
         self.dY = dY
         self.dZ = dZ
         self.mechanism = mechanism
+
+        if self.mode =='linear':
+            self.xi = 0.0
+        elif self.mode=='radial':
+            self.xi = 1.0
+        else:
+            raise ValueError
 
 
 
