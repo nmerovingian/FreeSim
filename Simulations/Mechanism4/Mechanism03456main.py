@@ -13,15 +13,17 @@ import os
 import math
 #from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
-cRef=1.0 # reference concentration, 1M
+
 P0 = 1.0 # reference pressure, 1 bar
-Dref = 1e-9 # reference diffusion coefficient
+
 
 
 
 
 def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None:
 
+    cRef=input_parameters.chemical_parameters_22[3]
+    Dref = input_parameters.chemical_parameters_22[1]
     DA = input_parameters.chemical_parameters_22[1]
     DB = input_parameters.chemical_parameters_22[5]
     DC = input_parameters.chemical_parameters_22[9]
@@ -47,7 +49,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     dimScanRate = input_parameters.cv_parameters_1[3]
     cycles = int(input_parameters.cv_parameters_1[4])
     #space step
-    deltaX = 1e-6
+    deltaX = 1e-7
     #potential step
     deltaTheta = input_parameters.model_parameters_30[0]*96485/(8.314*Temperature)
     #expanding grid factor
@@ -151,10 +153,10 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     # dimensionless diffusion coefficients of every species
     dA =DA/Dref
-    dB =DB/Dref   # diffusion coefficient of H+
+    dB =DB/Dref  
     dC =DC/Dref
-    dY =DY/Dref  # diffusion coeffficient of acetate+
-    dZ =DZ/Dref    # diffusion coefficient of H_2 
+    dY =DY/Dref  
+    dZ =DZ/Dref    
 
     # the maximum number of iterations for Newton method
     number_of_iteration = int(input_parameters.model_parameters_30[1])
@@ -174,12 +176,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    # create the csv file to save data
-    CVLocation  = f'{directory}/{file_name}.txt'
-
-    if os.path.exists(CVLocation):
-        print(F'{CVLocation} File exists, skipping!')
-        #return
     coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
     coeff.calc_n(deltaX)
 
@@ -230,8 +226,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
             coeff.calc_jacob(grid.conc,Theta)
             coeff.calc_fx(grid.conc,Theta)
             try:
-                #coeff.dx = np.linalg.solve(coeff.J,coeff.fx)
-                #coeff.dx = scipy.linalg.solve_banded((4,4),coeff.J,coeff.fx)
                 coeff.dx=linalg.spsolve(sparse.csr_matrix(coeff.J),sparse.csr_matrix(coeff.fx[:,np.newaxis]))
             except:
                 print("Using lstsq solver! ")
@@ -243,7 +237,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([Theta,grid.grad()/concA])
+            grid.fluxes.append([Theta,grid.grad()])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 if dimensional:

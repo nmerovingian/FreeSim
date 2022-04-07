@@ -61,44 +61,7 @@ class Grid(object):
     # A better initialized concentration vector
     
     
-    
-    """
-    def init_c(self,A:float,B:float,Y:float,Z:float,Theta:float):
-        NernstB = B*1.0/(1.0 + np.exp(-Theta))
-        NernstY = B*1.0/(1.0 + np.exp(Theta))
 
-        self.concB = np.linspace(NernstB,B,num=self.n,endpoint=True)
-        self.concY = np.linspace(NernstY,Y,num=self.n,endpoint=True)
-        self.concZ[:] = Z
-        self.concA[:] = A
-
-        self.conc[::4] = self.concA
-        self.conc[1::4] = self.concB
-        self.conc[2::4] = self.concY
-        self.conc[3::4] = self.concZ
-
-        #print(self.conc)
-    """
-    """
-    
-    def init_c(self,A:float,B:float,Y:float,Z:float,Theta:float):
-        NernstB = B*1.0/(1.0 + np.exp(-Theta))
-        NernstY = B*1.0/(1.0 + np.exp(Theta))
-
-        self.conc[::4] = A
-        self.conc[1::4] = B
-        self.conc[2::4] = Y
-        self.conc[3::4] = Z
-
-        self.conc[1] = NernstB
-        self.conc[2] = NernstY
-
-        self.concA = self.conc[::4]
-        self.concB = self.conc[1::4]
-        self.concY = self.conc[2::4]
-        self.concZ = self.conc[3::4]  
-
-    """
     def grad(self,d,deltaTheta):
         self.g = -(self.conc[10]-self.conc[5]) / (self.x[2]-self.x[1])  + self.beta*(self.conc[0]-d[0])/(deltaTheta)
         return self.g

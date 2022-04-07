@@ -11,7 +11,7 @@ import os
 import math
 from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
-cRef=1.0 # reference concentration, 1M
+
 P0 = 1.0 # reference pressure, 1 bar
 
 
@@ -19,13 +19,15 @@ P0 = 1.0 # reference pressure, 1 bar
 
 
 def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
+    cRef=input_parameters.chemical_parameters_22[3]
+    Dref = input_parameters.chemical_parameters_22[1]
 
     DA = input_parameters.chemical_parameters_22[1]
     DB = input_parameters.chemical_parameters_22[5]
     DC = input_parameters.chemical_parameters_22[9]
     DY = input_parameters.chemical_parameters_22[13]
     DZ = input_parameters.chemical_parameters_22[17]
-    Dref = 1e-9
+
     dElectrode = input_parameters.cv_parameters_11[1] # unit is m
     E0fAB = input_parameters.chemical_parameters_2[1] # The formal potential of the AB couple
     E0fBC = input_parameters.chemical_parameters_2[6] # The formal potential of the BC couple
@@ -217,7 +219,7 @@ def Mechanism_2_simulation_single_thread_Gui(signals,input_parameters)->None:
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([Theta,grid.grad()/concA])
+            grid.fluxes.append([Theta,grid.grad()])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 if dimensional:

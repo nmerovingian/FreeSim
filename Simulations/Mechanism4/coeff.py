@@ -84,31 +84,7 @@ class Coeff(object):
         x = x+ 1e-1*self.dx
         return x
     
-    
-    """
-    def xupdate(self,x,Theta):
-        t = 1.0
 
-        self.calc_fx(x,Theta)
-        original = np.mean(np.absolute(self.fx))
-        self.calc_fx(x+t*self.dx,Theta)
-        damped = np.mean(np.absolute(self.fx))
-
-        while damped > original:
-            t = t/2.0
-            self.calc_fx(x+t*self.dx,Theta)
-            damped = np.mean(np.absolute(self.fx))
-
-            #print(t)
-
-            if t < 1e-10:
-                break
-
-        x = x + t*self.dx
-        return x"""
-    
-    
-    
 
     def Acal_abc_radial(self,deltaT,Theta,deltaX):
         self.aA[0] = 0.0
@@ -312,32 +288,6 @@ class Coeff(object):
         else:
             raise ValueError
         
-        """
-        #BV boundary condition
-        Kred = self.K0*np.exp(-self.alpha*Theta)
-        Kox = self.K0*np.exp((2.0-self.alpha)*Theta)
-    
-        self.J[1,1] = (1.0+(1.0/self.dB)*Kred*h*2*x[1])
-        self.J[1,2] = -(1.0/self.dB)*Kox*h
-        self.J[1,5] = -1.0
-        self.J[2,1] = (-1.0/self.dY)*Kred*h * x[1]
-        self.J[2,2] = (0.5*(1.0/self.dY)*Kox*h+1.0)
-        self.J[2,6] =-1.0
-        """
-
-        #self.J[2,5] = 1.0/ np.exp(Theta)
-        #self.J[2,6] = -1.0
-
-        #self.J[2,1] = -self.dB
-        #self.J[2,2] = -self.dY
-        #self.J[2,5] = self.dB
-        #self.J[2,6] = self.dY
-        
-        
-        #self.J[1,1] = 1.0
-
-        #self.J[2,2] = -1.0
-
         
 
         for row in range(5,self.n*5-5,5):
@@ -353,7 +303,6 @@ class Coeff(object):
             self.J[row+1,row+6] = self.cB[i]
 
             self.J[row+2,row-3] = self.aC[i]
-
             self.J[row+2,row+2] = self.bC[i] 
             self.J[row+2,row+7] = self.cC[i]
 
@@ -422,7 +371,6 @@ class Coeff(object):
         h = self.XX[1] - self.XX[0]
 
         if self.kinetics == 'Nernst':
-        # Nernst boundary condition  working on it 
             self.fx[0] = self.dA*((x[5]-x[1]*np.exp(Theta))/h) + self.dB*((x[6]-x[1])/h)
             self.fx[1] = self.dB*((x[6]-x[0]/np.exp(Theta))/h) + self.dA*((x[5]-x[0])/h)
         elif self.kinetics =='BV':
@@ -436,19 +384,7 @@ class Coeff(object):
         self.fx[2] = x[7] - x[2]
         self.fx[3] = x[8] - x[3]
         self.fx[4] = x[9] - x[4]
-        """
-        #BV boundary condition
-        Kred = self.K0*self.Kappa*np.exp(-self.alpha*Theta)
-        Kox = self.K0*np.exp((2.0-self.alpha)*Theta)
-        self.fx[1] = x[1] + Kred*h* (1.0/self.dB)*x[1]*x[1] - Kox*h*(1/self.dB)*x[2]- x[5]
-        self.fx[2] = x[2] - 0.5*Kred*h*(1.0/self.dY)*x[1]*x[1] + 0.5*Kox*h*(1.0/self.dY)*x[2] - x[6]
-        """
 
-        #self.fx[2] = self.dY*((x[6]-x[2])/h) + self.dB*((x[5]-x[1])/h)
-        #self.fx[2] = x[1]/np.exp(Theta) - x[2]
-
-        #self.fx[1]  =  x[1] - self.concB * (1.0/(1.0+np.exp(-Theta)))
-        #self.fx[2]  = self.concB* (1.0/(1.0+np.exp(Theta))) - x[2]
 
 
         for j in range(5,5*self.n-5,5):

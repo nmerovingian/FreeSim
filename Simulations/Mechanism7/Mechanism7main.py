@@ -11,14 +11,14 @@ import os
 import math
 from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
-cRef=1.0 # reference concentration, 1M
-P0 = 1.0 # reference pressure, 1 bar
-Dref = 1e-9
 
+P0 = 1.0 # reference pressure, 1 bar
 
 
 
 def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)->None:
+    cRef=input_parameters.chemical_parameters_22[3]
+    Dref = input_parameters.chemical_parameters_22[1]
 
     DA = input_parameters.chemical_parameters_22[1]
     DB = input_parameters.chemical_parameters_22[5]
@@ -159,12 +159,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
 
 
 
-    # create the csv file to save data
-    CVLocation  = f'{directory}/{file_name}.txt'
 
-    if os.path.exists(CVLocation):
-        print(F'{CVLocation} File exists, skipping!')
-        #return
     coeff = Coeff(deltaT,maxX,kinetics,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism)
     coeff.calc_n(deltaX)
 
@@ -228,7 +223,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
                 break
             
         if not np.isnan(grid.grad(coeff.d,deltaTheta)):
-            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)/concA])
+            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f

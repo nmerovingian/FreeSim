@@ -375,19 +375,7 @@ class Coeff(object):
         self.fx[7] = x[12] - x[7]
         self.fx[8] = x[13] - x[8]
         self.fx[9] = x[14] - x[9]
-        """
-        #BV boundary condition
-        Kred = self.K0*self.Kappa*np.exp(-self.alpha*Theta)
-        Kox = self.K0*np.exp((2.0-self.alpha)*Theta)
-        self.fx[1] = x[1] + Kred*h* (1.0/self.dB)*x[1]*x[1] - Kox*h*(1/self.dB)*x[2]- x[5]
-        self.fx[2] = x[2] - 0.5*Kred*h*(1.0/self.dY)*x[1]*x[1] + 0.5*Kox*h*(1.0/self.dY)*x[2] - x[6]
-        """
 
-        #self.fx[2] = self.dY*((x[6]-x[2])/h) + self.dB*((x[5]-x[1])/h)
-        #self.fx[2] = x[1]/np.exp(Theta) - x[2]
-
-        #self.fx[1]  =  x[1] - self.concB * (1.0/(1.0+np.exp(-Theta)))
-        #self.fx[2]  = self.concB* (1.0/(1.0+np.exp(Theta))) - x[2]
 
 
         for j in range(10,5*self.n-5,5):

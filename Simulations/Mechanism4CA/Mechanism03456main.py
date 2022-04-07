@@ -13,7 +13,7 @@ import os
 import math
 from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
-cRef=1.0 # reference concentration, 1M
+
 P0 = 1.0 # reference pressure, 1 bar
 
 
@@ -22,12 +22,15 @@ P0 = 1.0 # reference pressure, 1 bar
 
 def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None:
 
+    cRef=input_parameters.chemical_parameters_22[3]
+    Dref = input_parameters.chemical_parameters_22[1]
+
     DA = input_parameters.chemical_parameters_22[1]
     DB = input_parameters.chemical_parameters_22[5]
     DC = input_parameters.chemical_parameters_22[9]
     DY = input_parameters.chemical_parameters_22[13]
     DZ = input_parameters.chemical_parameters_22[17]
-    Dref = 1e-9
+
     dElectrode = input_parameters.cv_parameters_11[1] # unit is m
     E0f = input_parameters.chemical_parameters_2[1] # The formal potential of the couple couple
     directory = input_parameters.file_options_parameters[1]
@@ -140,10 +143,10 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     # dimensionless diffusion coefficients of every species
     dA =DA/Dref
-    dB =DB/Dref   # diffusion coefficient of H+
+    dB =DB/Dref   
     dC =DC/Dref
-    dY =DY/Dref  # diffusion coeffficient of acetate+
-    dZ =DZ/Dref    # diffusion coefficient of H_2 
+    dY =DY/Dref  
+    dZ =DZ/Dref    
 
     # the maximum number of iterations for Newton method
     number_of_iteration = int(input_parameters.model_parameters_30[1])
@@ -158,12 +161,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     
 
-    # create the csv file to save data
-    CVLocation  = f'{directory}/{file_name}.txt'
-
-    if os.path.exists(CVLocation):
-        print(F'{CVLocation} File exists, overwriting!')
-        #return
     coeff = Coeff(deltaT,maxX,kinetics,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,diffusion_mode)
     coeff.calc_n(deltaX)
     coeff.calc_time_steps(maxT,deltaT,gammaT)
@@ -226,7 +223,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 break
             
         if not np.isnan(grid.grad()):
-            grid.fluxes.append([grid.t[index],grid.grad()/concA])
+            grid.fluxes.append([grid.t[index],grid.grad()])
             if input_parameters.ViewOption[0]:
 
                 fluxes = np.array(grid.fluxes)
