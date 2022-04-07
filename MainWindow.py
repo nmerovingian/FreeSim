@@ -730,6 +730,7 @@ class MyTableWidget(QWidget):
         self.settingUpCompleted = True
 
         self.userParameter = userInputParameters()
+        self.fileParameter = OrderedDict()
         
 
     def onModelButtonClicked(self,id):
@@ -740,38 +741,62 @@ class MyTableWidget(QWidget):
 
     def onMechanism0ButtonClicked(self):
         if self.pushButton10.isChecked():
-            self.loadInputParameters(Mechanism0Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism0 = Mechanism0Input()
+            Mechanism0.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism0)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
 
     def onMechanism1ButtonClicked(self):
         if self.pushButton11.isChecked():
-            self.loadInputParameters(Mechanism1Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism1 = Mechanism1Input()
+            Mechanism1.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism1)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
     def onMechanism2ButtonClicked(self):
         if self.pushButton12.isChecked():
-            self.loadInputParameters(Mechanism2Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism2 = Mechanism2Input()
+            Mechanism2.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism2)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
     def onMechanism3ButtonClicked(self):
         if self.pushButton13.isChecked():
-            self.loadInputParameters(Mechanism3Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism3 = Mechanism3Input()
+            Mechanism3.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism3)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
 
     
     def onMechanism4ButtonClicked(self):
         if self.pushButton14.isChecked():
-            self.loadInputParameters(Mechanism4Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism4 = Mechanism4Input()
+            Mechanism4.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism4)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
     def onMechanism5ButtonClicked(self):
         if self.pushButton15.isChecked():
-            self.loadInputParameters(Mechanism5Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism5 = Mechanism5Input()
+            Mechanism5.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism5)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
     def onMechanism6ButtonClicked(self):
         if self.pushButton16.isChecked():
-            self.loadInputParameters(Mechanism6Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism6 = Mechanism6Input()
+            Mechanism6.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism6)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
     def onMechanism7ButtonClicked(self):
         if self.pushButton17.isChecked():
-            self.loadInputParameters(Mechanism7Input())
+            fileParameter = self.loadFileParameter()
+            Mechanism7 = Mechanism7Input()
+            Mechanism7.file_options_parameters = fileParameter
+            self.loadInputParameters(Mechanism7)
         self.userParameter.mechanism_parameters_0[0] = self.button_group.id(self.button_group.checkedButton())
         self.calAds()
 
@@ -1721,7 +1746,7 @@ class MyTableWidget(QWidget):
         for key,value in inputParameter.model_parameters_enabled_3.items():
             setDisabled(self.input_widgets_dict3[key])
         for key,value in inputParameter.model_parameters_enabled_30.items():
-            setDisabled(self.input_widgets_dict31[key])
+            setDisabled(self.input_widgets_dict30[key])
         for key,value in inputParameter.model_parameters_enabled_31.items():
             setDisabled(self.input_widgets_dict31[key])
         for key,value in inputParameter.stochastic_parameters_enabled_4.items():
@@ -1802,6 +1827,16 @@ class MyTableWidget(QWidget):
             self.userParameter.AI_parameters_60[key] = getValue(self.input_widgets_dict60[key])
 
         return self.userParameter
+
+
+    def loadFileParameter(self):
+        for key,value in self.userParameter.file_options_parameters.items():
+            if key ==1 or key == 2:
+                self.fileParameter[key] = self.file_widgetes_dict[key].text()
+            else:
+                self.fileParameter[key] =  getValue(self.file_widgetes_dict[key])
+
+        return self.fileParameter
 
     def loadModelParameters(self,inputParameter = DefaultInput()):
         for key,value in inputParameter.model_parameters_3.items():
