@@ -36,7 +36,7 @@ $ pip install scipy
 The packages can also be installed using the *requirement.txt*
 
 ```
-$ pip install requirement.txt
+$ pip install -r requirement.txt
 ```
 
 To run,
