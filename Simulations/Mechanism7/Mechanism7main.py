@@ -17,7 +17,7 @@ P0 = 1.0 # reference pressure, 1 bar
 
 
 def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)->None:
-    cRef=input_parameters.chemical_parameters_22[3]
+    cRef=1.0#input_parameters.chemical_parameters_22[3]
     Dref = input_parameters.chemical_parameters_22[1]
 
     DA = input_parameters.chemical_parameters_22[1]
@@ -149,7 +149,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
     deltaT = deltaTheta/sigma
     print('sigma',sigma,'DeltaT',deltaT)
     # The maximum distance of simulation
-    maxT = 2.0*abs(theta_v-theta_i)/sigma
+
     maxT = 2.0*abs(theta_v-theta_i)/sigma
     SimulationSpaceMultiple  = input_parameters.model_parameters_3[2]
     if diffusion_mode == 'linear':
@@ -220,7 +220,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
                 break
             
         if not np.isnan(grid.grad(coeff.d,deltaTheta)):
-            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)])
+            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f

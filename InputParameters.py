@@ -10,7 +10,7 @@ class DefaultInput(object):
 
         self.cv_parameters_1 = OrderedDict([(0,0.4),(1,-0.4),(2,0.4),(3,1.0),(4,1),(5,0.0),(6,0.0),(7,298),(8,0.0),(9,0.0)])
         self.cv_parameters_10 = OrderedDict([(0,1e-5),(1,0.0),(2,0.0),(3,0.0),(4,0.0)])
-        self.cv_parameters_11 = OrderedDict([(0,0),(1,1e-5)])
+        self.cv_parameters_11 = OrderedDict([(0,0),(1,1e-5),(2,1e-2)])
         self.cv_parameters_12 = OrderedDict([(0,0)])
         self.cv_parameters_13 = OrderedDict([(0,-1.0),(1,10),(2,0),(3,0),(4,298),(5,0.0),(6,0.0)])
 
@@ -38,7 +38,7 @@ class DefaultInput(object):
 
         self.cv_parameters_enabled_1 = OrderedDict([(5,False),(6,False),(8,False),(9,False)])
         self.cv_parameters_enabled_10 = OrderedDict()
-        self.cv_parameters_enabled_11 = OrderedDict()
+        self.cv_parameters_enabled_11 = OrderedDict([(2,False)])
         self.cv_parameters_enabled_12 = OrderedDict()
         self.cv_parameters_enabled_13 = OrderedDict([(2,False),(3,False)])
 

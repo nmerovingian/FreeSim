@@ -930,15 +930,30 @@ class MyTableWidget(QWidget):
         self.input_widgets_dict11 = OrderedDict()
 
         self.input_widgets_dict11[0] = QComboBox()
-        self.input_widgets_dict11[0].addItems(['Macro, Planar','Micro, Spherical','Mirco, Hemispherical','Micro, Microdisc'])
+        self.input_widgets_dict11[0].addItems(['Macro, Planar','Micro, Spherical','Mirco, Hemispherical','Micro, Microdisc','Micro, Cylinder'])
+        self.input_widgets_dict11[0].currentIndexChanged.connect(self.electrodeGeometryInput)
         self.input_widgets_dict11[1] = QLineEdit()
+        self.input_widgets_dict11[2] = QLineEdit()
         layout.addRow(QLabel('Geometry of electrode'),self.input_widgets_dict11[0])
         layout.addRow(QLabel('Radius, m'),self.input_widgets_dict11[1])
+        layout.addRow(QLabel('Electrode length, m \n(cylinder electrode only)'),self.input_widgets_dict11[2])
 
         self.formGroupBox11.setLayout(layout)
 
+    def electrodeGeometryInput(self,index):
+        if index == 0:
+            setDisabled(self.input_widgets_dict11[2])
+        elif index == 1:
+            setDisabled(self.input_widgets_dict11[2])
+        elif index == 2:
+            setDisabled(self.input_widgets_dict11[2])
+        elif index == 3:
+            setDisabled(self.input_widgets_dict11[2])
+        elif index == 4:
+            setEnabled(self.input_widgets_dict11[2])
+
     def createFormGroupBox12(self):
-        self.formGroupBox12 = QGroupBox('Information of Electrode')
+        self.formGroupBox12 = QGroupBox('Simulation Boundary')
         layout = QFormLayout()
         self.input_widgets_dict12 = OrderedDict()
 
@@ -1381,6 +1396,7 @@ class MyTableWidget(QWidget):
         E0_ads = E0 - 8.314*Temperature/96485 * math.log((kA_ads/kA_des)/(kB_ads/kB_des))
         cA = getValue(self.input_widgets_dict22[3])
         cB = getValue(self.input_widgets_dict22[7])
+
         GammaA = GammaMax * (kA_ads/kA_des*cA)/(1.0+kA_ads/kA_des*cA+kB_ads/kB_des*cB)
         GammaB = GammaMax * (kB_ads/kB_des*cB)/(1.0+kA_ads/kA_des*cA+kB_ads/kB_des*cB)
         self.input_widgets_dict5[5].setText(f'{GammaA}')
