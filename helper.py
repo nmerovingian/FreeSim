@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget
-
+import math
 
 def getValue(widget):
     if isinstance(widget,QLineEdit):
@@ -42,3 +42,24 @@ def setHided(widget):
 def setVisible(widget):
     if isinstance(widget,QWidget):
         widget.show()
+
+
+
+def toDimensional(potential,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cRef):
+    potential = potential / (96485/(8.314*Temperature)) + E0f
+    if geometry == 0:
+        fluxes = math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 1:
+        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 2:
+        fluxes = 4*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 4:
+        fluxes = 2*math.pi*lElectrode*96485*Dref*cRef*fluxes
+    else:
+        raise ValueError
+
+    return potential,fluxes
+
+
+def toDimensionalCA(time,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cRef):
+    pass
