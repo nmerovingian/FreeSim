@@ -1,7 +1,7 @@
 import numpy as np
 import csv
 import pandas as pd
-
+from helper import toDimensional
 class Grid(object):
     def __init__(self,n,diffusion_mode):
         self.n = n
@@ -99,13 +99,18 @@ class Grid(object):
         package = np.stack((self.x,self.concA,self.concB,self.concC,self.concY,self.concZ),axis=1)
         return package
 
-    def saveVoltammogram(self,E,output_file_name,dimensional):
+    def saveVoltammogram(self,E,output_file_name,dimensional = True,geometry_number=None,Temperature = None, E0f=None,dElectrode = None,lElectrode=None,Dref=None,cRef=None):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
         if dimensional:
             df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
         else: 
             df = pd.DataFrame(voltammogram,columns=['Dimensionless Potential,theta','Flux,J'])
+
+        if dimensional:
+            df.iloc[:,0],df.iloc[:,1] = toDimensional(df.iloc[:,0],df.iloc[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
+
+            
         df.to_csv(output_file_name,index=False)
 
         

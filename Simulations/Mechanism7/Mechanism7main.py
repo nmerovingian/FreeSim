@@ -2,6 +2,7 @@ import numpy as np
 import time
 from Simulations.Mechanism7.coeff import Coeff
 from Simulations.Mechanism7.grid import Grid
+from helper import toDimensional
 import csv
 import scipy
 from scipy import sparse
@@ -27,6 +28,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
     DZ = input_parameters.chemical_parameters_22[17]
 
     dElectrode = input_parameters.cv_parameters_11[1] # unit is m
+    lElectrode = input_parameters.cv_parameters_11[2] # unit is m, for cylinder electrode only
     E0f = input_parameters.chemical_parameters_2[1] # The formal potential of the couple couple
     directory = input_parameters.file_options_parameters[1]
     file_name = input_parameters.file_options_parameters[2]
@@ -37,6 +39,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
     else:
         raise ValueError('Unknwon file type')
     output_file_name = f'{directory}/{file_name}{file_type}'
+    dimensional = input_parameters.file_options_parameters[5]
     Temperature = input_parameters.cv_parameters_1[7]
     theta_i = (input_parameters.cv_parameters_1[0]-E0f)*96485/(8.314*Temperature)
     theta_v = (input_parameters.cv_parameters_1[1]- E0f)*96485/(8.314*Temperature)
@@ -50,13 +53,20 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
     gamma = input_parameters.model_parameters_31[0]
 
 
+    zeta = 2 
+    geometry_number = input_parameters.cv_parameters_11[0]
     # information of electrode
-    if input_parameters.cv_parameters_11[0] == 0:
+    if geometry_number == 0:
         diffusion_mode = 'linear'
-    elif input_parameters.cv_parameters_11[0] == 1:
+    elif geometry_number == 1:
         diffusion_mode = 'radial'
-    elif input_parameters.cv_parameters_11[0] == 2:
+        zeta = 2 
+    elif geometry_number == 2:
         diffusion_mode = 'radial'
+        zeta = 2
+    elif geometry_number == 4:
+        diffusion_mode = 'radial'
+        zeta = 1
     else:
         raise ValueError('Unknown geometry')
 
@@ -160,7 +170,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
 
 
 
-    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism)
+    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,zeta,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism)
     coeff.calc_n(deltaX)
 
     #simulation steps
@@ -223,8 +233,8 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
             grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
-                fluxes[:,0]  = fluxes[:,0] / (96485/(8.314*Temperature)) + E0f
-                fluxes[:,1] = fluxes[:,1] *math.pi*dElectrode*96485*Dref*cRef
+                if dimensional:
+                    fluxes[:,0],fluxes[:,1] = toDimensional(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')
@@ -236,7 +246,7 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
 
 
 
-    grid.saveVoltammogram(E,output_file_name)
+    grid.saveVoltammogram(E,output_file_name,dimensional,geometry_number,Temperature,E0f,dElectrode,lElectrode,Dref,cRef)
 
     signals.output_file_name.emit(output_file_name)
     signals.progress.emit(100)

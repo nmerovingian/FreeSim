@@ -2,6 +2,7 @@ import numpy as np
 import csv
 import pandas as pd
 import math
+from helper import toDimensionalCA
 
 class Grid(object):
     def __init__(self,n,diffusion_mode,nT):
@@ -65,7 +66,7 @@ class Grid(object):
         package = np.stack((self.x,self.concA,self.concB,self.concC,self.concY,self.concZ),axis=1)
         return package
 
-    def saveVoltammogram(self,t,output_file_name,dimensional = True,Temperature = None, E0f=None,dElectrode = None,Dref=None,Cref=None):
+    def saveVoltammogram(self,t,output_file_name,dimensional = True,geometry_number=None,Temperature = None, E0f=None,dElectrode = None,lElectrode=None,Dref=None,cRef=None):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
         if dimensional:
@@ -73,8 +74,7 @@ class Grid(object):
         else:
             df = pd.DataFrame(voltammogram,columns=['Dimensionless Time,T','Flux,J'])
         if dimensional:
-            df.iloc[:,0] = df.iloc[:,0] * (dElectrode * dElectrode) / Dref
-            df.iloc[:,1] = df.iloc[:,1] *math.pi*dElectrode*96485*Dref*Cref
+            df.iloc[:,0],df.iloc[:,1] = toDimensionalCA(df.iloc[:,0],df.iloc[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
 
         df.to_csv(output_file_name,index=False)
 

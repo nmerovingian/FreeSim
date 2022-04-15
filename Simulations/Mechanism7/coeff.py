@@ -1,12 +1,13 @@
 import numpy as np
 
 class Coeff(object):
-    def __init__(self,deltaT,maxX,kinetics,mode,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism):
+    def __init__(self,deltaT,maxX,kinetics,mode,zeta,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism):
         self.n = 0
         self.xi = 0.0
         self.maxX = maxX
         self.kinetics = kinetics
         self.mode = mode
+        self.zeta = zeta
         self.K0 = K0
         self.K0_ads = K0_ads
         self.Kads_A = Kads_A
@@ -100,32 +101,32 @@ class Coeff(object):
     
 
     def Acal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aA[1] = 0.0
-        self.bA[1] = 0.0
-        self.cA[1] = 0.0
+        self.aA[0] = 0.0
+        self.bA[0] = 0.0
+        self.cA[0] = 0.0
 
-        for i in range(2,self.n-1):
+        for i in range(1,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
-            self.aA[i] = self.dA*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.aA[i] = self.dA*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
             self.bA[i] = self.dA*(((2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) + (2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)))) + 1.0
-            self.cA[i] = self.dA*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.cA[i] = self.dA*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
 
         self.aA[-1] = 0.0
         self.bA[-1] = 0.0
         self.cA[-1] = 0.0
 
     def Bcal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aB[1] = 0.0
-        self.bB[1] = 0.0
-        self.cB[1] = 0.0
+        self.aB[0] = 0.0
+        self.bB[0] = 0.0
+        self.cB[0] = 0.0
 
-        for i in range(2,self.n-1):
+        for i in range(1,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
-            self.aB[i] =self.dB*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.aB[i] =self.dB*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
             self.bB[i] =self.dB*( ((2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) + (2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)))) + 1.0
-            self.cB[i] =self.dB*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.cB[i] =self.dB*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
 
         self.aB[-1] = 0.0
         self.bB[-1] = 0.0
@@ -133,16 +134,16 @@ class Coeff(object):
 
 
     def Ccal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aC[1] = 0.0
-        self.bC[1] = 0.0
-        self.cC[1] = 0.0
+        self.aC[0] = 0.0
+        self.bC[0] = 0.0
+        self.cC[0] = 0.0
 
-        for i in range(2,self.n-1):
+        for i in range(1,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
-            self.aC[i] =self.dC*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.aC[i] =self.dC*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
             self.bC[i] =self.dC*( ((2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) + (2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)))) + 1.0
-            self.cC[i] =self.dC*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.cC[i] =self.dC*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
 
         self.aC[-1] = 0.0
         self.bC[-1] = 0.0
@@ -150,31 +151,31 @@ class Coeff(object):
 
 
     def Ycal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aY[1] = 0.0
-        self.bY[1] = 0.0
-        self.cY[1] = 0.0
+        self.aY[0] = 0.0
+        self.bY[0] = 0.0
+        self.cY[0] = 0.0
 
-        for i in range(2,self.n-1):
+        for i in range(1,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
-            self.aY[i] = self.dY*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.aY[i] = self.dY*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
             self.bY[i] = self.dY*(((2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) + (2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)))) + 1.0
-            self.cY[i] = self.dY*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.cY[i] = self.dY*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
         self.aY[-1] = 0.0
         self.bY[-1] = 0.0
         self.cY[-1] = 0.0
 
     def Zcal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aZ[1] = 0.0
-        self.bZ[1] = 0.0
-        self.cZ[1] = 0.0
+        self.aZ[0] = 0.0
+        self.bZ[0] = 0.0
+        self.cZ[0] = 0.0
 
-        for i in range(2,self.n-1):
+        for i in range(1,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
-            self.aZ[i] = self.dZ*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.aZ[i] = self.dZ*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
             self.bZ[i] = self.dZ*(((2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) + (2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)))) + 1.0
-            self.cZ[i] = self.dZ*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - 2.0 / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
+            self.cZ[i] = self.dZ*((-(2.0 * deltaT) / (deltaX_p * (deltaX_m + deltaX_p)) - self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
         self.aZ[-1] = 0.0
         self.bZ[-1] = 0.0
         self.cZ[-1] = 0.0

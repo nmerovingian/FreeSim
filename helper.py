@@ -62,4 +62,18 @@ def toDimensional(potential,fluxes,geometry,dElectrode,lElectrode,E0f,Temperatur
 
 
 def toDimensionalCA(time,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cRef):
-    pass
+    
+    time = time*dElectrode*dElectrode/Dref
+
+    if geometry == 0:
+        fluxes = math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 1:
+        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 2:
+        fluxes = 4*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 4:
+        fluxes = 2*math.pi*lElectrode*96485*Dref*cRef*fluxes
+    else:
+        raise ValueError
+
+    return time,fluxes
