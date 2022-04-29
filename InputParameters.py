@@ -3,6 +3,10 @@ from collections import OrderedDict
 import os
 import datetime
 class DefaultInput(object):
+    """
+    This class controls the default input of the software and the state of the software (enabled/disabled).
+    Each mechanism inhereit from this class for the layout of input/output.
+    """
     def __init__(self) -> None:
         super().__init__()
 
@@ -14,7 +18,7 @@ class DefaultInput(object):
         self.cv_parameters_12 = OrderedDict([(0,0)])
         self.cv_parameters_13 = OrderedDict([(0,-1.0),(1,10),(2,0),(3,0),(4,298),(5,0.0),(6,0.0)])
 
-        self.chemical_parameters_2 = OrderedDict([(0,0),(1,0.0),(2,0.0),(3,1.0),(4,0.5),(5,1),(6,-0.2),(7,0.0),(8,1.0),(9,0.5)])
+        self.chemical_parameters_2 = OrderedDict([(0,0),(1,0.0),(2,0.0),(3,1.0),(4,0.5),(5,1),(6,-0.2),(7,0.0),(8,1.0),(9,0.5),(10,0),(11,0)])
         self.chemical_parameters_21 = OrderedDict([(0,''),(1,0.0),(2,''),(3,0.0),(4,False)])
         self.chemical_parameters_22 = OrderedDict([(0,True),(1,1e-9),(2,1e-5),(3,1e-5),(4,True),(5,1e-9),(6,0.0),(7,0.0),(8,False),(9,1e-9),(10,0.0),(11,0.0),(12,False),(13,1e-9),(14,0.0),(15,0.0),(16,False),(17,1e-9),(18,0.0),(19,0.0)])
 
@@ -98,6 +102,11 @@ class Mechanism1Input(DefaultInput):
         self.cv_parameters_enabled_10[2] = False
         self.cv_parameters_enabled_10[3] = False
         self.cv_parameters_enabled_10[4] = False
+        self.chemical_parameters_enabled_2[0] = False
+        self.chemical_parameters_enabled_2[2] = False
+        self.chemical_parameters_enabled_2[3] = False
+        self.chemical_parameters_enabled_2[4] = False
+        self.chemical_parameters_enabled_2[10] = False
         self.chemical_parameters_enabled_22[8] = False 
         self.chemical_parameters_enabled_22[9] = False 
         self.chemical_parameters_enabled_22[10] = False 
@@ -128,6 +137,7 @@ class Mechanism2Input(DefaultInput):
         self.chemical_parameters_enabled_2[5] = False
         self.chemical_parameters_enabled_2[2] = False
         self.chemical_parameters_enabled_2[7] = False
+        self.chemical_parameters_enabled_2[11] = False
         self.chemical_parameters_enabled_21[4] = False
         self.chemical_parameters_enabled_22[12] = False 
         self.chemical_parameters_enabled_22[13] = False 

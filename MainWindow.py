@@ -472,15 +472,6 @@ class MainWindow(QMainWindow):
 
 
 
-
-            
-
-
-
-
-
-
-
     def onStartSimulation(self):
 
         if self.threadpool.activeThreadCount() < 1:
@@ -999,6 +990,7 @@ class MyTableWidget(QWidget):
         self.input_widgets_dict2[2] = QLineEdit()
         self.input_widgets_dict2[3] = QLineEdit()
         self.input_widgets_dict2[4] = QLineEdit()
+        self.input_widgets_dict2[10] = QLineEdit()
 
 
         layout1.addRow(QLabel('A + e = B'),QLabel(''))
@@ -1007,6 +999,7 @@ class MyTableWidget(QWidget):
         layout1.addRow(QLabel('Reorgnization Energy, eV'),self.input_widgets_dict2[2])
         layout1.addRow(QLabel('Standard electrochemical rate constant<br> k<sub>0</sub>, m/s'),self.input_widgets_dict2[3])
         layout1.addRow(QLabel('Transfer coefficient,\u03B1'),self.input_widgets_dict2[4])
+        layout1.addRow(QLabel('Asymmetric parameter,\u03BB'),self.input_widgets_dict2[10])
 
 
 
@@ -1017,6 +1010,7 @@ class MyTableWidget(QWidget):
         self.input_widgets_dict2[7] = QLineEdit()
         self.input_widgets_dict2[8] = QLineEdit()
         self.input_widgets_dict2[9] = QLineEdit()
+        self.input_widgets_dict2[11] = QLineEdit()
 
 
         layout2.addRow(QLabel('B + e = C'),QLabel(''))
@@ -1025,6 +1019,7 @@ class MyTableWidget(QWidget):
         layout2.addRow(QLabel('Reorgnization Energy, eV'),self.input_widgets_dict2[7])
         layout2.addRow(QLabel('Standard electrochemical rate constant<br> k<sub>0</sub>, m/s'),self.input_widgets_dict2[8])
         layout2.addRow(QLabel('Transfer coefficient,\u03B1'),self.input_widgets_dict2[9])
+        layout2.addRow(QLabel('Asymmetric parameter,\u03BB'),self.input_widgets_dict2[11])
 
         masterWidget1 = QWidget()
         masterWidget1.setLayout(layout1)
@@ -1042,14 +1037,18 @@ class MyTableWidget(QWidget):
         if index == 0:
             setDisabled(self.input_widgets_dict2[2])
             setDisabled(self.input_widgets_dict2[3])
+            setDisabled(self.input_widgets_dict2[4])
+            setDisabled(self.input_widgets_dict2[10])
         elif index == 1:
-            setEnabled(self.input_widgets_dict2[3])
             setDisabled(self.input_widgets_dict2[2])
+            setEnabled(self.input_widgets_dict2[3])
+            setEnabled(self.input_widgets_dict2[4])
+            setDisabled(self.input_widgets_dict2[10])
         elif index == 2:
             setEnabled(self.input_widgets_dict2[2])
-            setDisabled(self.input_widgets_dict2[3])
-
-
+            setEnabled(self.input_widgets_dict2[3])
+            setDisabled(self.input_widgets_dict2[4])
+            setEnabled(self.input_widgets_dict2[10])
     def createFormGroupBox21(self):
         self.formGroupBox21 = QGroupBox('Homogeneous Chemical Reactions')
         layout = QFormLayout()
