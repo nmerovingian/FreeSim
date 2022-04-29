@@ -4,7 +4,7 @@ import time
 from Simulations.Mechanism4CA.coeff import Coeff
 #from grid import Grid
 from Simulations.Mechanism4CA.grid import Grid
-from helper import toDimensionalCA
+from helper import toDimensionalCA,addNoise
 import csv
 import scipy
 from scipy import sparse
@@ -159,7 +159,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     # the maximum number of iterations for Newton method
     number_of_iteration = int(input_parameters.model_parameters_30[1])
-
+    noise_level = input_parameters.model_parameters_30[2]
 
 
 
@@ -238,7 +238,9 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
                 fluxes = np.array(grid.fluxes)
                 if dimensional: 
-                    fluxes[:,0],fluxes[:,1] = toDimensionalCA(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
+                    fluxes[:,0],fluxes[:,1] = toDimensionalCA(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef,noise_level)
+                    if noise_level>0.0:
+                        fluxes[:,1] = addNoise(fluxes[:,1],noise_level)
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')

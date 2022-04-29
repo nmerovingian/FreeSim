@@ -1,7 +1,7 @@
 import numpy as np
 import csv
 import pandas as pd
-from helper import toDimensional
+from helper import toDimensional,addNoise
 class Grid(object):
     def __init__(self,n,diffusion_mode):
         self.n = n
@@ -99,7 +99,7 @@ class Grid(object):
         package = np.stack((self.x,self.concA,self.concB,self.concC,self.concY,self.concZ),axis=1)
         return package
 
-    def saveVoltammogram(self,E,output_file_name,dimensional = True,geometry_number=None,Temperature = None, E0f=None,dElectrode = None,lElectrode=None,Dref=None,cRef=None):
+    def saveVoltammogram(self,E,output_file_name,dimensional = True,geometry_number=None,Temperature = None, E0f=None,dElectrode = None,lElectrode=None,Dref=None,cRef=None,noise_level=None):
         voltammogram = np.array(self.fluxes)
         print(voltammogram.shape)
         if dimensional:
@@ -109,7 +109,8 @@ class Grid(object):
 
         if dimensional:
             df.iloc[:,0],df.iloc[:,1] = toDimensional(df.iloc[:,0],df.iloc[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
-
+            if noise_level>0.0:
+                df.iloc[:,1] = addNoise(df.iloc[:,1],noise_level)
             
         df.to_csv(output_file_name,index=False)
 

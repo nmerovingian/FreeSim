@@ -52,7 +52,7 @@ class DefaultInput(object):
         self.chemical_parameters_enabled_21 = OrderedDict()
         self.chemical_parameters_enabled_22 = OrderedDict()
 
-        self.model_parameters_enabled_3= OrderedDict()
+        self.model_parameters_enabled_3= OrderedDict([(1,False),(3,False)])
         self.model_parameters_enabled_30 = OrderedDict()
         self.model_parameters_enabled_31 = OrderedDict()
         

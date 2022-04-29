@@ -4,7 +4,7 @@ import time
 from Simulations.Mechanism4.coeff import Coeff
 #from grid import Grid
 from Simulations.Mechanism4.grid import Grid
-from helper import toDimensional
+from helper import toDimensional,addNoise
 import csv
 import scipy
 from scipy import sparse
@@ -169,6 +169,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
     # the maximum number of iterations for Newton method
     number_of_iteration = int(input_parameters.model_parameters_30[1])
+    noise_level = input_parameters.model_parameters_30[2]
 
     deltaT = deltaTheta/sigma
     print('sigma',sigma,'DeltaT',deltaT)
@@ -250,6 +251,8 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 fluxes = np.array(grid.fluxes)
                 if dimensional:
                     fluxes[:,0],fluxes[:,1] = toDimensional(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
+                    if noise_level>0.0:
+                        fluxes[:,1] = addNoise(fluxes[:,1],noise_level)
                 signals.fluxesProfile.emit(fluxes)
         else:
             print('Bad solution')
@@ -261,7 +264,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    grid.saveVoltammogram(E,output_file_name,dimensional,geometry_number,Temperature,E0f,dElectrode,lElectrode,Dref,cRef)
+    grid.saveVoltammogram(E,output_file_name,dimensional,geometry_number,Temperature,E0f,dElectrode,lElectrode,Dref,cRef,noise_level)
 
     signals.output_file_name.emit(output_file_name)
     signals.progress.emit(100)

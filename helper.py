@@ -128,6 +128,13 @@ def calMH(K0,theta,Lambda,gamma):
     return Kred,Kox
 
 
+def addNoise(flux,noise_level,type='Gaussian'):
+    if type == 'Gaussian':
+        flux  = flux + np.random.normal(0,noise_level,len(flux))
+
+    return flux
+
+
 
 
     

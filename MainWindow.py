@@ -1308,8 +1308,10 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('Xmax/SQRT(Dt)'),self.input_widgets_dict3[2])
         layout.addRow(QLabel('R0*,minimum'),self.input_widgets_dict3[3])
 
-        self.formGroupBox3.setLayout(layout)
 
+        self.formGroupBox3.setLayout(layout)
+        self.input_widgets_dict3[0].setToolTip('Simulation uses expanding spatial grid and this parameter determines how refine the space grid is.\nThe smaller the parameter, the more refine the grid is. It must be larger than 0.')
+        self.input_widgets_dict3[2].setToolTip('A hyperparamter determining the maximum distance of simulation.\nFor semi-infinit boundary condition, it is usually 6.\nFor finite space boundary condition, it is usually less than 1')
 
 
     def createFormGroupBox30(self):
@@ -1340,6 +1342,7 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('Expanding grid factor in y direction'),self.input_widgets_dict31[0])
 
         self.formGroupBox31.setLayout(layout)
+        self.input_widgets_dict31[0].setToolTip('Expanding grid factor for 2D simulation. No effect yet.')
 
 
     def createFormGroupBox32(self):
