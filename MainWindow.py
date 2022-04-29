@@ -2,7 +2,6 @@ __author__ = 'Haotian Chen'
 from tkinter.tix import Tree
 from pyqtgraph.graphicsItems.PlotDataItem import dataType
 from pyqtgraph.widgets.LayoutWidget import LayoutWidget
-from Simulations.Mechanism1.Voltammogram import Voltammogram
 from PyQt5 import QtCore
 import pyqtgraph as pg
 from pyqtgraph import PlotWidget, plot 

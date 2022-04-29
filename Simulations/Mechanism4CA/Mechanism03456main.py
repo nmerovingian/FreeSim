@@ -206,6 +206,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                     grid.updateAll()
                     ConcProfile = grid.packageAllConc()
                     ConcProfile[:,0] *= dElectrode
+                    ConcProfile[:,1:] *= cRef
                     signals.concProfile.emit(ConcProfile)
 
         Theta = theta_i

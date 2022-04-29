@@ -6,6 +6,7 @@ class DefaultInput(object):
     """
     This class controls the default input of the software and the state of the software (enabled/disabled).
     Each mechanism inhereit from this class for the layout of input/output.
+    This object also communicates the simulation parameters to the simualtion scripts
     """
     def __init__(self) -> None:
         super().__init__()
@@ -102,6 +103,8 @@ class Mechanism1Input(DefaultInput):
         self.cv_parameters_enabled_10[2] = False
         self.cv_parameters_enabled_10[3] = False
         self.cv_parameters_enabled_10[4] = False
+        self.cv_parameters_enabled_11[0] = False
+        self.cv_parameters_enabled_12[0] = False
         self.chemical_parameters_enabled_2[0] = False
         self.chemical_parameters_enabled_2[2] = False
         self.chemical_parameters_enabled_2[3] = False
@@ -124,6 +127,16 @@ class Mechanism1Input(DefaultInput):
         self.chemical_parameters_enabled_21[2] = False 
         self.chemical_parameters_enabled_21[3] = False
         self.chemical_parameters_enabled_21[4] = False
+        self.model_parameters_enabled_3[0] = False
+        self.model_parameters_enabled_3[1] = False
+        self.model_parameters_enabled_3[2] = False
+        self.model_parameters_enabled_3[3] = False
+
+        self.model_parameters_enabled_30[0] = False
+        self.model_parameters_enabled_30[1] = False
+        self.model_parameters_enabled_30[2] = False
+
+        self.model_parameters_enabled_31[0] = False
 
 class Mechanism2Input(DefaultInput):
     def __init__(self) -> None:
