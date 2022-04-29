@@ -424,6 +424,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot(np.ndarray)
     def plotLiveSimulation(self,fluxesProfile):
 
+
         xlabel,ylabel,title = self.determineLabelTitleLiveSim()
 
         if self.liveSimulationWindow is None:
@@ -448,13 +449,44 @@ class MainWindow(QMainWindow):
         self.liveSimulationWindow.show()
         
 
+    def speciesToggle(self,mechanism):
+        if mechanism == 0:
+            return OrderedDict([(0,'A'),(1,'B')])
+        elif mechanism == 1:
+            return OrderedDict([(0,'A'),(1,'B')])
+        elif mechanism == 2:
+            return OrderedDict([(0,'A'),(1,'B'),(2,'C')])
+        elif mechanism == 3:
+            return OrderedDict([(0,'A'),(1,'B'),(2,'C')])
+        elif mechanism == 4:
+            return OrderedDict([(0,'A'),(1,'B'),(2,'C')])
+        elif mechanism == 5:
+            return OrderedDict([(0,'A'),(1,'B'),(3,'X')])
+        elif mechanism == 6:
+            return OrderedDict([(0,'A'),(1,'B'),(2,'C'),(3,'X')])
+        elif mechanism == 7:
+            return OrderedDict([(0,'A'),(1,'B')])
+        else:
+            return OrderedDict([(0,'A'),(1,'B'),(2,'C'),(3,'X'),(4,'Y')])
+
+
     @pyqtSlot(np.ndarray)
     def plotLiveConcPorfile(self,concProfile):
+
+
+
+
+        mechanism = self.tableWidget.userParameter.mechanism_parameters_0[0]
+
+        speciesDict = self.speciesToggle(mechanism)
+
+
+
         if self.liveConcProfileWindow is None:
             self.liveConcProfileWindow = GraphWindow(title='Live Concentration')
             self.liveConcProfileWindow.graphWidget.setBackground('w')
             self.liveConcProfileWindow.graphWidget.addLegend()
-            for index,species in enumerate(['A','B','C','X','Y']):
+            for index,species in speciesDict.items():
                 pen = pg.mkPen(width=3,color=next(self.liveConcProfileWindow.colorCycle))
                 self.liveConcProfileWindowLineRef[index]=self.liveConcProfileWindow.graphWidget.plot(concProfile[:,0],concProfile[:,index+1],pen=pen,name=f'{species}')
 
@@ -464,7 +496,10 @@ class MainWindow(QMainWindow):
             self.liveConcProfileWindow.graphWidget.showGrid(x=True,y=True)
 
         elif isinstance(self.liveConcProfileWindow,GraphWindow):
-            for index,species in enumerate(['A','B','C','X','Y']):
+            for index,species in speciesDict.items():
+                if index not in self.liveConcProfileWindowLineRef.keys():
+                    pen = pg.mkPen(width=3,color=next(self.liveConcProfileWindow.colorCycle))
+                    self.liveConcProfileWindowLineRef[index]=self.liveConcProfileWindow.graphWidget.plot(concProfile[:,0],concProfile[:,index+1],pen=pen,name=f'{species}')
                 self.liveConcProfileWindowLineRef[index].setData(concProfile[:,0],concProfile[:,index+1])
 
         self.liveConcProfileWindow.show()
