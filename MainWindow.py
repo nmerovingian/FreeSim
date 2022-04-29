@@ -927,6 +927,15 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('Reserved'),self.input_widgets_dict1[9])
         self.formGroupBox1.setLayout(layout)
 
+        self.input_widgets_dict1[0].setToolTip('Start potential of scan')
+        self.input_widgets_dict1[1].setToolTip('Reverse potential of scan')
+        self.input_widgets_dict1[2].setToolTip('End potential of scan, usually equal to the start potential')
+
+        self.input_widgets_dict1[4].setToolTip('Number of cycles. Default to 1.')
+        self.input_widgets_dict1[5].setToolTip('Internal resistance. Not implemented')
+        self.input_widgets_dict1[6].setToolTip('Double Layer Capacitance. Not implemented.')
+
+
     def createFormGroupBox10(self):
         self.formGroupBox10 = QGroupBox('Concentration, mole/liter (Molar)')
         layout = QFormLayout()
@@ -1030,10 +1039,14 @@ class MyTableWidget(QWidget):
         layout1.addRow(QLabel('A + e = B'),QLabel(''))
         layout1.addRow(QLabel('Type of mechanism'),self.input_widgets_dict2[0])
         layout1.addRow(QLabel('Formal Potential, E<sub>0</sub>, V'),self.input_widgets_dict2[1])
-        layout1.addRow(QLabel('Reorgnization Energy, eV'),self.input_widgets_dict2[2])
+        self.input_widgets_dict2[1].setToolTip('The formal potential is thus the reversible potential of an electrode at equilibrium\nimmersed in a solution where reactants and products are at unit concentration')
+        layout1.addRow(QLabel('Reorganization Energy, eV'),self.input_widgets_dict2[2])
+        self.input_widgets_dict2[2].setToolTip('Reorganization energy for Marcus-Hush Theory. Its unit is electronvolt')
         layout1.addRow(QLabel('Standard electrochemical rate constant<br> k<sub>0</sub>, m/s'),self.input_widgets_dict2[3])
         layout1.addRow(QLabel('Transfer coefficient,\u03B1'),self.input_widgets_dict2[4])
+        self.input_widgets_dict2[4].setToolTip('Transfer coefficient for Butler-Volmer theory.\nRange=(0,1),default value is around 0.5')
         layout1.addRow(QLabel('Asymmetric parameter,\u03BB'),self.input_widgets_dict2[10])
+        self.input_widgets_dict2[10].setToolTip('Asymmetric parameter for asymmetric Marcus-Hush theory.\nRange=(-1,1). Prefer |\u03BB|<0.3\nIf \u03BB == 0, it is the symmetric Marcus-Hush theory')
 
 
 
@@ -1353,6 +1366,9 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('Sampling rate,Hz'),self.input_widgets_dict4[0])
         layout.addRow(QLabel('Number of oversampling'),self.input_widgets_dict4[1])
         self.formGroupBox4.setLayout(layout)
+        
+        self.input_widgets_dict4[0].setToolTip('Sampling frequency of potentiostat')
+        self.input_widgets_dict4[1].setToolTip('Simulation resampling rate based on the original sampling rate.\nThe discrete time interval is thus 1/sampling rate/oversampling rate (second)')
 
     def createFormGroupBox40(self):
         self.formGroupBox40 = QGroupBox('Simulation Parameters')
@@ -1367,6 +1383,7 @@ class MyTableWidget(QWidget):
 
         layout.addRow(QLabel('Number of molecules'),self.input_widgets_dict40[0])
         layout.addRow(self.input_widgets_dict40[1])
+        self.input_widgets_dict40[0].setToolTip('The number of molecules in 1D simulation.\nThe higher the concentration, the more molecules to simulate')
         self.formGroupBox40.setLayout(layout)
 
 
@@ -1584,21 +1601,25 @@ class MyTableWidget(QWidget):
         else:
             error_string += "The dimensionless scan rate is suggested to be within 10^-12 to 10^15\n"
             self.input_widgets_dict60[3].setStyleSheet(warning_qss)
+
         if 1e-2 <= getValue(self.input_widgets_dict60[8]) <=100:
             self.input_widgets_dict60[8].setStyleSheet(default_qss)
         else:
             error_string +=  "The dimensionless diffusion coefficient of B is suggested to be within 0.01 and 100\n"
             self.input_widgets_dict60[8].setStyleSheet(warning_qss)
+
         if 1e-12 <= getValue(self.input_widgets_dict60[9]) <= 1e8:
             self.input_widgets_dict60[9].setStyleSheet(default_qss)
         else:
             error_string += "The dimensionless electrochemical rate constant is suggested to be within 10^-12 to 10^8\n"
             self.input_widgets_dict60[9].setStyleSheet(warning_qss)
+
         if 0.05 <= getValue(self.input_widgets_dict60[10]) <= 0.95:
             self.input_widgets_dict60[10].setStyleSheet(default_qss)
         else:
             error_string += "The transfer coefficient is suggested to be within 0.05 and 0.95"
             self.input_widgets_dict60[10].setStyleSheet(warning_qss)
+
         if error_string:
             dlg = QMessageBox(self)
             dlg.setWindowTitle('Check Input Range')

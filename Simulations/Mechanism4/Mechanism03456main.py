@@ -82,7 +82,6 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
         kinetics = 'BV'
     elif input_parameters.chemical_parameters_2[0] == 2:
         kinetics = 'MH'
-        raise ValueError('Marcus Harsh is an unimplemented Electrode kinetics ')
     else:
         raise ValueError('Unknown/Unimplemented Electrode kinetics ')
 
@@ -98,6 +97,9 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
     alpha = input_parameters.chemical_parameters_2[4]
+    Lambda = input_parameters.chemical_parameters_2[2] * 96485/ (8.314*Temperature)
+    asymParameter = input_parameters.chemical_parameters_2[10]
+
 
     if not os.path.exists(directory):
         os.mkdir(directory)
@@ -183,7 +185,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,zeta,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
+    coeff = Coeff(deltaT,maxX,kinetics,diffusion_mode,zeta,K0,Kf,Kb,alpha,Lambda,asymParameter,gamma,dA,dB,dC,dY,dZ,mechanism,outerBoundaryMode)
     coeff.calc_n(deltaX)
 
     #simulation steps

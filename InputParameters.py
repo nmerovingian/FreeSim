@@ -19,7 +19,7 @@ class DefaultInput(object):
         self.cv_parameters_12 = OrderedDict([(0,0)])
         self.cv_parameters_13 = OrderedDict([(0,-1.0),(1,10),(2,0),(3,0),(4,298),(5,0.0),(6,0.0)])
 
-        self.chemical_parameters_2 = OrderedDict([(0,0),(1,0.0),(2,0.0),(3,1.0),(4,0.5),(5,1),(6,-0.2),(7,0.0),(8,1.0),(9,0.5),(10,0),(11,0)])
+        self.chemical_parameters_2 = OrderedDict([(0,0),(1,0.0),(2,1.0),(3,1.0),(4,0.5),(5,1),(6,-0.2),(7,0.0),(8,1.0),(9,0.5),(10,0),(11,0)])
         self.chemical_parameters_21 = OrderedDict([(0,''),(1,0.0),(2,''),(3,0.0),(4,False)])
         self.chemical_parameters_22 = OrderedDict([(0,True),(1,1e-9),(2,1e-5),(3,1e-5),(4,True),(5,1e-9),(6,0.0),(7,0.0),(8,False),(9,1e-9),(10,0.0),(11,0.0),(12,False),(13,1e-9),(14,0.0),(15,0.0),(16,False),(17,1e-9),(18,0.0),(19,0.0)])
 

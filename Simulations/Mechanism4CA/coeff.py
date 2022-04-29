@@ -1,7 +1,8 @@
 import numpy as np
+from helper import calMH
 
 class Coeff(object):
-    def __init__(self,deltaT,maxX,kinetics,mode,zeta,K0,Kf,Kb,alpha,gamma,dA,dB,dC,dY,dZ,mechanism):
+    def __init__(self,deltaT,maxX,kinetics,mode,zeta,K0,Kf,Kb,alpha,Lambda,asymParameter,gamma,dA,dB,dC,dY,dZ,mechanism):
         self.n = 0
         self.nT = 0
         self.xi = 0.0
@@ -13,6 +14,8 @@ class Coeff(object):
         self.Kf = Kf*deltaT
         self.Kb = Kb*deltaT
         self.alpha = alpha
+        self.Lambda = Lambda
+        self.asymParameter = asymParameter
         self.gamma = gamma
         self.dA = dA
         self.dB = dB
@@ -305,6 +308,14 @@ class Coeff(object):
             self.J[1,0] = -Kred*h/self.dB
             self.J[1,1] = Kox*h/self.dB + 1
             self.J[1,6] = -1.0
+        elif self.kinetics == 'MH':
+            Kred,Kox = calMH(self.K0,Theta,self.Lambda,self.asymParameter)
+            self.J[0,0] = Kred*h/self.dB + 1
+            self.J[0,1] = -Kox*h/self.dA
+            self.J[0,5] = -1.0
+            self.J[1,0] = -Kred*h/self.dB
+            self.J[1,1] = Kox*h/self.dB + 1
+            self.J[1,6] = -1.0
         else:
             raise ValueError
         
@@ -386,6 +397,10 @@ class Coeff(object):
         elif self.kinetics =='BV':
             Kred = self.K0*np.exp(-self.alpha*Theta)
             Kox = self.K0*np.exp((1.0-self.alpha)*Theta)
+            self.fx[0] = (1+Kred*h/self.dA)*x[0] - Kox*h/self.dA * x[1] - x[5]
+            self.fx[1] = (1+Kox*h/self.dB)*x[1] - Kred*h/self.dB * x[0] - x[6]
+        elif self.kinetics == 'MH':
+            Kred,Kox = calMH(self.K0,Theta,self.Lambda,self.asymParameter)
             self.fx[0] = (1+Kred*h/self.dA)*x[0] - Kox*h/self.dA * x[1] - x[5]
             self.fx[1] = (1+Kox*h/self.dB)*x[1] - Kred*h/self.dB * x[0] - x[6]
         else:
