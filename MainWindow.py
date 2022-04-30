@@ -614,7 +614,7 @@ class MyTableWidget(QWidget):
         self.pushButton16 = QPushButton("X = A + C\nA + e = B")
         self.pushButton16.setToolTip('Dissociative CE reaction')
         self.pushButton17 = QPushButton("A + e = B\nAabs + e = Babs")
-        self.pushButton17.setToolTip('Spcies A and B can adsorb to electrode surface.<br>the adsorbed species are also electrochemical active.')
+        self.pushButton17.setToolTip('Spcies A and B can adsorb to electrode surface.<br>The adsorbed species are also electrochemical active.')
 
 
         self.pushButton10.setCheckable(True)
@@ -891,7 +891,7 @@ class MyTableWidget(QWidget):
         setEnabled(self.pushButton14)
         setEnabled(self.pushButton15)
         setEnabled(self.pushButton16)
-        setEnabled(self.pushButton17)
+        setDisabled(self.pushButton17)
 
     def CAMechanismEnabled(self):
         #setDisabled(self.pushButton10)
@@ -1327,6 +1327,9 @@ class MyTableWidget(QWidget):
         layout.addRow(QLabel('Gaussian Noise level (A)'),self.input_widgets_dict30[2])
 
         self.formGroupBox30.setLayout(layout)
+
+        self.input_widgets_dict30[1].setToolTip('Maximum number of iterations for Newton method.\nIncrease if simulation is not converged')
+
 
 
 
