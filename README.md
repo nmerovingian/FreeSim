@@ -15,11 +15,10 @@ We have now implemented ***7*** mechanisms, including:
 * X = A + C, A + e = B, dissociative CE reaction
 * A + e = B， A<sub>abs</sub> + e = B<sub>abs</sub>, one eletctron reduction with adsorbed species, adsorption described with Langmuir Isotherm theory
 
-Most of the mechanism support Butler-Volmer and Nernst kinetics. Radial and linear diffusions are also supported in most mechanisms. Prequilibrium of species are supported in CE and dissociative CE reactions.
+Most of the mechanism support Butler-Volmer, Nernst and asymmetric Marcus-Hush kinetics. Radial and linear diffusions are also supported in most mechanisms. Prequilibrium of species are supported in CE and dissociative CE reactions. Semi-infinite and thin-layer boundary conditions are supported.
 
 Chronoamperometry of most mechanisms are supported. 
 
-Simulation now also supports semi-infinite vs. finite element simulation. 
 
 # Installs
 A few common packages including PyQt5, pyqtgraph, Sympy, Numpy and Pandas are required to be installed. Python version 3.6 and above is recommended
@@ -50,7 +49,7 @@ The authors may include 2-D simulation of a microdisc elelctrode. You may also l
 
 
 # Disclaimers
-Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would also try their best to correct any bugs as soon as possible. Thanks for your understanding.
+Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would try their best to respond to any bugs as soon as possible. Thanks for your understanding.
 
 
 
