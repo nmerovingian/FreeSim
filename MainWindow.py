@@ -81,7 +81,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('FreeSim, Open-Source Electrochemical Reaction Simulator V 0.0')
+        self.setWindowTitle('FreeSim, Open-Source Electrochemical Reaction Simulator V1.0')
 
         self.layout = QVBoxLayout()
 
