@@ -1,0 +1,11 @@
+Experimental Concentration of RuHex: 0.98 mM.
+Concentration of KCl electrolyte:  99.8 mM 
+E start = 0.1 V  Vs. SCE
+E reverse = -0.6 V vs. SCE
+E0f = -0.16 V vs.SCE
+
+D RuHex = 7.86e-10 m^2 s^-1
+
+
+Radius of gold electrode: 0.19mm ± 0.01 mm
+Temperature 298±1 K
