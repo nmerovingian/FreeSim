@@ -238,7 +238,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
                 fluxes = np.array(grid.fluxes)
                 if dimensional: 
-                    fluxes[:,0],fluxes[:,1] = toDimensionalCA(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef,noise_level)
+                    fluxes[:,0],fluxes[:,1] = toDimensionalCA(fluxes[:,0],fluxes[:,1],geometry_number,dElectrode,lElectrode,E0f,Temperature,Dref,cRef)
                     if noise_level>0.0:
                         fluxes[:,1] = addNoise(fluxes[:,1],noise_level)
                 signals.fluxesProfile.emit(fluxes)
@@ -252,7 +252,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
 
 
 
-    grid.saveVoltammogram(grid.t,output_file_name,dimensional,geometry_number,Temperature,E0f,dElectrode,lElectrode,Dref,cRef)
+    grid.saveVoltammogram(grid.t,output_file_name,dimensional,geometry_number,Temperature,E0f,dElectrode,lElectrode,Dref,cRef,noise_level)
 
     signals.output_file_name.emit(output_file_name)
     signals.progress.emit(100)
