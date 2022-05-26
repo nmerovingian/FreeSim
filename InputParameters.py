@@ -175,6 +175,7 @@ class Mechanism3Input(DefaultInput):
         self.cv_parameters_enabled_10[3] = False
         self.cv_parameters_enabled_10[4] = False
         self.chemical_parameters_22[8] = True
+        self.chemical_parameters_enabled_21[4] = False
         self.chemical_parameters_enabled_22[12] = False 
         self.chemical_parameters_enabled_22[13] = False 
         self.chemical_parameters_enabled_22[14] = False 
@@ -196,6 +197,7 @@ class Mechanism4Input(DefaultInput):
         self.cv_parameters_enabled_10[3] = False
         self.cv_parameters_enabled_10[4] = False
         self.chemical_parameters_22[8] = True
+        self.chemical_parameters_enabled_21[4] = False
         self.chemical_parameters_enabled_22[12] = False 
         self.chemical_parameters_enabled_22[13] = False 
         self.chemical_parameters_enabled_22[14] = False 

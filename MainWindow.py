@@ -1235,8 +1235,10 @@ class MyTableWidget(QWidget):
                 return
             if math.isclose(kf,0.0,abs_tol=1e-8):
                 if self.userParameter.mechanism_parameters_0[0] == 3:
+                    # No pre-equilibrium for EC2 reaction 
                     pass
                 elif self.userParameter.mechanism_parameters_0[0] == 4:
+                    # No pre-equilibrium for EC reaction 
                     pass
                 elif self.userParameter.mechanism_parameters_0[0] == 5:
                     self.input_widgets_dict22[3].setText(f'{0.0:.2E}')
