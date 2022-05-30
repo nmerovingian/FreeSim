@@ -575,6 +575,8 @@ class MyTableWidget(QWidget):
         self.timer.timeout.connect(self.onAutomaticFileNames)
         self.timer.start(1000)
 
+        self.NameComponentList = ['','Date Time','Scan Rate','E0f','k0','\u03B1']
+
         self.layout = QVBoxLayout(self)
         
         # Initialize tab screen
@@ -1651,16 +1653,29 @@ class MyTableWidget(QWidget):
         self.file_widgetes_dict[3] = QComboBox()
         self.file_widgetes_dict[4] = QCheckBox('Automatic File Names')
         self.file_widgetes_dict[5] = QCheckBox('Dimensional form of voltammogram')
+        self.file_widgetes_dict[6] = QComboBox()
+        self.file_widgetes_dict[7] = QComboBox()
+        self.file_widgetes_dict[8] = QComboBox()
+        self.file_widgetes_dict[9] = QLineEdit()
 
         self.file_widgetes_dict[0].clicked.connect(self.saveDirectoryDialog)
         self.file_widgetes_dict[3].addItems(['.txt','.csv'])
+        self.file_widgetes_dict[6].addItems(self.NameComponentList)
+        self.file_widgetes_dict[7].addItems(self.NameComponentList)
+        self.file_widgetes_dict[8].addItems(self.NameComponentList)
 
+        NameComponentLayout = QHBoxLayout()
+        NameComponentLayout.addWidget(QLabel('Name Prefix:'))
+        NameComponentLayout.addWidget(self.file_widgetes_dict[9])
+        NameComponentLayout.addWidget(self.file_widgetes_dict[6])
+        NameComponentLayout.addWidget(self.file_widgetes_dict[7])
+        NameComponentLayout.addWidget(self.file_widgetes_dict[8])
 
         layout.addRow(QLabel(),self.file_widgetes_dict[0])
         layout.addRow(QLabel('Folder name') ,self.file_widgetes_dict[1])
         layout.addRow(QLabel('File name') ,self.file_widgetes_dict[2])
         layout.addRow(QLabel('File type') ,self.file_widgetes_dict[3])
-        layout.addRow(self.file_widgetes_dict[4])
+        layout.addRow(self.file_widgetes_dict[4],NameComponentLayout)
         layout.addRow(self.file_widgetes_dict[5])
         self.fileFormGroupBox.setLayout(layout)
 
@@ -1674,12 +1689,43 @@ class MyTableWidget(QWidget):
         if directory:
             self.file_widgetes_dict[1].setText(directory)
 
+    def composeFileName(self):
+        NameComponentsDict = OrderedDict([(0,''),(1,datetime.datetime.now().strftime(r'%Y-%m-%d %H%M%S')),(2,f'{getValue(self.input_widgets_dict1[3]):.2E}'),(3,f'{getValue(self.input_widgets_dict2[1]):.2E}'),(4,f'{getValue(self.input_widgets_dict2[3]):.2E}'),(5,f'{getValue(self.input_widgets_dict2[4]):.2E}')])
+
+        name_prefix = self.file_widgetes_dict[9].text()
+        
+        component1 = ''
+        component2 = ''
+        component3 = ''
+        index1 = getValue(self.file_widgetes_dict[6])
+        index2 = getValue(self.file_widgetes_dict[7])
+        index3 = getValue(self.file_widgetes_dict[8])
+
+        if index1 > 0:
+            component1 = f' {self.NameComponentList[index1]}={NameComponentsDict[index1]}'
+        if index2 > 0:
+            component2 = f' {self.NameComponentList[index2]}={NameComponentsDict[index2]}'
+        if index3 > 0:
+            component3 = f' {self.NameComponentList[index3]}={NameComponentsDict[index3]}'
+
+        file_name = f'{name_prefix}{component1}{component2}{component3}'
+
+        return file_name
+
     def onAutomaticFileNames(self):
         if self.file_widgetes_dict[4].isChecked():
             setDisabled(self.file_widgetes_dict[2])
-            self.file_widgetes_dict[2].setText(datetime.datetime.now().strftime(r'%Y-%m-%d %H%M%S'))
+            setEnabled(self.file_widgetes_dict[6])
+            setEnabled(self.file_widgetes_dict[7])
+            setEnabled(self.file_widgetes_dict[8])
+            setEnabled(self.file_widgetes_dict[9])
+            self.file_widgetes_dict[2].setText(self.composeFileName())
         else:
             setEnabled(self.file_widgetes_dict[2])
+            setDisabled(self.file_widgetes_dict[6])
+            setDisabled(self.file_widgetes_dict[7])
+            setDisabled(self.file_widgetes_dict[8])
+            setDisabled(self.file_widgetes_dict[9])
 
     def loadInputParameters(self,inputParameter = DefaultInput()):
 
@@ -1799,6 +1845,10 @@ class MyTableWidget(QWidget):
                 setEnabled(self.file_widgetes_dict[key])
             elif key in [4,5]:
                 self.file_widgetes_dict[key].setChecked(value)
+                setEnabled(self.file_widgetes_dict[key])
+
+            elif key in [9]:
+                self.file_widgetes_dict[key].setText(f'{value}')
                 setEnabled(self.file_widgetes_dict[key])
         for key,value in inputParameter.chemical_parameters_hided_21.items():
             if value:
