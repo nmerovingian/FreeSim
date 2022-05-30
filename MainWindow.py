@@ -285,6 +285,7 @@ class MainWindow(QMainWindow):
     def onFileListDoubleClicked(self,item):
         print('double clicked')
         selectedFile = item.text()
+        FileName = os.path.basename(selectedFile)
 
         xlabel,ylabel,title = self.determineLabelTitle()
 
@@ -337,7 +338,7 @@ class MainWindow(QMainWindow):
 
                     self.graphWindowOverlay.graphWidget.addLegend()
                     pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
-                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}')
+                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{FileName}')
                     
                     self.graphWindowOverlay.graphWidget.setLabel('bottom',xlabel,**self.graphWindowOverlay.styles)
                     self.graphWindowOverlay.graphWidget.setLabel('left',ylabel,**self.graphWindowOverlay.styles)
@@ -350,7 +351,7 @@ class MainWindow(QMainWindow):
                     self.graphWindowOverlay.graphWidget.addLegend()
                     for key,df in df_dict.items():
                         pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
-                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}/{key}')
+                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{FileName}/{key}')
                     
                     self.graphWindowOverlay.graphWidget.setLabel('bottom',xlabel,**self.graphWindowOverlay.styles)
                     self.graphWindowOverlay.graphWidget.setLabel('left',ylabel,**self.graphWindowOverlay.styles)
@@ -369,14 +370,14 @@ class MainWindow(QMainWindow):
 
                     pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
                     self.graphWindowOverlay.graphWidget.addLegend()
-                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}')
+                    self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{FileName}')
                 elif os.path.splitext(selectedFile)[1] =='.xls' or os.path.splitext(selectedFile)[1] =='.xlsx': 
                     df_dict = pd.read_excel(selectedFile,sheet_name=None)
                     # add legend
                     self.graphWindowOverlay.graphWidget.addLegend()
                     for key,df in df_dict.items():
                         pen = pg.mkPen(width=5,color=next(self.graphWindowOverlay.colorCycle))
-                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{selectedFile}/{key}')
+                        self.graphWindowOverlay.graphWidget.plot(df.iloc[:,0],df.iloc[:,1],pen=pen,name=f'{FileName}/{key}')
                     
                 else:
                     raise TypeError(f'Unsupported file type {os.path.splitext(selectedFile)[1]} ')
@@ -1947,7 +1948,7 @@ class MyTableWidget(QWidget):
             self.userParameter.adsorption_parameters_50[key] = getValue(self.input_widgets_dict50[key])
 
         for key,value in self.userParameter.file_options_parameters.items():
-            if key ==1 or key == 2:
+            if key in [1,2,9]:
                 self.userParameter.file_options_parameters[key] = self.file_widgetes_dict[key].text()
             else:
                 self.userParameter.file_options_parameters[key] =  getValue(self.file_widgetes_dict[key])
