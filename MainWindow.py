@@ -585,7 +585,7 @@ class MyTableWidget(QWidget):
         self.timer.timeout.connect(self.onAutomaticFileNames)
         self.timer.start(1000)
 
-        self.NameComponentList = ['','Date Time','Scan Rate','E0f','k0','\u03B1']
+        self.NameComponentList = ['','Date Time','Scan Rate','E0f','k0','\u03B1','Reorganization Energy','Asymmetric Parameter','kf','kb']
 
         self.layout = QVBoxLayout(self)
         
@@ -1701,6 +1701,10 @@ class MyTableWidget(QWidget):
 
     def composeFileName(self):
         NameComponentsDict = OrderedDict([(0,''),(1,datetime.datetime.now().strftime(r'%Y-%m-%d %H%M%S')),(2,f'{getValue(self.input_widgets_dict1[3]):.2E}'),(3,f'{getValue(self.input_widgets_dict2[1]):.2E}'),(4,f'{getValue(self.input_widgets_dict2[3]):.2E}'),(5,f'{getValue(self.input_widgets_dict2[4]):.2E}')])
+        NameComponentsDict[6] = getValue(self.input_widgets_dict2[7])
+        NameComponentsDict[7] = getValue(self.input_widgets_dict2[11])
+        NameComponentsDict[8] = getValue(self.input_widgets_dict21[1])
+        NameComponentsDict[9] = getValue(self.input_widgets_dict21[3])
 
         name_prefix = self.file_widgetes_dict[9].text()
         
