@@ -585,7 +585,7 @@ class MyTableWidget(QWidget):
         self.timer.timeout.connect(self.onAutomaticFileNames)
         self.timer.start(1000)
 
-        self.NameComponentList = ['','Date Time','Scan Rate','E0f','k0','\u03B1','Reorganization Energy','Asymmetric Parameter','kf','kb']
+        self.NameComponentList = ['','Date Time','Scan Rate','E0f','k0','\u03B1','Reorganization Energy','Asymmetric Parameter','kf','kb', 'Bulk Concentration A','Bulk Concentration B','Bulk Concentration C','Bulk Concentration X','Bulk Concentration Y','Sampling Rate', 'Number of Oversampling','Number of Molecules','Diffusion Coeff A','Diffusion Coeff B','Diffusion coeff C','Diffusion Coeff X','Diffusion Coeff Y']
 
         self.layout = QVBoxLayout(self)
         
@@ -1705,6 +1705,20 @@ class MyTableWidget(QWidget):
         NameComponentsDict[7] = getValue(self.input_widgets_dict2[11])
         NameComponentsDict[8] = getValue(self.input_widgets_dict21[1])
         NameComponentsDict[9] = getValue(self.input_widgets_dict21[3])
+        NameComponentsDict[10] = getValue(self.input_widgets_dict22[3])
+        NameComponentsDict[11] = getValue(self.input_widgets_dict22[7])
+        NameComponentsDict[12] = getValue(self.input_widgets_dict22[11])
+        NameComponentsDict[13] = getValue(self.input_widgets_dict22[15])
+        NameComponentsDict[14] = getValue(self.input_widgets_dict22[19])
+        NameComponentsDict[15] = getValue(self.input_widgets_dict4[0])
+        NameComponentsDict[16] = getValue(self.input_widgets_dict4[1])
+        NameComponentsDict[17] = getValue(self.input_widgets_dict40[0])
+        NameComponentsDict[18] = getValue(self.input_widgets_dict22[1])
+        NameComponentsDict[19] = getValue(self.input_widgets_dict22[5])
+        NameComponentsDict[20] = getValue(self.input_widgets_dict22[9])
+        NameComponentsDict[21] = getValue(self.input_widgets_dict22[13])
+        NameComponentsDict[22] = getValue(self.input_widgets_dict22[17])
+
 
         name_prefix = self.file_widgetes_dict[9].text()
         
