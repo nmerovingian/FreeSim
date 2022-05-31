@@ -1701,23 +1701,23 @@ class MyTableWidget(QWidget):
 
     def composeFileName(self):
         NameComponentsDict = OrderedDict([(0,''),(1,datetime.datetime.now().strftime(r'%Y-%m-%d %H%M%S')),(2,f'{getValue(self.input_widgets_dict1[3]):.2E}'),(3,f'{getValue(self.input_widgets_dict2[1]):.2E}'),(4,f'{getValue(self.input_widgets_dict2[3]):.2E}'),(5,f'{getValue(self.input_widgets_dict2[4]):.2E}')])
-        NameComponentsDict[6] = getValue(self.input_widgets_dict2[7])
-        NameComponentsDict[7] = getValue(self.input_widgets_dict2[11])
-        NameComponentsDict[8] = getValue(self.input_widgets_dict21[1])
-        NameComponentsDict[9] = getValue(self.input_widgets_dict21[3])
-        NameComponentsDict[10] = getValue(self.input_widgets_dict22[3])
-        NameComponentsDict[11] = getValue(self.input_widgets_dict22[7])
-        NameComponentsDict[12] = getValue(self.input_widgets_dict22[11])
-        NameComponentsDict[13] = getValue(self.input_widgets_dict22[15])
-        NameComponentsDict[14] = getValue(self.input_widgets_dict22[19])
-        NameComponentsDict[15] = getValue(self.input_widgets_dict4[0])
-        NameComponentsDict[16] = getValue(self.input_widgets_dict4[1])
-        NameComponentsDict[17] = getValue(self.input_widgets_dict40[0])
-        NameComponentsDict[18] = getValue(self.input_widgets_dict22[1])
-        NameComponentsDict[19] = getValue(self.input_widgets_dict22[5])
-        NameComponentsDict[20] = getValue(self.input_widgets_dict22[9])
-        NameComponentsDict[21] = getValue(self.input_widgets_dict22[13])
-        NameComponentsDict[22] = getValue(self.input_widgets_dict22[17])
+        NameComponentsDict[6] = f'{getValue(self.input_widgets_dict2[2]):.2E}'
+        NameComponentsDict[7] = f'{getValue(self.input_widgets_dict2[10]):.2E}'
+        NameComponentsDict[8] = f'{getValue(self.input_widgets_dict21[1]):.2E}'
+        NameComponentsDict[9] = f'{getValue(self.input_widgets_dict21[3]):.2E}'
+        NameComponentsDict[10] = f'{getValue(self.input_widgets_dict22[3]):.2E}'
+        NameComponentsDict[11] = f'{getValue(self.input_widgets_dict22[7]):.2E}'
+        NameComponentsDict[12] = f'{getValue(self.input_widgets_dict22[11]):.2E}'
+        NameComponentsDict[13] = f'{getValue(self.input_widgets_dict22[15]):.2E}'
+        NameComponentsDict[14] = f'{getValue(self.input_widgets_dict22[19]):.2E}'
+        NameComponentsDict[15] = f'{getValue(self.input_widgets_dict4[0]):.2E}'
+        NameComponentsDict[16] = f'{getValue(self.input_widgets_dict4[1]):.2E}'
+        NameComponentsDict[17] = f'{getValue(self.input_widgets_dict40[0]):.2E}'
+        NameComponentsDict[18] = f'{getValue(self.input_widgets_dict22[1]):.2E}'
+        NameComponentsDict[19] = f'{getValue(self.input_widgets_dict22[5]):.2E}'
+        NameComponentsDict[20] = f'{getValue(self.input_widgets_dict22[9]):.2E}'
+        NameComponentsDict[21] = f'{getValue(self.input_widgets_dict22[13]):.2E}'
+        NameComponentsDict[22] = f'{getValue(self.input_widgets_dict22[17]):.2E}'
 
 
         name_prefix = self.file_widgetes_dict[9].text()
