@@ -159,6 +159,9 @@ class MainWindow(QMainWindow):
         button_action14 = QAction(QIcon('./Icons/Dimension.png'),'&Dimensionless',self)
         button_action14.toggled.connect(self.onDimension)
         button_action14.setCheckable(True)
+        button_action15 = QAction(QIcon('./Icons/DeleteListIcon.png'),'&Clear File List',self)
+        button_action15.triggered.connect(self.clearFileList)
+
 
         button_group0 = QActionGroup(self)
         button_group0.addAction(button_action11)
@@ -169,11 +172,13 @@ class MainWindow(QMainWindow):
         self.menu = self.menuBar()
         file_menu = self.menu.addMenu('&File')
         file_menu.addAction(button_action5)
+        file_menu.addAction(button_action15)
         file_menu.addAction(button_action)
         file_menu.addAction(button_action3)
         file_menu.addAction(button_action4)
         file_menu.addAction(button_action8)
         file_menu.addAction(button_action9)
+
 
         mode_menu = self.menu.addMenu('&Mode')
         mode_menu.addAction(button_action11)
@@ -244,8 +249,12 @@ class MainWindow(QMainWindow):
             print(files)
             self.updateFileList(files=files)
 
+
     def updateFileList(self,files):
         self.file_list.addItems(files)
+
+    def clearFileList(self):
+        self.file_list.clear()
 
     def determineLabelTitle(self):
         if self.tableWidget.userParameter.mechanism_parameters_0[1] == 'CV':
@@ -1961,7 +1970,7 @@ class MyTableWidget(QWidget):
 
     def loadFileParameter(self):
         for key,value in self.userParameter.file_options_parameters.items():
-            if key ==1 or key == 2:
+            if key in [1,2,9]:
                 self.fileParameter[key] = self.file_widgetes_dict[key].text()
             else:
                 self.fileParameter[key] =  getValue(self.file_widgetes_dict[key])
