@@ -2,6 +2,7 @@ from errno import EPIPE
 from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget
 import math
 from scipy.integrate import quad
+from scipy.linalg import solve_banded
 import numpy as np
 
 class WorkerKilledException(Exception):
@@ -144,3 +145,34 @@ def addNoise(flux,noise_level,type='Gaussian'):
 
     
 
+def diagonal_form(a,l= 1,u = 1,):
+    """
+    a is a numpy square matrix
+    this function converts a square matrix to diagonal ordered form
+    returned matrix in ab shape which can be used directly for scipy.linalg.solve_banded
+    """
+    n = a.shape[1]
+    assert(np.all(a.shape ==(n,n)))
+    
+    ab = np.zeros((2*n-1, n))
+    
+    for i in range(n):
+        ab[i,(n-1)-i:] = np.diagonal(a,(n-1)-i)
+        
+    for i in range(n-1): 
+        ab[(2*n-2)-i,:i+1] = np.diagonal(a,i-(n-1))
+
+    mid_row_inx = int(ab.shape[0]/2)
+    upper_rows = [mid_row_inx - i for i in range(1, u+1)]
+    upper_rows.reverse()
+    upper_rows.append(mid_row_inx)
+    lower_rows = [mid_row_inx + i for i in range(1, l+1)]
+    keep_rows = upper_rows+lower_rows
+    ab = ab[keep_rows,:]
+
+
+    return ab
+
+def solve_multi_diagonal(a,b,l=1,u=1):
+    ab = diagonal_form(a,l,u)
+    return solve_banded((l,u),ab,b)

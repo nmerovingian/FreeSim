@@ -8,7 +8,7 @@ from pyqtgraph import PlotWidget, plot
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QAction, QBoxLayout, QComboBox, QFormLayout, QGroupBox, QLabel, QListWidget, QMessageBox, QProgressBar, QWidget,QLineEdit,QCheckBox,QRadioButton,QMainWindow,QVBoxLayout,QHBoxLayout,QGridLayout,QPushButton,QApplication,QFileDialog,QGroupBox,QButtonGroup,QToolBar,QTabWidget,QActionGroup,QStackedWidget,QScrollBar
 from PyQt5.QtCore import QFile, QLine, QRect, QRunnable, QTimer, Qt,QSize,QThread,QThreadPool,QObject, pyqtBoundSignal, pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QIcon,QPixmap
+from PyQt5.QtGui import QIcon,QPixmap,QFont
 import sys
 import datetime
 import json
@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
         self.widget = QWidget()
         self.tableWidget = MyTableWidget()
         self.button_start_simulation = QPushButton('Start Simulation')
+        self.button_start_simulation.setFont(QFont('Arial',12))
         self.button_start_simulation.clicked.connect(self.onStartSimulation)
         self.button_pause_simulation = QPushButton('Pause')
         self.button_pause_simulation.setCheckable(True)
