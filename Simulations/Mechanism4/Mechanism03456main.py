@@ -4,7 +4,7 @@ import time
 from Simulations.Mechanism4.coeff import Coeff
 #from grid import Grid
 from Simulations.Mechanism4.grid import Grid
-from helper import toDimensional,addNoise
+from helper import toDimensional,addNoise,WorkerKilledException
 import csv
 import scipy
 from scipy import sparse
@@ -12,6 +12,8 @@ from scipy.sparse import linalg
 import time
 import os
 import math
+import pickle
+import time
 #from matplotlib import pyplot as plt
 # the total concentration of X added before any chemical equilibrium happen 
 
@@ -213,6 +215,17 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     for index in range(0,len(E)):
         if len(E)> 100:
             if index%int(len(E)*0.01) ==0:
+                with open('.status.pkl','rb') as f:
+                    dict = pickle.load(f)
+                if dict['stop']:
+                    return 0
+                while dict['pause']:
+                    time.sleep(0.2)
+                    with open('.status.pkl','rb') as f:
+                        dict = pickle.load(f)
+                    if not dict['pause']:
+                        break 
+
                 progress =index/len(E)
                 signals.progress.emit(int(progress*100))
                 if input_parameters.ViewOption[1]:
@@ -222,6 +235,10 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                         ConcProfile[:,0] *= dElectrode
                         ConcProfile[:,1:] *= cRef
                     signals.concProfile.emit(ConcProfile)
+
+
+
+
 
         Theta = E[index]
         

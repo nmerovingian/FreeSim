@@ -10,6 +10,8 @@ from Simulations.Mechanism1.Molecule import Molecule
 from random import random,seed
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Queue,Lock,Pool,Process,Manager
+import pickle
+import time 
 seed(1)
 
 
@@ -60,6 +62,19 @@ def Mechanism_1_simulation_single_thread_GUI(signals,input_parameters):
     for n in range(0,int(Parameters.nMolecules)):
         if Parameters.nMolecules > 100:
             if n%int(Parameters.nMolecules*0.01) ==0:
+
+
+                with open('.status.pkl','rb') as f:
+                    dict = pickle.load(f)
+                if dict['stop']:
+                    return 0
+                while dict['pause']:
+                    time.sleep(0.2)
+                    with open('.status.pkl','rb') as f:
+                        dict = pickle.load(f)
+                    if not dict['pause']:
+                        break 
+
                 print(f"{n} of {Parameters.nMolecules}")
                 progress =n/Parameters.nMolecules
                 signals.progress.emit(int(progress*100))

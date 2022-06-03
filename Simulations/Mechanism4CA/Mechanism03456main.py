@@ -13,6 +13,7 @@ import time
 import os
 import math
 from matplotlib import pyplot as plt
+import pickle
 # the total concentration of X added before any chemical equilibrium happen 
 
 P0 = 1.0 # reference pressure, 1 bar
@@ -200,6 +201,18 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
         deltaT = grid.t[index] - grid.t[index-1]
         if len(grid.t)> 100:
             if index%int(len(grid.t)*0.01) ==0:
+                with open('.status.pkl','rb') as f:
+                    dict = pickle.load(f)
+                if dict['stop']:
+                    return 0
+                while dict['pause']:
+                    time.sleep(0.2)
+                    with open('.status.pkl','rb') as f:
+                        dict = pickle.load(f)
+                    if not dict['pause']:
+                        break 
+
+
                 progress =index/len(grid.t)
                 signals.progress.emit(int(progress*100))
                 if input_parameters.ViewOption[1]:

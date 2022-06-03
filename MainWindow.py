@@ -49,6 +49,9 @@ class SimulationWorker(QRunnable):
 
     @pyqtSlot()
     def run(self):
+        with open('.status.pkl','wb') as f:
+            pickle.dump({'run':True,'pause':False,'stop':False},f)
+
         if self.input_parameters.mechanism_parameters_0[1] == 'CV':
             if self.input_parameters.mechanism_parameters_0[0] in [1]:
                 from Simulations.Mechanism1.Mechanism1main import Mechanism_1_simulation_single_thread_GUI
@@ -89,12 +92,21 @@ class MainWindow(QMainWindow):
         self.tableWidget = MyTableWidget()
         self.button_start_simulation = QPushButton('Start Simulation')
         self.button_start_simulation.clicked.connect(self.onStartSimulation)
+        self.button_pause_simulation = QPushButton('Pause')
+        self.button_pause_simulation.setCheckable(True)
+        self.button_pause_simulation.clicked.connect(self.onPauseSimulation)
+        self.button_stop_simulation = QPushButton('Stop')
+        self.button_stop_simulation.clicked.connect(self.onStopSimulation)
         self.progressbar = QProgressBar()
         self.progressbar.setMaximum(100)
         self.file_list = QListWidget()
         self.file_list.itemDoubleClicked.connect(self.onFileListDoubleClicked)
         self.layout.addWidget(self.tableWidget)
         self.layout.addWidget(self.button_start_simulation)
+        layout = QHBoxLayout()
+        layout.addWidget(self.button_pause_simulation)
+        layout.addWidget(self.button_stop_simulation)
+        self.layout.addLayout(layout)
         self.layout.addWidget(self.file_list)
         self.layout.addWidget(self.progressbar)
         self.widget.setLayout(self.layout)
@@ -103,6 +115,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('./Icons/CV-icon.png'))
         self.setGeometry(QRect(0,0,800,600))
 
+        self.worker = None
         # Load default parameters after start
         self.tableWidget.loadInputParameters()
         self.threadpool = QThreadPool()
@@ -525,21 +538,33 @@ class MainWindow(QMainWindow):
                 self.tableWidget.toDimlessAImode()
                 user_inputs = self.tableWidget.getUserInput()
 
-            worker = SimulationWorker(user_inputs)
-            worker.signals.progress.connect(self.showProgress)
-            worker.signals.finished.connect(self.workerFinished)
-            worker.signals.output_file_name.connect(self.onOutputFileName)
-            worker.signals.concProfile.connect(self.plotLiveConcPorfile)
-            worker.signals.fluxesProfile.connect(self.plotLiveSimulation)
-            self.threadpool.start(worker)
+            self.worker = SimulationWorker(user_inputs)
+            self.worker.signals.progress.connect(self.showProgress)
+            self.worker.signals.finished.connect(self.workerFinished)
+            self.worker.signals.output_file_name.connect(self.onOutputFileName)
+            self.worker.signals.concProfile.connect(self.plotLiveConcPorfile)
+            self.worker.signals.fluxesProfile.connect(self.plotLiveSimulation)
+            self.threadpool.start(self.worker)
 
         else:
             self.unfinishedWorker()
         
         
-        print('Please note development is ongoing. Report bugs in the issue section of the GitHub repository\n')
+    def onPauseSimulation(self):
+        with open('.status.pkl','rb') as f:
+            dict = pickle.load(f)
+        dict['pause'] = not dict['pause']
+        self.button_pause_simulation.setChecked(dict['pause'])
+        with open('.status.pkl','wb') as f:
+            pickle.dump(dict,f)
 
+    def onStopSimulation(self):
+        with open('.status.pkl','rb') as f:
+            dict = pickle.load(f)
+        dict['stop'] = True
 
+        with open('.status.pkl','wb') as f:
+            pickle.dump(dict,f)
 
     @pyqtSlot(int)
     def showProgress(self,progress):

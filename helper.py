@@ -4,6 +4,10 @@ import math
 from scipy.integrate import quad
 import numpy as np
 
+class WorkerKilledException(Exception):
+    pass
+
+
 def getValue(widget):
     if isinstance(widget,QLineEdit):
         return float(widget.text())
