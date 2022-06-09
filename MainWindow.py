@@ -892,6 +892,7 @@ class MyTableWidget(QWidget):
         self.AIModeTabVisibility()
         self.AIModeMechanismEnabled()
         self.userParameter.mechanism_parameters_0[1] = 'AI'
+        self.pushButton10.click()
         print(self.userParameter.mechanism_parameters_0[1])
 
     def AIModeTabVisibility(self):
