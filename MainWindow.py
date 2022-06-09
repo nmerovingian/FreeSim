@@ -1536,7 +1536,7 @@ class MyTableWidget(QWidget):
         self.input_widgets_dict6[12] = QLineEdit()
         self.input_widgets_dict6[13] = QLineEdit()
         self.input_widgets_dict6[14] = QComboBox()
-        self.input_widgets_dict6[14].addItems(['Linear','Radial'])
+        self.input_widgets_dict6[14].addItems(['Macro, Planar','Micro, Spherical'])
         self.input_widgets_dict6[15] = QPushButton('Convert to dimensionless')
         self.input_widgets_dict6[15].clicked.connect(lambda: (self.toDimlessAImode(),self.checkAImodeInputRange()))
 

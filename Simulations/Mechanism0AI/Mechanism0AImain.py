@@ -4,6 +4,7 @@ from tensorflow.keras.models import Sequential,Model
 import numpy as np
 import math
 import pandas as pd
+from helper import toDimensional
 
 theta_i = -1.0*96485/(298*8.314)
 theta_v = 1.0*96485/(298*8.314)
@@ -13,9 +14,9 @@ reverse_theta = np.linspace(theta_v,theta_i,num=100)
 scan = np.concatenate((forward_theta,reverse_theta))
 
 
-meta_dict = {'Nernst':0,'BV':1,'linear':0,'radial':1}
+meta_dict = {'Nernst':0,'BV':1,'Macro, Planar':0,'Micro, Spherical':1}
 kinetics_index_dict = {0:'BV'}
-diffusion_index_dict = {0:'linear',1:'radial'}
+diffusion_index_dict = {0:'Macro, Planar',1:'Micro, Spherical'}
 
 
 
@@ -45,12 +46,11 @@ def load_parameter(input_parameters):
     
 
 
-def saveVoltammogram(voltammogram,output_file_name,dimensional = True,Temperature = None, E0f=None,dElectrode = None,Dref=None,cref=None):
+def saveVoltammogram(voltammogram,output_file_name,dimensional = True,geometry = 1, Temperature = None, E0f=None,dElectrode = None,Dref=None,cref=None):
     df = pd.DataFrame(voltammogram,columns=['Potential,V','Current,A'])
+    lElectrode = 0.0
     if dimensional:
-        df.iloc[:,0] = df.iloc[:,0] / (96485/(8.314*Temperature)) + E0f
-
-        df.iloc[:,1] = df.iloc[:,1] * math.pi*dElectrode*96485*Dref*cref
+        df.iloc[:,0],df.iloc[:,1] = toDimensional(df.iloc[:,0],df.iloc[:,1],geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cref)
 
     df.to_csv(output_file_name,index=False)
 
@@ -65,6 +65,7 @@ def Mechanism_0_AI_single_thread_GUI(signals,input_parameters) -> None:
     dElectrode = input_parameters.AI_parameters_6[13]
     Dref = input_parameters.AI_parameters_6[7]
     cref = input_parameters.AI_parameters_6[5]
+    geometry = input_parameters.AI_parameters_6[14]
 
     if input_parameters.file_options_parameters[3] == 0:
         file_type ='.txt'
@@ -82,12 +83,12 @@ def Mechanism_0_AI_single_thread_GUI(signals,input_parameters) -> None:
     pred *= np.sqrt(sigma) # now denormalize the voltammogram
     Voltammogram = np.stack([scan,pred[0]],axis=1)
 
-    saveVoltammogram(Voltammogram,output_file_name,dimensional,Temperature,E0f,dElectrode,Dref,cref)
+    saveVoltammogram(Voltammogram,output_file_name,dimensional,geometry,Temperature,E0f,dElectrode,Dref,cref)
 
 
     signals.output_file_name.emit(output_file_name)
 
-
+    signals.finished.emit()
 
     
 
