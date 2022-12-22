@@ -11,7 +11,7 @@ class DefaultInput(object):
     def __init__(self) -> None:
         super().__init__()
 
-        self.mechanism_parameters_0 = OrderedDict([(0,3),(1,'CV')])
+        self.mechanism_parameters_0 = OrderedDict([(0,0),(1,'CV')])
 
         self.cv_parameters_1 = OrderedDict([(0,0.4),(1,-0.4),(2,0.4),(3,1.0),(4,1),(5,0.0),(6,0.0),(7,298),(8,0.0),(9,0.0)])
         self.cv_parameters_10 = OrderedDict([(0,1e-5),(1,0.0),(2,0.0),(3,0.0),(4,0.0)])

@@ -140,7 +140,7 @@ class MainWindow(QMainWindow):
         button_action = QAction(QIcon('./Icons/ScreenShotIcon.png'),'&ScreenShot',self)
         button_action.triggered.connect(self.onScreenShot)
         button_action2 = QAction(QIcon('./Icons/ChemistIcon.png'),'&Authors',self)
-        button_action2.triggered.connect(self.onAuthors)
+        button_action2.triggered.connect(self.onAuthors)#adSetting
         button_action3 = QAction(QIcon('./Icons/ClearIcon.png'),'&Clear Inputs',self)
         button_action3.triggered.connect(self.clearCommands)
         button_action4 = QAction(QIcon('./Icons/SetDefault.jpg'),'&Restore Default',self)
@@ -236,9 +236,12 @@ class MainWindow(QMainWindow):
         if fileName:
             with open(fileName,mode='rb') as f:
                 userInput = pickle.load(f)
-                self.tableWidget.button_group.button(userInput.mechanism_parameters_0[0]).setChecked(True)
+                #self.tableWidget.button_group.button(userInput.mechanism_parameters_0[0]).setChecked(True)
+                userInput.file_options_parameters[1] = self.tableWidget.file_widgetes_dict[1].text()
+                userInput.file_options_parameters[2] = self.tableWidget.file_widgetes_dict[2].text()
+                userInput.mechanism_parameters_0[0] = 0
                 self.tableWidget.loadInputParameters(userInput)
-
+                self.tableWidget.button_group.button(userInput.mechanism_parameters_0[0]).setChecked(True)
         
 
 
@@ -1684,9 +1687,9 @@ class MyTableWidget(QWidget):
         layout = QFormLayout()
         self.file_widgetes_dict = OrderedDict()
 
-        self.file_widgetes_dict[0] = QPushButton('Select folder')
-        self.file_widgetes_dict[1] = QLineEdit()
-        self.file_widgetes_dict[2] = QLineEdit()
+        self.file_widgetes_dict[0] = QPushButton('Select folder') # the select folder button 
+        self.file_widgetes_dict[1] = QLineEdit() # The folder name input 
+        self.file_widgetes_dict[2] = QLineEdit() # The file name input
         self.file_widgetes_dict[3] = QComboBox()
         self.file_widgetes_dict[4] = QCheckBox('Automatic File Names')
         self.file_widgetes_dict[5] = QCheckBox('Dimensional form of voltammogram')
