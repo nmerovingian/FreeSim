@@ -56,13 +56,13 @@ def setVisible(widget):
 def toDimensional(potential,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cRef):
     cRef *= 1000 # convert mol/L to mol/m^3 
     potential = potential / (96485/(8.314*Temperature)) + E0f
-    if geometry == 0:
+    if geometry == 0: # Planar Electrode
         fluxes = math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 1:
-        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 2:
+    elif geometry == 1:  # Spherical Electrode 
         fluxes = 4*math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 4:
+    elif geometry == 2: # Hemispherical Electrode
+        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 4: # Cylinder Electrod
         fluxes = 2*math.pi*lElectrode*96485*Dref*cRef*fluxes
     else:
         raise ValueError
@@ -74,13 +74,13 @@ def toDimensionalCA(time,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,D
     cRef *= 1000 # convert mol/L to mol/m^3 
     time = time*dElectrode*dElectrode/Dref
 
-    if geometry == 0:
+    if geometry == 0: # Planar Electrode 
         fluxes = math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 1:
-        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 2:
+    elif geometry == 1: # Spherical Electrode
         fluxes = 4*math.pi*dElectrode*96485*Dref*cRef*fluxes
-    elif geometry == 4:
+    elif geometry == 2: # Hemispherical Electrode
+        fluxes = 2*math.pi*dElectrode*96485*Dref*cRef*fluxes
+    elif geometry == 4: # Cylinder Electrode
         fluxes = 2*math.pi*lElectrode*96485*Dref*cRef*fluxes
     else:
         raise ValueError

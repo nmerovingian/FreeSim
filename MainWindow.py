@@ -1806,8 +1806,8 @@ class MyTableWidget(QWidget):
 
         for key,value in inputParameter.cv_parameters_12.items():
             if key == 0:
-                self.input_widgets_dict11[key].setCurrentIndex(value)
-            setEnabled(self.input_widgets_dict11[key])
+                self.input_widgets_dict12[key].setCurrentIndex(value)
+            setEnabled(self.input_widgets_dict12[key])
 
         for key,value in inputParameter.cv_parameters_13.items():
             self.input_widgets_dict13[key].setText(f'{value:.2f}')
