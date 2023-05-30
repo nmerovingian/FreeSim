@@ -309,7 +309,7 @@ class MainWindow(QMainWindow):
         return xlabel,ylabel,title
 
     def onFileListDoubleClicked(self,item):
-        print('double clicked')
+        print('double clicked. Double click on file name will open a preview of the file.')
         selectedFile = item.text()
         FileName = os.path.basename(selectedFile)
 

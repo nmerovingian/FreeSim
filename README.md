@@ -44,6 +44,18 @@ To run,
 $ python MainWindow.py
 ```
 
+# Case Studies
+Case studies are perfect starting point for simulations. The cases allow you to input simulation parameters according to the parameter guide provided and see the nice agreement with experiments! The cases provided in the *Case Study* folder are:
+
+* Case Study\MeNP reduction at a hemispherical electrode
+* Case Study\RuHex Au macroelectrode CV
+
+Each case comes with a *Background and Parameters.md* file for the experimental backgrounds and parameters. An experimental voltammogram is provided too. In addition, if you don't want to type these parameters mannually, **you can just load the *Simulation Seeting.pkl* file and run the simulations!**
+
+
+
+
+
 # Future plans
 The authors may include 2-D simulation of a microdisc elelctrode. You may also leave your preferred mechanism in the discussion forum and we will try our best to consider that! 
 
