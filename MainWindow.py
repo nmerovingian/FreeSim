@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
     def onAuthors(self):
         dlg = QMessageBox(self)
         dlg.setWindowTitle('About Authors')
-        dlg.setText('GUI and Simulation: <a href = "mailto: haotian.chen@lmh.ox.ac.uk">Haotian Chen</a><br><br>General Enquiry: <a href = "mailto: richard.compton@chem.ox.ac.uk">Professor Richard Compton</a><br><br>We would like to hear your experience!')
+        dlg.setText('GUI and Simulation: <a href = "mailto: nmerovingian@gmail.com">Haotian Chen</a><br><br>General Enquiry: <a href = "mailto: richard.compton@chem.ox.ac.uk">Professor Richard Compton</a><br><br>We would like to hear your experience!')
         button = dlg.exec_()
     def clearCommands(self):
         print('Not implemented yet')
