@@ -43,6 +43,9 @@ To run,
 ```
 $ python MainWindow.py
 ```
+#Finite Difference Simulation Tutorials
+A Google Colab  [Notebook](https://colab.research.google.com/drive/1dv3ZKD5io7FAsoq-KWWVFZOnAWLW5cnT?usp=sharing) is provided. 
+
 
 # Case Studies
 Case studies are perfect starting point for simulations. The cases allow you to input simulation parameters according to the parameter guide provided and see the nice agreement with experiments! The cases provided in the *Case Study* folder are:
