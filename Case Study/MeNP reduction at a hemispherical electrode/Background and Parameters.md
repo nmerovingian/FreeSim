@@ -32,7 +32,8 @@ R, Gas Constant, 8.314 J/(mol·K)
 T, Temperature 298±1 K
 F, Faraday Constant, 96485 C/mol
 
-
+Link to the paper
+https://www.sciencedirect.com/science/article/pii/S1572665712000859
 
 
 
