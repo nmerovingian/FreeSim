@@ -13,7 +13,7 @@ E_i, the starting potential: -1.0 V vs. Ag
 
 E_v, the reverse potential: -2.7 V vs. Ag 
 
-E0f, formal Potential: -1.1817 V vs. Ag
+E0f, formal Potential: -1.817 V vs. Ag
 
 k_0, standard electrochemical rate constant, 4.06e-5 m/s
 
