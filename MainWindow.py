@@ -1,5 +1,4 @@
 __author__ = 'Haotian Chen'
-from tkinter.tix import Tree
 from pyqtgraph.graphicsItems.PlotDataItem import dataType
 from pyqtgraph.widgets.LayoutWidget import LayoutWidget
 from PyQt5 import QtCore
