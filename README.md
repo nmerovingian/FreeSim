@@ -43,8 +43,15 @@ To run,
 ```
 $ python MainWindow.py
 ```
-#Finite Difference Simulation Tutorials
-A Google Colab  [Notebook](https://colab.research.google.com/drive/1dv3ZKD5io7FAsoq-KWWVFZOnAWLW5cnT?usp=sharing) is provided. 
+# Finite Difference Simulation Tutorials
+The authors have provided a Colab notebook tutorials for voltammetry simulation from scratch. Users interested in learning, applying and advancing voltammetry simulations should try to run and understand simulations. 
+
+A Google Colab  [Notebook](https://colab.research.google.com/drive/1dv3ZKD5io7FAsoq-KWWVFZOnAWLW5cnT?usp=sharing) is provided with the following sections
+1. My first voltammetry simulation! Linear diffusion, Nernst equation and reproducing the famous RuHex experiment. 
+2. Butler-Volmer Equation and Electrochemical Reversibility
+3. Spherical Electrode
+4. Chronoamperometry at at microdisk electrode (2D Simulation)
+5. Voltammetry on Rotating Disk Electrode
 
 
 # Case Studies
