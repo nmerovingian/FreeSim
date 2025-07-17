@@ -65,7 +65,7 @@ class DefaultInput(object):
 
         self.chemical_parameters_hided_21 = OrderedDict([(1,True)])
         
-        self.file_options_parameters = OrderedDict([(0,True),(1,os.getcwd() + '\Data'),(2,datetime.datetime.now().strftime(r'%Y-%m-%d')),(3,False),(4,False),(5,True),(9,'Simulation')])
+        self.file_options_parameters = OrderedDict([(0,True),(1,os.getcwd() + r'\Data'),(2,datetime.datetime.now().strftime(r'%Y-%m-%d')),(3,False),(4,False),(5,True),(9,'Simulation')])
 
 class Mechanism0Input(DefaultInput):
     def __init__(self) -> None:
