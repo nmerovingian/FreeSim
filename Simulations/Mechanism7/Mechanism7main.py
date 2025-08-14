@@ -243,8 +243,8 @@ def Mechanism_7_simulation_single_thread_Gui(signals=None,input_parameters=None)
                 #print(f'Exit: Precision satisfied!\nExit at iteration {ii}')
                 break
             
-        if not np.isnan(grid.grad(coeff.d,deltaTheta)):
-            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaTheta)/concA])
+        if not np.isnan(grid.grad(coeff.d,deltaT)):
+            grid.fluxes.append([Theta,grid.grad(coeff.d,deltaT)/concA])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 if dimensional:

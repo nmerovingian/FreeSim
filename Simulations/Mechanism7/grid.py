@@ -63,8 +63,8 @@ class Grid(object):
     
     
 
-    def grad(self,d,deltaTheta):
-        self.g = -(self.conc[10]-self.conc[5]) / (self.x[2]-self.x[1])  + self.beta*(self.conc[0]-d[0])/(deltaTheta)
+    def grad(self,d,deltaT):
+        self.g = -(self.conc[10]-self.conc[5]) / (self.x[2]-self.x[1])  + self.beta*(self.conc[0]-d[0])/(deltaT)
         return self.g
 
     def updateAll(self):

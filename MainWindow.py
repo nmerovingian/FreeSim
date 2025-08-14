@@ -932,7 +932,7 @@ class MyTableWidget(QWidget):
         setEnabled(self.pushButton14)
         setEnabled(self.pushButton15)
         setEnabled(self.pushButton16)
-        setDisabled(self.pushButton17)
+        setEnabled(self.pushButton17)
 
     def CAMechanismEnabled(self):
         #setDisabled(self.pushButton10)

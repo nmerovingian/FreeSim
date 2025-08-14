@@ -4,6 +4,7 @@ class Coeff(object):
     def __init__(self,deltaT,maxX,kinetics,mode,zeta,K0,K0_ads,Kads_A,Kdes_A,Kads_B,Kdes_B,alpha,alpha_ads,beta,gamma,Theta_diff,dA,dB,dC,dY,dZ,mechanism):
         self.n = 0
         self.xi = 0.0
+        self.deltaT = deltaT
         self.maxX = maxX
         self.kinetics = kinetics
         self.mode = mode
@@ -101,11 +102,11 @@ class Coeff(object):
     
 
     def Acal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aA[0] = 0.0
-        self.bA[0] = 0.0
-        self.cA[0] = 0.0
+        self.aA[1] = 0.0
+        self.bA[1] = 0.0
+        self.cA[1] = 0.0
 
-        for i in range(1,self.n-1):
+        for i in range(2,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
             self.aA[i] = self.dA*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
@@ -117,11 +118,11 @@ class Coeff(object):
         self.cA[-1] = 0.0
 
     def Bcal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aB[0] = 0.0
-        self.bB[0] = 0.0
-        self.cB[0] = 0.0
+        self.aB[1] = 0.0
+        self.bB[1] = 0.0
+        self.cB[1] = 0.0
 
-        for i in range(1,self.n-1):
+        for i in range(2,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
             self.aB[i] =self.dB*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
@@ -134,11 +135,11 @@ class Coeff(object):
 
 
     def Ccal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aC[0] = 0.0
-        self.bC[0] = 0.0
-        self.cC[0] = 0.0
+        self.aC[1] = 0.0
+        self.bC[1] = 0.0
+        self.cC[1] = 0.0
 
-        for i in range(1,self.n-1):
+        for i in range(2,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
             self.aC[i] =self.dC*( (-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
@@ -151,11 +152,11 @@ class Coeff(object):
 
 
     def Ycal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aY[0] = 0.0
-        self.bY[0] = 0.0
-        self.cY[0] = 0.0
+        self.aY[1] = 0.0
+        self.bY[1] = 0.0
+        self.cY[1] = 0.0
 
-        for i in range(1,self.n-1):
+        for i in range(2,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
             self.aY[i] = self.dY*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
@@ -166,11 +167,11 @@ class Coeff(object):
         self.cY[-1] = 0.0
 
     def Zcal_abc_radial(self,deltaT,Theta,deltaX):
-        self.aZ[0] = 0.0
-        self.bZ[0] = 0.0
-        self.cZ[0] = 0.0
+        self.aZ[1] = 0.0
+        self.bZ[1] = 0.0
+        self.cZ[1] = 0.0
 
-        for i in range(1,self.n-1):
+        for i in range(2,self.n-1):
             deltaX_m = self.XX[i] - self.XX[i - 1]
             deltaX_p = self.XX[i + 1] - self.XX[i]
             self.aZ[i] = self.dZ*((-(2.0 * deltaT) / (deltaX_m * (deltaX_m + deltaX_p)) + self.zeta / self.XX[i] * (deltaT / (deltaX_m + deltaX_p))))
@@ -277,12 +278,13 @@ class Coeff(object):
         if self.kinetics =='BV':
             Kred_ads = self.K0_ads * np.exp(-self.alpha_ads*(Theta-self.Theta_diff))
             Kox_ads = self.K0_ads* np.exp((1-self.alpha_ads)*(Theta-self.Theta_diff))
-            self.J[0,0] = -Kred_ads -self.Kads_A*self.beta*x[5] -self.Kdes_A*self.beta - 1.0
-            self.J[0,1] = Kox_ads - self.Kdes_A*self.beta*x[5]
-            self.J[0,5] = self.Kads_A*self.beta*(1.0-x[0]-x[1])
-            self.J[1,0] = -Kred_ads
-            self.J[1,1] = -Kox_ads - self.Kads_B*self.beta*x[6] - self.Kdes_B*self.beta - 1.0
-            self.J[1,6] = self.Kads_B*self.beta*(1.0-x[0]-x[1])
+            self.J[0,0] = -self.deltaT*Kred_ads -self.deltaT*self.Kads_A*self.beta*x[5] -self.deltaT*self.Kdes_A*self.beta - 1.0
+            self.J[0,1] = self.deltaT*Kox_ads - self.deltaT*self.Kdes_A*self.beta*x[5]
+            self.J[0,5] = self.deltaT*self.Kads_A*self.beta*(1.0-x[0]-x[1])
+
+            self.J[1,0] = -self.deltaT*Kred_ads - self.deltaT*self.Kads_B*self.beta*x[6]
+            self.J[1,1] = -self.deltaT*Kox_ads - self.deltaT*self.Kads_B*self.beta*x[6] - self.Kdes_B*self.beta - 1.0
+            self.J[1,6] = self.deltaT*self.Kads_B*self.beta*(1.0-x[0]-x[1])
             self.J[2,2] = -1.0
             self.J[2,7] = 1.0
             self.J[3,3] = -1.0
@@ -297,13 +299,13 @@ class Coeff(object):
             Kox = self.K0*np.exp((1.0-self.alpha)*Theta)
             self.J[5,0] = -self.Kads_A*h/self.dA*x[5] - self.Kdes_A*h/self.dA
             self.J[5,1] = -self.Kads_A*h/self.dA*x[5]
-            self.J[5,5] = Kred*h/self.dB + 1 + self.Kads_A*h/self.dA*(1.0-x[0]-x[1])
+            self.J[5,5] = Kred*h/self.dB  + self.Kads_A*h/self.dA*(1.0-x[0]-x[1]) + 1.0
             self.J[5,6] = -Kox*h/self.dA
             self.J[5,10] = -1.0
             self.J[6,0] = -self.Kads_B*h/self.dB*x[6]
-            self.J[6,1] = -self.Kads_B*h/self.dB*x[6] - self.Kads_B*h/self.dB
+            self.J[6,1] = -self.Kads_B*h/self.dB*x[6] - self.Kdes_B*h/self.dB
             self.J[6,5] = -Kred*h/self.dB 
-            self.J[6,6] = Kox*h/self.dB + 1 + self.Kads_B*h/self.dB*(1.0-x[0]-x[1])
+            self.J[6,6] = Kox*h/self.dB  + self.Kads_B*h/self.dB*(1.0-x[0]-x[1]) + 1.0
             self.J[6,11] = -1.0
         else:
             raise ValueError
@@ -364,8 +366,8 @@ class Coeff(object):
 
 
 
-            self.fx[0] = -Kred_ads*x[0] + Kox_ads*x[1] + self.Kads_A*self.beta*x[5]*(1.0-x[0]-x[1]) - self.Kdes_A*self.beta*x[0] - x[0] + self.d[0]
-            self.fx[1] = Kred_ads*x[0]  - Kox_ads*x[1] + self.Kads_B*self.beta*x[6]*(1.0-x[0]-x[1]) - self.Kdes_B*self.beta*x[1] - x[1] + self.d[1]
+            self.fx[0] = -self.deltaT*Kred_ads*x[0] + self.deltaT*Kox_ads*x[1] + self.deltaT*self.Kads_A*self.beta*x[5]*(1.0-x[0]-x[1]) - self.deltaT*self.Kdes_A*self.beta*x[0] - x[0] + self.d[0]
+            self.fx[1] = self.deltaT*Kred_ads*x[0]  - self.deltaT*Kox_ads*x[1] + self.deltaT*self.Kads_B*self.beta*x[6]*(1.0-x[0]-x[1]) - self.deltaT*self.Kdes_B*self.beta*x[1] - x[1] + self.d[1]
             self.fx[2] = x[7] - x[2]
             self.fx[3] = x[8] - x[3]
             self.fx[4] = x[9] - x[4]
