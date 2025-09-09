@@ -1068,7 +1068,7 @@ class MyTableWidget(QWidget):
 
 
         self.input_widgets_dict2[0] = QComboBox()
-        self.input_widgets_dict2[0].addItems(['Nernst','Butler-Volmer','Marcus-Hush'])
+        self.input_widgets_dict2[0].addItems(['Nernst','Butler-Volmer','Marcus-Hush-Chidsey'])
         self.input_widgets_dict2[0].currentIndexChanged.connect(self.mechanismTypeInput)
         self.input_widgets_dict2[1] = QLineEdit()
         self.input_widgets_dict2[2] = QLineEdit()

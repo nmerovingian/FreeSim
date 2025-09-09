@@ -86,8 +86,8 @@ class Grid(object):
         self.concZ = self.conc[3::4]  
 
     """
-    def grad(self):
-        self.g = -(self.conc[5]-self.conc[0]) / (self.x[1]-self.x[0])
+    def grad(self,dA):
+        self.g = -dA*(self.conc[5]-self.conc[0]) / (self.x[1]-self.x[0])
         return self.g
 
     def updateAll(self):

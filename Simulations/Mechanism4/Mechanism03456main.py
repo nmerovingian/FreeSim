@@ -36,6 +36,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     dElectrode = input_parameters.cv_parameters_11[1] # unit is m
     lElectrode = input_parameters.cv_parameters_11[2] # unit is m, for cylinder electrode only
     E0f = input_parameters.chemical_parameters_2[1] # The formal potential of the couple couple
+
     directory = input_parameters.file_options_parameters[1]
     file_name = input_parameters.file_options_parameters[2]
 
@@ -53,7 +54,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     dimScanRate = input_parameters.cv_parameters_1[3]
     cycles = int(input_parameters.cv_parameters_1[4])
     #space step
-    deltaX = 1e-6
+    deltaX = 1E-7
     #potential step
     deltaTheta = input_parameters.model_parameters_30[0]*96485/(8.314*Temperature)
     #expanding grid factor
@@ -96,6 +97,7 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
      
     mechanism = input_parameters.mechanism_parameters_0[0]
     k0 = input_parameters.chemical_parameters_2[3]
+    
 
 
     alpha = input_parameters.chemical_parameters_2[4]
@@ -149,6 +151,8 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
     # standard electrochemical rate constant. Only useful if using Butler-Volmer equation for boundary conditions
 
     K0 = k0*dElectrode / Dref
+
+    print(f"The dimensionless K0 is {K0}")
 
 
  
@@ -264,8 +268,8 @@ def Mechanism_03456_simulation_single_thread_Gui(signals,input_parameters)->None
                 #print(f'Exit: Precision satisfied!\nExit at iteration {ii}')
                 break
             
-        if not np.isnan(grid.grad()):
-            grid.fluxes.append([Theta,grid.grad()])
+        if not np.isnan(grid.grad(dA=dA)):
+            grid.fluxes.append([Theta,grid.grad(dA=dA)])
             if input_parameters.ViewOption[0]: 
                 fluxes = np.array(grid.fluxes)
                 if dimensional:

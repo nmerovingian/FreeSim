@@ -56,6 +56,7 @@ def setVisible(widget):
 def toDimensional(potential,fluxes,geometry,dElectrode,lElectrode,E0f,Temperature,Dref,cRef):
     cRef *= 1000 # convert mol/L to mol/m^3 
     potential = potential / (96485/(8.314*Temperature)) + E0f
+
     if geometry == 0: # Planar Electrode
         fluxes = math.pi*dElectrode*96485*Dref*cRef*fluxes
     elif geometry == 1:  # Spherical Electrode 

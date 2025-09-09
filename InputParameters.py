@@ -26,7 +26,7 @@ class DefaultInput(object):
 
 
         self.model_parameters_3 = OrderedDict([(0,0.05),(1,0),(2,6.0),(3,1e-8)])
-        self.model_parameters_30 = OrderedDict([(0,5e-3),(1,6),(2,0.0)])
+        self.model_parameters_30 = OrderedDict([(0,2e-3),(1,6),(2,0.0)])
         self.model_parameters_31 = OrderedDict([(0,0.05)])
         self.model_parameters_32 = OrderedDict([(0,1e-5),(1,0.02),(2,0.0)])
 
