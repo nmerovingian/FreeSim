@@ -26,6 +26,7 @@ A few common packages including PyQt5, pyqtgraph, Sympy, Numpy and Pandas are re
 ```
 $ pip install PyQt5
 $ pip install pyqtgraph
+$ pip install matplotlib
 $ pip install sympy
 $ pip install numpy
 $ pip install pandas
