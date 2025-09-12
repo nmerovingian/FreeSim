@@ -1,5 +1,6 @@
 PyQt5
 pyqtgraph
+matplotlib
 sympy
 numpy
 pandas
