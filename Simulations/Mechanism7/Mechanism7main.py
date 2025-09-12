@@ -10,7 +10,7 @@ from scipy.sparse import linalg
 import time
 import os
 import math
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import pickle
 import time
 # the total concentration of X added before any chemical equilibrium happen 
