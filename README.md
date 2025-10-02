@@ -3,7 +3,7 @@
 
 ![Intro](Icons/FreeSimIntro.jpg)
 
-FreeSim is a free simultor for electrochemical reaction by Haotian Chen and Professor Richard Compton at University of Oxford. 
+FreeSim is a free simultor for electrochemical reaction by Haotian Chen. Part of FreeSim is developed during Haotian's PhD study with Prof. Richard G. Compton at University of Oxford.  
 We have now implemented ***7*** mechanisms, including:
 
 * A + e = B, simple one electron reuduction 
