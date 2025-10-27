@@ -74,5 +74,7 @@ The authors may include 2-D simulation of a microdisc elelctrode. You may also l
 # Disclaimers
 Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would try their best to respond to any bugs as soon as possible. Thanks for your understanding.
 
+#Citation 
+Please cite the FreeSim paper published at [Journal of Chemical Education](https://pubs.acs.org/doi/full/10.1021/acs.jchemed.5c01092). 
 
 
