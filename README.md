@@ -52,10 +52,19 @@ A Google Colab  [Notebook](https://colab.research.google.com/drive/1dv3ZKD5io7FA
   * Simulator: Voltammetry simulation with linear diffusion and Nernst equation boundary condition
   * Exercise: Simulate RuHex reduction and compare with experiment
   * Validation: Validating simulation results with specific equations on peak flux, peak potential, half-wave potential, and peak-to-peak separation
-2. Butler-Volmer Equation and Electrochemical Reversibility
-3. Spherical Electrode
-4. Chronoamperometry at at microdisk electrode (2D Simulation)
-5. Voltammetry on Rotating Disk Electrode
+* Butler-Volmer Equation and Electrochemical Reversibility
+  * Simulator: Voltammetry simulation with linear diffusion and Butler–Volmer boundary condition
+  * Exercise: Using simulation to examine the interplay between scan rate, electrochemical rate constant, and reversibility
+  * Validation: Validating simulation with BV kinetics on peak flux and peak potential in the fully irreversible limit
+* Spherical Electrode
+  * Simulator: Voltammetry simulation with radial diffusion onto a (hemi)spherical electrode with Butler–Volmer or Nernst boundary condition
+  * Exercise: Simulate 2-methyl-2-nitropropane (MeNP) reduction at a hemispherical electrode and compare with experiments
+* Chronoamperometry at at microdisk electrode (2D Simulation)
+  * Simulator: 2D Simulator: Chronoamperometry at a microdisk electrode
+  * Validation: Comparing chronoamperogram with Shoup–Szabo equation
+* Voltammetry on Rotating Disk Electrode
+  * Voltammetry on a rotating disk electrode with convection-diffusion mass transport and Nernst boundary condition
+  * Validation: Comparing steady state flux with Levich equation
 
 
 # Case Studies
