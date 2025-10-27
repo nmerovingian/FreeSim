@@ -48,7 +48,10 @@ $ python MainWindow.py
 The authors have provided a Colab notebook tutorials for voltammetry simulation from scratch. Users interested in learning, applying and advancing voltammetry simulations should try to run and understand simulations. 
 
 A Google Colab  [Notebook](https://colab.research.google.com/drive/1dv3ZKD5io7FAsoq-KWWVFZOnAWLW5cnT?usp=sharing) is provided with the following sections
-1. My first voltammetry simulation! Linear diffusion, Nernst equation and reproducing the famous RuHex experiment. 
+* My first voltammetry simulation! Linear diffusion, Nernst equation and reproducing the famous RuHex experiment.
+  * Simulator: Voltammetry simulation with linear diffusion and Nernst equation boundary condition
+  * Exercise: Simulate RuHex reduction and compare with experiment
+  * Validation: Validating simulation results with specific equations on peak flux, peak potential, half-wave potential, and peak-to-peak separation
 2. Butler-Volmer Equation and Electrochemical Reversibility
 3. Spherical Electrode
 4. Chronoamperometry at at microdisk electrode (2D Simulation)
@@ -74,7 +77,7 @@ The authors may include 2-D simulation of a microdisc elelctrode. You may also l
 # Disclaimers
 Since the software is offered free of charge under GNU public license, we do not offer gurantees on the results of simulations and offer absolute no warranties to the software. The authors would try their best to respond to any bugs as soon as possible. Thanks for your understanding.
 
-#Citation 
+# Citation 
 Please cite the FreeSim paper published at [Journal of Chemical Education](https://pubs.acs.org/doi/full/10.1021/acs.jchemed.5c01092). 
 
 
